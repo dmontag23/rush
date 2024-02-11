@@ -5,6 +5,12 @@ import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 
+/**
+ * Needed for React Navigation
+ * See https://reactnavigation.org/docs/getting-started/
+ */
+import android.os.Bundle;
+
 class MainActivity : ReactActivity() {
 
   /**
@@ -19,4 +25,12 @@ class MainActivity : ReactActivity() {
    */
   override fun createReactActivityDelegate(): ReactActivityDelegate =
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
+
+  /**
+   * Needed for React Navigation
+   * See https://reactnavigation.org/docs/getting-started/
+   */
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(null)
+  }
 }
