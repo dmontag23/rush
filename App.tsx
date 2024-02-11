@@ -5,7 +5,7 @@
  * @format
  */
 
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
@@ -17,7 +17,11 @@ import {
   useColorScheme,
   View
 } from 'react-native';
-import {PaperProvider} from 'react-native-paper';
+import {
+  adaptNavigationTheme,
+  MD3LightTheme,
+  PaperProvider
+} from 'react-native-paper';
 
 import {
   Colors,
@@ -26,6 +30,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions
 } from 'react-native/Libraries/NewAppScreen';
+import {hadestownLightThemeColors} from './themes';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -57,6 +62,12 @@ function Section({children, title}: SectionProps): React.JSX.Element {
   );
 }
 
+const LIGHT_THEME = {...MD3LightTheme, colors: hadestownLightThemeColors};
+const {LightTheme: NAV_LIGHT_THEME} = adaptNavigationTheme({
+  reactNavigationLight: DefaultTheme,
+  materialLight: LIGHT_THEME
+});
+
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -65,10 +76,10 @@ function App(): React.JSX.Element {
   };
 
   return (
-    <NavigationContainer>
-      {/* PaperProvider should be the innermost provider for the app.
-      See https://callstack.github.io/react-native-paper/docs/guides/getting-started */}
-      <PaperProvider>
+    /* PaperProvider should be the innermost provider for the app.
+    See https://callstack.github.io/react-native-paper/docs/guides/getting-started */
+    <PaperProvider theme={LIGHT_THEME}>
+      <NavigationContainer theme={NAV_LIGHT_THEME}>
         <SafeAreaView style={backgroundStyle}>
           <StatusBar
             barStyle={isDarkMode ? 'light-content' : 'dark-content'}
@@ -99,8 +110,8 @@ function App(): React.JSX.Element {
             </View>
           </ScrollView>
         </SafeAreaView>
-      </PaperProvider>
-    </NavigationContainer>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
 
