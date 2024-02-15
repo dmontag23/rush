@@ -1,3 +1,5 @@
+import {MD3LightTheme, configureFonts, MD3DarkTheme} from 'react-native-paper';
+
 export const hadestownLightThemeColors = {
   primary: 'rgb(192, 0, 21)',
   onPrimary: 'rgb(255, 255, 255)',
@@ -82,4 +84,20 @@ export const hadestownDarkThemeColors = {
   surfaceDisabled: 'rgba(237, 224, 222, 0.12)',
   onSurfaceDisabled: 'rgba(237, 224, 222, 0.38)',
   backdrop: 'rgba(59, 45, 43, 0.4)'
+};
+
+const fontConfig = {
+  fontFamily: 'Chalkboard SE'
+};
+
+export const LIGHT_THEME = {
+  ...MD3LightTheme,
+  colors: hadestownLightThemeColors,
+  fonts: configureFonts({config: fontConfig})
+};
+
+export const DARK_THEME = {
+  ...MD3DarkTheme,
+  colors: hadestownDarkThemeColors,
+  fonts: configureFonts({config: fontConfig})
 };
