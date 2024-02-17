@@ -1,17 +1,14 @@
 import express from 'express';
-import {
-  TodayTixLoginReqBody,
-  TodayTixLoginResponse
-} from '../types/todaytixAPI/loginTokens';
-import {TodayTixAPIError} from '../types/todaytixAPI/base';
+import {TodayTixLoginReq, TodayTixLoginRes} from './types/loginTokens';
+import {TodayTixAPIError} from './types/base';
 
 const v2Router = express.Router();
 
 v2Router.post<
   '/loginTokens',
   {},
-  TodayTixLoginResponse | TodayTixAPIError,
-  TodayTixLoginReqBody
+  TodayTixLoginRes | TodayTixAPIError,
+  TodayTixLoginReq
 >('/loginTokens', (req, res) => {
   if (req.body.email === 'good@gmail.com') {
     return res.status(201).json({code: 201, data: {}});
