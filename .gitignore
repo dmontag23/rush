@@ -67,3 +67,11 @@ yarn-error.log
 
 # VSCode
 .vscode
+
+# Mock server transpiled files
+mock-server/dist
+
+# Config files
+config.json
+config-testing.json
+config-production.json
