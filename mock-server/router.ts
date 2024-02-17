@@ -1,6 +1,6 @@
 import express from 'express';
-import {TodayTixLoginReq, TodayTixLoginRes} from './types/loginTokens';
-import {TodayTixAPIError} from './types/base';
+import {TodayTixLoginReq, TodayTixLoginRes} from '../types/loginTokens';
+import {TodayTixAPIError} from '../types/base';
 
 const v2Router = express.Router();
 
