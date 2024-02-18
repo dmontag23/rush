@@ -23,7 +23,7 @@ type TodayTixAPIErrorContext = {
 export type TodayTixAPIError = {
   code?: number;
   error: string;
-  context?: TodayTixAPIErrorContext;
+  context?: TodayTixAPIErrorContext | string[] | null;
   title?: string;
   message?: string;
 };
