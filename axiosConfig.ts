@@ -7,6 +7,6 @@ export const todayTixAPI = axios.create({
 });
 
 todayTixAPI.interceptors.response.use(
-  response => response.data,
+  response => response.data.data,
   errorResponse => Promise.reject(errorResponse.response.data)
 );
