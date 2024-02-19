@@ -1,5 +1,5 @@
 import '@testing-library/jest-native/extend-expect';
-import {jest, beforeEach} from '@jest/globals';
+import {jest, beforeEach, afterEach} from '@jest/globals';
 /* The following import is needed for react navigation. 
 See https://reactnavigation.org/docs/testing/ */
 import 'react-native-gesture-handler/jestSetup';
@@ -13,4 +13,8 @@ jest.mock('@react-native-async-storage/async-storage', () => MockAsyncStorage);
 see https://github.com/jestjs/jest/issues/6434 */
 beforeEach(() => {
   jest.useFakeTimers();
+});
+
+afterEach(() => {
+  MockAsyncStorage.clear();
 });
