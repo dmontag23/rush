@@ -15,7 +15,7 @@ const App = () => (
       <RootNavigator />
       {/* Needed to debug async storage on Flipper. 
       See https://github.com/lbaldy/flipper-plugin-async-storage-advanced */}
-      {__DEV__ && <FlipperAsyncStorage />}
+      {__DEV__ && !process.env.JEST_WORKER_ID && <FlipperAsyncStorage />}
     </PaperProvider>
   </QueryClientProvider>
 );
