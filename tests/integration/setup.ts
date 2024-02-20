@@ -1,4 +1,4 @@
-import '@testing-library/jest-native/extend-expect';
+import '@testing-library/react-native/extend-expect';
 import {jest, beforeEach, afterEach} from '@jest/globals';
 /* The following import is needed for react navigation. 
 See https://reactnavigation.org/docs/testing/ */
