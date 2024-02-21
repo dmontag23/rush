@@ -1,0 +1,30 @@
+name: Continuous Integration
+run-name: Analyzing ${{ github.ref }}, triggered by ${{ github.actor }} 🚀
+on: push
+jobs:
+  lint:
+    name: Lint 🧹
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository code
+        uses: actions/checkout@v4
+      - name: Setup node and cache yarn
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: yarn
+      - name: Lint
+        run: yarn lint
+  integration_tests:
+    name: Integration tests 🧪
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository code
+        uses: actions/checkout@v4
+      - name: Setup node and cache yarn
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: yarn
+      - name: Run integration tests
+        run: yarn test
