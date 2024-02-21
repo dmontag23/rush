@@ -32,7 +32,6 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Create the env file
-        run: |
-          echo ${{ vars.ENV }} > .env
+        run: echo ${{ vars.ENV }} > .env
       - name: Run integration tests
         run: yarn test
