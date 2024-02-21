@@ -1,9 +1,9 @@
 import React from 'react';
 import {Image, SafeAreaView, StyleSheet, View} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import config from '../config.json';
+import {TODAY_TIX_WEB_URL} from '@env';
 
-const LOGO_URL = `${config.todayTixBaseUrl}/static/ttx_logo_horizontal_white.png`;
+const LOGO_URL = `${TODAY_TIX_WEB_URL}/static/ttx_logo_horizontal_white.png`;
 
 const TodayTixLogoOnBackground = () => (
   <View style={{backgroundColor: useTheme().colors.primary}}>

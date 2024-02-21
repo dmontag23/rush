@@ -1,8 +1,8 @@
 import axios from 'axios';
-import config from './config.json';
+import {TODAY_TIX_API_BASE_URL} from '@env';
 
 export const todayTixAPI = axios.create({
-  baseURL: config.todayTixAPIBaseUrl,
+  baseURL: TODAY_TIX_API_BASE_URL,
   headers: {'Content-Type': 'application/json'}
 });
 
