@@ -33,7 +33,8 @@ jobs:
         run: yarn
       - name: Create the env file
         run: |
-          echo ${{ vars.ENV }} > .env
-          cat .env
+          touch .env
+          echo TODAY_TIX_API_BASE_URL=${{ vars.TODAY_TIX_API_BASE_URL }} >> .env
+          echo TODAY_TIX_WEB_URL=${{ vars.TODAY_TIX_WEB_URL }} >> .env
       - name: Run integration tests
         run: yarn test
