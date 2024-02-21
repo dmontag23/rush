@@ -33,5 +33,7 @@ jobs:
         run: yarn
       - name: Create the env file
         run: echo ${{ vars.ENV }} > .env
+      - name: Print env file
+        run: cat .env
       - name: Run integration tests
         run: yarn test
