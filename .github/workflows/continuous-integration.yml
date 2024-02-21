@@ -19,6 +19,7 @@ jobs:
         run: yarn lint
   integration_tests:
     name: Integration tests 🧪
+    environment: test
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository code
