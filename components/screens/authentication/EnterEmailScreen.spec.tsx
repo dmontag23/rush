@@ -58,7 +58,7 @@ describe('email screen', () => {
           internalMessage: 'Internal message'
         },
         title: 'Error',
-        message: 'Please enter a valid email'
+        message: 'TodayTix error'
       });
 
     const Stack = createStackNavigator<RootStack>();
@@ -71,15 +71,21 @@ describe('email screen', () => {
     );
 
     // enter a valid email address that fails on the TodayTix server
+    const emailFormInput = getByLabelText('Email');
     const continueButton = getByRole('button', {name: 'Continue'});
-    userEvent.type(getByLabelText('Email'), '    good@gmail.com     ');
+    userEvent.type(emailFormInput, '    good@gmail.com     ');
     await waitFor(() => expect(continueButton).toBeEnabled());
     userEvent.press(continueButton);
 
     await waitFor(() =>
       expect(getByText('TodayTix returned the following error:')).toBeVisible()
     );
-    expect(getByText('Please enter a valid email')).toBeVisible();
+    const validationText = getByText('TodayTix error');
+    expect(validationText).toBeVisible();
     expect(continueButton).toBeEnabled();
+
+    // check that validation disappears when typing into the text box
+    userEvent.type(emailFormInput, 'k');
+    await waitFor(() => expect(validationText).not.toBeOnTheScreen());
   });
 });
