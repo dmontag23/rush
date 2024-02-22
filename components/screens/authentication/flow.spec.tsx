@@ -14,6 +14,7 @@ describe('The authentication flow', () => {
 
   it('can navigate back to the previous screen', async () => {
     // setup mock success response
+    console.log('API URL: ', process.env.TODAY_TIX_API_BASE_URL);
     nock(process.env.TODAY_TIX_API_BASE_URL)
       .post('/loginTokens')
       .reply(201, {code: 201, data: {}});
