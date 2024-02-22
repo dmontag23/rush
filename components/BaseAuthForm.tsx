@@ -128,6 +128,7 @@ const BaseAuthForm = <TField extends FieldValues, TData, TVariables>({
             render={({field: {onChange, onBlur, value}}) => (
               <TextInput
                 label={fieldLabel}
+                accessibilityLabel={fieldLabel}
                 mode="outlined"
                 error={Boolean(formErrors[fieldName])}
                 autoCapitalize="none"

@@ -73,6 +73,7 @@ const Header =
         <View style={styles.headerSideItem}>
           {back && (
             <IconButton
+              accessibilityLabel="Go back"
               icon="arrow-left"
               size={35}
               onPress={navigation.goBack}

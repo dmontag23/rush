@@ -7,7 +7,11 @@ const LOGO_URL = `${process.env.TODAY_TIX_WEB_URL}/static/ttx_logo_horizontal_wh
 const TodayTixLogoOnBackground = () => (
   <View style={{backgroundColor: useTheme().colors.primary}}>
     <SafeAreaView style={styles.logoContainer}>
-      <Image style={styles.logo} source={{uri: LOGO_URL}} />
+      <Image
+        accessibilityLabel="TodayTix logo"
+        style={styles.logo}
+        source={{uri: LOGO_URL}}
+      />
     </SafeAreaView>
   </View>
 );
