@@ -1,7 +1,7 @@
 import {describe, it, expect} from '@jest/globals';
 import {render, waitFor} from '@testing-library/react-native';
 import React from 'react';
-import App from '../../App';
+import App from './App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 describe('The Rush App', () => {
