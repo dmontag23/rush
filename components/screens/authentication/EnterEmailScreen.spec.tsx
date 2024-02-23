@@ -38,7 +38,7 @@ describe('email screen', () => {
       </NavigationContainer>
     );
 
-    // enter a invalid email address
+    // enter an invalid email address
     userEvent.type(getByLabelText('Email'), 'd{Enter}');
     await waitFor(() =>
       expect(getByText('Please enter a valid email address')).toBeVisible()
