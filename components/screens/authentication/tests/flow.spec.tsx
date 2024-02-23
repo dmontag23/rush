@@ -2,7 +2,7 @@ import {describe, it, expect} from '@jest/globals';
 import {render, waitFor, userEvent} from 'testing-library/extension';
 import React from 'react';
 import nock from 'nock';
-import RootNavigator from '../RootNavigator';
+import RootNavigator from '../../RootNavigator';
 
 describe('The authentication flow', () => {
   it('displays a splash screen when loading the auth token', async () => {

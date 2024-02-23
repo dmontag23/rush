@@ -3,11 +3,11 @@ import {render, waitFor, userEvent} from 'testing-library/extension';
 import React from 'react';
 import nock from 'nock';
 import {createStackNavigator} from '@react-navigation/stack';
-import {RootStack} from '../RootNavigator';
+import {RootStack} from '../../RootNavigator';
 import {NavigationContainer} from '@react-navigation/native';
-import EnterLinkScreen from './EnterLinkScreen';
+import EnterLinkScreen from '../EnterLinkScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {systemTime} from '../../../tests/integration/setup';
+import {systemTime} from '../../../../tests/integration/setup';
 
 describe('link screen', () => {
   it('displays elements in their initial state on the screen', async () => {

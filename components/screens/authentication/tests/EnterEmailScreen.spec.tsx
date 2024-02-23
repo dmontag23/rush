@@ -2,9 +2,9 @@ import {describe, it, expect} from '@jest/globals';
 import {render, waitFor, userEvent} from 'testing-library/extension';
 import React from 'react';
 import nock from 'nock';
-import EnterEmailScreen from './EnterEmailScreen';
+import EnterEmailScreen from '../EnterEmailScreen';
 import {createStackNavigator} from '@react-navigation/stack';
-import {RootStack} from '../RootNavigator';
+import {RootStack} from '../../RootNavigator';
 import {NavigationContainer} from '@react-navigation/native';
 
 describe('email screen', () => {
