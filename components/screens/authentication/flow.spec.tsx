@@ -13,7 +13,7 @@ describe('The authentication flow', () => {
   // TODO: Find a way to test the closed and open dots?
 
   it('can navigate back to the previous screen', async () => {
-    // setup mock success response
+    // setup mock success response from the TodayTix API
     nock(process.env.TODAY_TIX_API_BASE_URL)
       .post('/loginTokens')
       .reply(201, {code: 201, data: {}});

@@ -8,6 +8,7 @@ import useStoreAuthTokens from '../../../hooks/useStoreAuthTokens';
 const VALIDATION_SCHEMA = z.object({
   code: z
     .string()
+    .trim()
     .url('Please enter a valid url')
     .transform((link, ctx) => {
       const code = link.split('token=')[1];
