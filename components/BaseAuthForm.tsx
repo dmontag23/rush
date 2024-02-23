@@ -46,7 +46,7 @@ type BaseAuthFormProps<TField extends FieldValues, TData, TVariables> = {
   subText: string;
   submitButtonText: string;
   mutationResult: UseMutationResult<TData, TodayTixAPIError, TVariables>;
-  onMutationSuccess?: (data: TData | undefined) => void;
+  onMutationSuccess?: (data: TData) => void;
   additionalError?: string | null;
 };
 
@@ -97,7 +97,7 @@ const BaseAuthForm = <TField extends FieldValues, TData, TVariables>({
   );
 
   useEffect(() => {
-    if (isMutationSuccess) onMutationSuccess(mutationData);
+    if (isMutationSuccess && mutationData) onMutationSuccess(mutationData);
   }, [isMutationSuccess, mutationData, onMutationSuccess]);
 
   useEffect(() => {

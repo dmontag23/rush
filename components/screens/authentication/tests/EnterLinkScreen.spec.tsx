@@ -1,4 +1,4 @@
-import {describe, it, expect} from '@jest/globals';
+import {describe, it, expect, jest} from '@jest/globals';
 import {render, waitFor, userEvent} from 'testing-library/extension';
 import React from 'react';
 import nock from 'nock';
@@ -90,6 +90,53 @@ describe('link screen', () => {
     // check that validation disappears when typing into the text box
     userEvent.type(linkFormInput, 'k');
     await waitFor(() => expect(validationText).not.toBeOnTheScreen());
+  });
+
+  it('displays an AsyncStorage error', async () => {
+    // setup mock error response from the TodayTix API
+    (
+      AsyncStorage.multiSet as jest.MockedFunction<typeof AsyncStorage.multiSet>
+    ).mockRejectedValueOnce({message: 'Error with AsyncStorage multiSet'});
+
+    // setup mock success response from the TodayTix API
+    nock(process.env.TODAY_TIX_API_BASE_URL)
+      .post('/accessTokens')
+      .reply(201, {
+        code: 201,
+        data: {
+          _type: 'AccessToken',
+          accessToken: 'access-token',
+          tokenType: 'Bearer',
+          scope: 'customer',
+          refreshToken: 'refresh-token',
+          expiresIn: 1800
+        }
+      });
+
+    const Stack = createStackNavigator<RootStack>();
+    const {getByRole, getByText, getByLabelText} = render(
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="EnterLink" component={EnterLinkScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+
+    // enter a valid email address
+    const loginButton = getByRole('button', {name: 'Login'});
+    userEvent.type(getByLabelText('Link'), 'https://url.co?token=good-code');
+
+    await waitFor(() => expect(loginButton).toBeEnabled());
+    userEvent.press(loginButton);
+
+    await waitFor(() =>
+      expect(
+        getByText(
+          'There was an error storing the authentication tokens: Error with AsyncStorage multiSet. Please try submitting the link again.'
+        )
+      ).toBeVisible()
+    );
+    expect(loginButton).toBeEnabled();
   });
 
   it('can login successfully', async () => {

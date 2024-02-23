@@ -32,13 +32,12 @@ const VALIDATION_SCHEMA = z.object({
 const EnterLinkScreen = () => {
   const {mutate: storeTokens, error} = useStoreAuthTokens();
   const handleExchangeCodeSuccess = useCallback(
-    (data: TodayTixAccessTokensRes | undefined) => {
-      if (data)
-        storeTokens({
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-          ttl: data.expiresIn * 1000 + new Date().getTime()
-        });
+    (data: TodayTixAccessTokensRes) => {
+      storeTokens({
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+        ttl: data.expiresIn * 1000 + new Date().getTime()
+      });
     },
     [storeTokens]
   );
