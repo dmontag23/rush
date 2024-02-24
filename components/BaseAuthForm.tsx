@@ -169,10 +169,7 @@ const BaseAuthForm = <TField extends FieldValues, TData, TVariables>({
         disabled={!isFormValid}
         onPress={handleSubmit(onSubmit)}
         theme={{roundness: 1}}>
-        {/* The isSuccess condition below is to keep the continuity of the loading spinner during the
-          transition to the next screen. Otherwise, the text on the button changes back to its text before the user
-          has finished the transition */}
-        {isMutationPending || isMutationSuccess ? (
+        {isMutationPending ? (
           <ActivityIndicator color={colors.onPrimary} />
         ) : (
           <Text variant="titleLarge" style={{color: colors.onPrimary}}>
