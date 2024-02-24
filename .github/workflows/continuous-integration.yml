@@ -59,5 +59,5 @@ jobs:
         run: yarn test:e2e:build ios.sim.release
       - name: Run Detox Tests
         run: |
-          yarn start
+          yarn start &
           yarn test:e2e ios.sim.release
