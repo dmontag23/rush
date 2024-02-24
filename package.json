@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "yarn lint && yarn test:integration && yarn test:e2e ios.sim.debug",
+    "test:e2e": "detox test -c",
+    "test:integration": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -51,7 +53,6 @@
     "react-native-flipper": "^0.212.0",
     "react-test-renderer": "18.2.0",
     "rn-flipper-async-storage-advanced": "^1.0.5",
-    "ts-jest": "^29.1.2",
     "typescript": "5.0.4"
   },
   "engines": {
