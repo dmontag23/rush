@@ -183,14 +183,16 @@ describe('link screen', () => {
       expect(await AsyncStorage.getItem('access-token')).toBe('access-token')
     );
     expect(await AsyncStorage.getItem('refresh-token')).toBe('refresh-token');
-    /* TODO: advanceTimersOffset is the amount of time the react testing library advanced the fake timers by
+
+    const actualTime = Number(await AsyncStorage.getItem('token-ttl'));
+    /* TODO: msTolerance is the amount of time the react testing library advanced the fake timers by
     during the await statements. This should be re-thought to not depend on the internals of how the react testing
     library advances the fake timers, but this seems hard because we don't want to have to manually advance
     the timers in every test. Perhaps the delay value from the react testing library can be modified, maybe set to undefined
     or 0? */
-    const advanceTimersOffset = 431;
-    expect(await AsyncStorage.getItem('token-ttl')).toBe(
-      (systemTime.getTime() + 1800 * 1000 + advanceTimersOffset).toString()
-    );
+    const msTolerance = 500;
+    const expectedTime = systemTime.getTime() + 1800 * 1000;
+    expect(actualTime).toBeGreaterThanOrEqual(expectedTime - msTolerance);
+    expect(actualTime).toBeLessThanOrEqual(expectedTime + msTolerance);
   });
 });
