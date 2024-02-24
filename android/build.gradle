@@ -18,4 +18,13 @@ buildscript {
     }
 }
 
+// The allprojects section is needed for detox, see https://wix.github.io/Detox/docs/introduction/project-setup
+allprojects {
+    repositories {
+        maven {
+            url("$rootDir/../node_modules/detox/Detox-android")
+        }
+   }
+}
+
 apply plugin: "com.facebook.react.rootproject"
