@@ -1,11 +1,10 @@
 /** @type import("@react-native-community/cli-types").Config */
 module.exports = {
-  /** Needed for react-native-vector-icons, see https://github.com/oblador/react-native-vector-icons */
   dependencies: {
-    'react-native-vector-icons': {
-      platforms: {
-        ios: null
-      }
-    }
+    /** Needed for react-native-vector-icons, see https://github.com/oblador/react-native-vector-icons */
+    'react-native-vector-icons': {platforms: {ios: null}},
+    ...(process.env.NO_FLIPPER
+      ? {'react-native-flipper': {platforms: {ios: null}}}
+      : {})
   }
 };
