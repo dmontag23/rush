@@ -7,8 +7,9 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "yarn lint && yarn test:integration && yarn test:e2e ios.sim.debug",
+    "test:local": "yarn lint && yarn test:integration && yarn test:e2e:local",
     "test:e2e": "detox test -c",
+    "test:e2e:local": "NODE_ENV=DEV yarn test:e2e ios.sim.debug",
     "test:integration": "jest"
   },
   "dependencies": {
