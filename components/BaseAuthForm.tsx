@@ -30,7 +30,7 @@ import {TodayTixAPIError} from '../types/base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useHeaderHeight} from '@react-navigation/elements';
 
-const ErrorText = ({message}: {message: string}) => (
+const ErrorText = ({message}: {message: string | undefined}) => (
   <Text variant="titleMedium" style={{color: useTheme().colors.error}}>
     {message}
   </Text>
@@ -84,10 +84,8 @@ const BaseAuthForm = <TField extends FieldValues, TData, TVariables>({
     resolver: zodResolver(validationSchema)
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = formFields => {
-    if (!(isMutationPending || isMutationSuccess))
-      mutate(formFields[fieldName]);
-  };
+  const onSubmit: SubmitHandler<FieldValues> = formFields =>
+    mutate(formFields[fieldName]);
 
   useFocusEffect(
     useCallback(() => {
@@ -108,6 +106,7 @@ const BaseAuthForm = <TField extends FieldValues, TData, TVariables>({
 
   return (
     <KeyboardAvoidingView
+      accessibilityLabel="Form"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       /* The top is needed below because the header has a top margin
       equal to the top safe area */
@@ -146,31 +145,25 @@ const BaseAuthForm = <TField extends FieldValues, TData, TVariables>({
             name={fieldName}
           />
           {formErrors[fieldName] && (
-            <ErrorText
-              message={
-                formErrors[fieldName]?.message?.toString() ??
-                (formErrors[fieldName]?.type ?? {}).toString()
-              }
-            />
+            <ErrorText message={formErrors[fieldName]?.message?.toString()} />
           )}
           {isMutationError && (
             <>
               <ErrorText message="TodayTix returned the following error:" />
-              <ErrorText
-                message={mutationError?.message ?? mutationError?.error ?? ''}
-              />
+              <ErrorText message={mutationError?.message?.toString()} />
             </>
           )}
           {additionalError && <ErrorText message={additionalError} />}
         </View>
       </View>
       <Button
+        accessibilityLabel="Submit button"
         mode="contained"
-        disabled={!isFormValid}
+        disabled={!isFormValid || isMutationPending || isMutationSuccess}
         onPress={handleSubmit(onSubmit)}
         theme={{roundness: 1}}>
         {isMutationPending ? (
-          <ActivityIndicator color={colors.onPrimary} />
+          <ActivityIndicator />
         ) : (
           <Text variant="titleLarge" style={{color: colors.onPrimary}}>
             {submitButtonText}

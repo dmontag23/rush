@@ -76,6 +76,7 @@ describe('email screen', () => {
     userEvent.type(emailFormInput, '    good@gmail.com     ');
     await waitFor(() => expect(continueButton).toBeEnabled());
     userEvent.press(continueButton);
+    await waitFor(() => expect(continueButton).toBeDisabled());
 
     await waitFor(() =>
       expect(getByText('TodayTix returned the following error:')).toBeVisible()
