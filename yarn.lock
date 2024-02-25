@@ -1973,17 +1973,17 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
-"@tanstack/query-core@5.22.2":
-  version "5.22.2"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.22.2.tgz#af67d41b0b4a3e846c2325f32540f39ca0d4788d"
-  integrity sha512-z3PwKFUFACMUqe1eyesCIKg3Jv1mysSrYfrEW5ww5DCDUD4zlpTKBvUDaEjsfZzL3ULrFLDM9yVUxI/fega1Qg==
+"@tanstack/query-core@5.24.1":
+  version "5.24.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.24.1.tgz#d40928dec22b47df97fb2648e8c499772e8d7eb2"
+  integrity sha512-DZ6Nx9p7BhjkG50ayJ+MKPgff+lMeol7QYXkvuU5jr2ryW/4ok5eanaS9W5eooA4xN0A/GPHdLGOZGzArgf5Cg==
 
 "@tanstack/react-query@^5.20.2":
-  version "5.22.2"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.22.2.tgz#e5fce278fbdd026fc1d561a4505142b9f93549d7"
-  integrity sha512-TaxJDRzJ8/NWRT4lY2jguKCrNI6MRN+67dELzPjNUlvqzTxGANlMp68l7aC7hG8Bd1uHNxHl7ihv7MT50i/43A==
+  version "5.24.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.24.1.tgz#bcb913febe0d813cec1fda7783298d07aa998b20"
+  integrity sha512-4+09JEdO4d6+Gc8Y/g2M/MuxDK5IY0QV8+2wL2304wPKJgJ54cBbULd3nciJ5uvh/as8rrxx6s0mtIwpRuGd1g==
   dependencies:
-    "@tanstack/query-core" "5.22.2"
+    "@tanstack/query-core" "5.24.1"
 
 "@testing-library/react-native@^12.4.3":
   version "12.4.3"
@@ -3879,9 +3879,9 @@ flow-enums-runtime@^0.0.6:
   integrity sha512-3PYnM29RFXwvAN6Pc/scUfkI7RwhQ/xqyLUyPNlXUp9S40zI8nup9tUSrTLSVnWGBN38FNiGWbwZOB6uR4OGdw==
 
 flow-parser@0.*:
-  version "0.229.0"
-  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.229.0.tgz#054b60d6f6a9fab76cd89dc6ca662fd32d910163"
-  integrity sha512-mOYmMuvJwAo/CvnMFEq4SHftq7E5188hYMTTxJyQOXk2nh+sgslRdYMw3wTthH+FMcFaZLtmBPuMu6IwztdoUQ==
+  version "0.229.2"
+  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.229.2.tgz#b19ce67bfbfab8c91ee51dcddb9c3ab0f3bf2ab7"
+  integrity sha512-T72XV2Izvl7yV6dhHhLaJ630Y6vOZJl6dnOS6dN0bPW9ExuREu7xGAf3omtcxX76POTuux9TJPu9ZpS48a/rdw==
 
 flow-parser@^0.206.0:
   version "0.206.0"
@@ -6203,10 +6203,10 @@ react-native-dotenv@^3.4.10:
   dependencies:
     dotenv "^16.4.1"
 
-react-native-flipper@0.164.0:
-  version "0.164.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.164.0.tgz#64f6269a86a13a72e30f53ba9f5281d2073a7697"
-  integrity sha512-iJhIe3rqx6okuzBp4AJsTa2b8VRAOGzoLRFx/4HGbaGvu8AurZjz8TTQkhJsRma8dsHN2b6KKZPvGGW3wdWzvA==
+react-native-flipper@^0.212.0:
+  version "0.212.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.212.0.tgz#b3fdd47676ecd09a25edd77a1466acace6276762"
+  integrity sha512-bDRfIgE3v/jjEEdnvGP0T6maDD+bXhDAQ/SZUYTKd/CQ6YIU1c0EF+e0urU62LNMv6XEFQKz226McdddyVhYZA==
 
 react-native-gesture-handler@^2.15.0:
   version "2.15.0"
