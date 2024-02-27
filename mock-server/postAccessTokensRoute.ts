@@ -29,7 +29,7 @@ const postAccessTokens404Response: TodayTixAPIError = {
 const postAccessTokensRoute = (router: Router) =>
   router.post<
     '/accessTokens',
-    {},
+    null,
     TodayTixAPIRes<TodayTixAccessTokensRes> | TodayTixAPIError,
     TodayTixAccessTokensReq
   >('/accessTokens', (req, res) => {

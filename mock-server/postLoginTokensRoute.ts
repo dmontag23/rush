@@ -21,7 +21,7 @@ const postLoginTokens400Response: TodayTixAPIError = {
 const loginTokensRoute = (router: Router) =>
   router.post<
     '/loginTokens',
-    {},
+    null,
     TodayTixAPIRes<TodayTixLoginRes> | TodayTixAPIError,
     TodayTixLoginReq
   >('/loginTokens', (req, res) => {
