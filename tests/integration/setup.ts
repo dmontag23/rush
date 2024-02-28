@@ -1,5 +1,6 @@
 import '@testing-library/react-native/extend-expect';
 import {jest, beforeAll, beforeEach, afterEach} from '@jest/globals';
+import {act} from '@testing-library/react-native';
 import nock from 'nock';
 /* The following import is needed for react navigation. 
 See https://reactnavigation.org/docs/testing/ */
@@ -17,9 +18,7 @@ beforeAll(() => {
   see https://github.com/jestjs/jest/issues/6434
   the doNotFake option is due to an open issue with nock/react testing library
   see https://github.com/nock/nock/issues/2200 */
-  jest.useFakeTimers({
-    doNotFake: ['nextTick', 'setImmediate']
-  });
+  jest.useFakeTimers({doNotFake: ['nextTick', 'setImmediate']});
 });
 
 beforeEach(() => {
@@ -27,6 +26,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  act(() => jest.runOnlyPendingTimers());
   nock.cleanAll();
   MockAsyncStorage.clear();
 });

@@ -28,6 +28,6 @@ describe('Authentication flow', () => {
     // enter a valid code and login
     await linkFormInput.typeText('https://todaytix.com?token=good-code');
     await loginButton.tap();
-    await expect(element(by.text('Home screen'))).toBeVisible();
+    await expect(element(by.text('Guys & Dolls'))).toBeVisible();
   });
 });

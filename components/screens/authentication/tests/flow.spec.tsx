@@ -3,21 +3,40 @@ import {render, waitFor, userEvent} from 'testing-library/extension';
 import React from 'react';
 import nock from 'nock';
 import RootNavigator from '../../RootNavigator';
+import {TodayTixFieldset, TodayTixLocation} from '../../../../types/shows';
 
 describe('The authentication flow', () => {
   it('displays a splash screen when loading the auth token', async () => {
+    // setup
+    nock(process.env.TODAY_TIX_API_BASE_URL)
+      .get('/shows')
+      .query({
+        areAccessProgramsActive: '1',
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location: TodayTixLocation.London
+      })
+      .reply(200, {
+        code: 200,
+        data: []
+      });
+
+    // render
     const {getByLabelText} = render(<RootNavigator />);
+
+    // assert
     expect(getByLabelText('TodayTix logo')).toBeVisible();
   });
 
   // TODO: Find a way to test the closed and open dots?
 
   it('can navigate back to the previous screen', async () => {
-    // setup mock success response from the TodayTix API
+    // setup
     nock(process.env.TODAY_TIX_API_BASE_URL)
       .post('/loginTokens')
       .reply(201, {code: 201, data: {}});
 
+    // render
     const {getByRole, getByText, getByLabelText} = render(<RootNavigator />);
     await waitFor(() => expect(getByText('Sign into TodayTix')).toBeVisible());
 

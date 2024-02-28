@@ -13,12 +13,25 @@ import {View, Animated, StyleSheet} from 'react-native';
 import EnterLinkScreen from './authentication/EnterLinkScreen';
 import TodayTixLogoOnBackground from '../TodayTixLogoOnBackground';
 import useGetAccessToken from '../../hooks/useGetAccessToken';
-import HomeScreen from './HomeScreen';
+import RushShowList from './RushShowList';
 import {StackHeaderProps, createStackNavigator} from '@react-navigation/stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import useGetShows from '../../hooks/useGetShows';
+import {
+  TodayTixFieldset,
+  TodayTixLocation,
+  TodayTixShow
+} from '../../types/shows';
+import useGetShowtimesWithRushAvailability from '../../hooks/useGetShowtimesWithRushAvailability';
+import {TodayTixShowtime} from '../../types/showtimes';
 
 export type RootStack = {
-  HomeScreen: undefined;
+  RushShowList: {
+    showsAndTimes: {
+      show: TodayTixShow;
+      showtimes: TodayTixShowtime[];
+    }[];
+  };
   EnterEmail: undefined;
   EnterLink: undefined;
 };
@@ -100,10 +113,32 @@ const RootNavigator = () => {
   const theme = useTheme();
   const {top} = useSafeAreaInsets();
 
-  const {data: accessToken, isLoading: isLoadingAccessToken} =
+  const {data: accessToken, isPending: isLoadingAccessToken} =
     useGetAccessToken();
 
-  if (isLoadingAccessToken) return <TodayTixLogoOnBackground />;
+  const {data: rushAndLotteryShows, isPending: isLoadingRushAndLotteryShows} =
+    useGetShows({
+      areAccessProgramsActive: true,
+      fieldset: TodayTixFieldset.Summary,
+      limit: 10000,
+      location: TodayTixLocation.London
+    });
+
+  const rushShows = (rushAndLotteryShows ?? []).filter(
+    show => show.isRushActive
+  );
+
+  const {data: rushShowtimes, isPending: isLoadingRushShowtimes} =
+    useGetShowtimesWithRushAvailability({
+      showIds: rushShows.map(show => show.id)
+    });
+
+  if (
+    isLoadingAccessToken ||
+    isLoadingRushAndLotteryShows ||
+    isLoadingRushShowtimes
+  )
+    return <TodayTixLogoOnBackground />;
 
   return (
     <NavigationContainer theme={NAV_LIGHT_THEME}>
@@ -115,7 +150,16 @@ const RootNavigator = () => {
         }}>
         {accessToken ? (
           <Stack.Group screenOptions={{headerShown: false}}>
-            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen
+              name="RushShowList"
+              component={RushShowList}
+              initialParams={{
+                showsAndTimes: rushShows.map((show, i) => ({
+                  show,
+                  showtimes: rushShowtimes[i] ?? []
+                }))
+              }}
+            />
           </Stack.Group>
         ) : (
           <>
