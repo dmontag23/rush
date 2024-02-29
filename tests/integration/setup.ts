@@ -25,6 +25,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  nock.abortPendingRequests();
   nock.cleanAll();
   MockAsyncStorage.clear();
 });
