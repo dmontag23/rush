@@ -1,6 +1,5 @@
 import '@testing-library/react-native/extend-expect';
 import {jest, beforeAll, beforeEach, afterEach} from '@jest/globals';
-import {act} from '@testing-library/react-native';
 import nock from 'nock';
 /* The following import is needed for react navigation. 
 See https://reactnavigation.org/docs/testing/ */
@@ -26,7 +25,6 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  act(() => jest.runOnlyPendingTimers());
   nock.cleanAll();
   MockAsyncStorage.clear();
 });

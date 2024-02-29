@@ -1,12 +1,12 @@
 import {describe, it, expect} from '@jest/globals';
-import {render, waitFor} from '@testing-library/react-native';
+import {render, waitFor} from 'testing-library/extension';
 import React from 'react';
-import App from './App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import nock from 'nock';
-import {TodayTixFieldset, TodayTixLocation} from './types/shows';
+import {TodayTixFieldset, TodayTixLocation} from '../../types/shows';
+import RootNavigator from '../screens/RootNavigator';
 
-describe('The Rush App', () => {
+describe('The root navigator', () => {
   it('renders the splash screen when loading', () => {
     // setup
     nock(process.env.TODAY_TIX_API_BASE_URL)
@@ -23,7 +23,7 @@ describe('The Rush App', () => {
       });
 
     // render
-    const {getByLabelText} = render(<App />);
+    const {getByLabelText} = render(<RootNavigator />);
 
     // assert
     expect(getByLabelText('TodayTix logo')).toBeVisible();
@@ -45,7 +45,7 @@ describe('The Rush App', () => {
       });
 
     // render
-    const {getByText} = render(<App />);
+    const {getByText} = render(<RootNavigator />);
 
     // assert
     await waitFor(() => expect(getByText('Sign into TodayTix')).toBeVisible());
@@ -80,7 +80,7 @@ describe('The Rush App', () => {
       });
 
     // render
-    const {getByText} = render(<App />);
+    const {getByText} = render(<RootNavigator />);
 
     // assert
     await waitFor(() => expect(getByText('SIX the Musical')).toBeVisible());
