@@ -87,6 +87,7 @@ const ShowCard = ({show, showtimes}: ShowCardProps) => {
         </Chip>
       ) : (
         <View
+          accessibilityLabel="Inactive card"
           style={[
             styles.disabledOverlay,
             {
