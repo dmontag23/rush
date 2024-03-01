@@ -110,7 +110,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    opacity: 0.3
+    opacity: 0.3,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12
   },
   image: {height: 150},
   showtimeAndTicketNumContainer: {alignItems: 'center'},

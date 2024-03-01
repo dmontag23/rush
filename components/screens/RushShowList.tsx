@@ -15,7 +15,7 @@ const addTickets = (showtimes: TodayTixShowtime[]) =>
   );
 
 const RushShowList = ({route}: StackScreenProps<RootStack, 'RushShowList'>) => {
-  const {top} = useSafeAreaInsets();
+  const {top, bottom} = useSafeAreaInsets();
   const {showsAndTimes} = route.params;
 
   const sortedRushShows = [...showsAndTimes].sort(
@@ -29,15 +29,15 @@ const RushShowList = ({route}: StackScreenProps<RootStack, 'RushShowList'>) => {
     <View
       style={[
         styles.container,
-        {
-          paddingTop: top,
-          backgroundColor: useTheme().colors.inversePrimary
-        }
+        {backgroundColor: useTheme().colors.inversePrimary}
       ]}>
       <ScrollView
-        testID="rushShows"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContentContainer}>
+        contentContainerStyle={[
+          styles.scrollContentContainer,
+          {paddingTop: top, paddingBottom: bottom}
+        ]}
+        testID="rushShows">
         {sortedRushShows.map(({show, showtimes}) => (
           <ShowCard key={show.id} show={show} showtimes={showtimes} />
         ))}
