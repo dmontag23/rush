@@ -9,7 +9,7 @@ import EnterLinkScreen from '../EnterLinkScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {systemTime} from '../../../../tests/integration/setup';
 
-describe('link screen', () => {
+describe('Link screen', () => {
   it('displays elements in their initial state on the screen', async () => {
     const Stack = createStackNavigator<RootStack>();
     const {getByRole, getByText, getByLabelText} = render(

@@ -7,7 +7,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {RootStack} from '../../RootNavigator';
 import {NavigationContainer} from '@react-navigation/native';
 
-describe('email screen', () => {
+describe('Email screen', () => {
   it('displays elements in their initial state on the screen', async () => {
     const Stack = createStackNavigator<RootStack>();
     const {getByRole, getByText, getByLabelText} = render(
