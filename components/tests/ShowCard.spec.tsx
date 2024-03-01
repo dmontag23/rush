@@ -24,8 +24,8 @@ describe('The show card', () => {
             localTime: '14:00',
             rushTickets: {
               maxTickets: 2,
-              availableAfter: '2024-05-23T10:00:00.000+01:00',
-              availableUntil: '2024-05-23T15:30:00.000+01:00',
+              availableAfter: '2024-05-23T11:00:00.000+01:00',
+              availableUntil: '2024-05-23T16:30:00.000+01:00',
               quantityAvailable: 6
             }
           } as TodayTixShowtime,
@@ -34,8 +34,8 @@ describe('The show card', () => {
             localTime: '19:30',
             rushTickets: {
               maxTickets: 2,
-              availableAfter: '2024-05-23T10:00:00.000+01:00',
-              availableUntil: '2024-05-23T17:00:00.000+01:00'
+              availableAfter: '2024-05-23T11:00:00.000+01:00',
+              availableUntil: '2024-05-23T16:30:00.000+01:00'
             }
           } as TodayTixShowtime
         ]}

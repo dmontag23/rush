@@ -7,6 +7,7 @@ module.exports = {
     '!**/types/**',
     '!App.tsx'
   ],
+  globalSetup: '<rootDir>/tests/integration/globalSetup.ts',
   moduleNameMapper: {
     /* added the line below to resolve absolute imports from the root directory,
     e.g. for all the custom react testing library functions
