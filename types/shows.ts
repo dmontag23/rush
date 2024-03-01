@@ -146,7 +146,7 @@ export type TodayTixShow = {
   lowPriceForLotteryTickets: TicketPrice | null;
   lowPriceForRegularTickets: TicketPrice;
   lowPriceForRushTickets: TicketPrice | null;
-  marketableLocationIds: number[];
+  marketableLocationIds: TodayTixLocation[];
   maxDiscountPercentage: number;
   name: string;
   posterImageUrl: string;

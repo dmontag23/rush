@@ -47,7 +47,10 @@ const ShowCard = ({show, showtimes}: ShowCardProps) => {
 
   return (
     <View>
-      <Card mode="contained" style={isRushOpen ? styles.cardWithChip : {}}>
+      <Card
+        accessibilityLabel="Show card"
+        mode="contained"
+        style={isRushOpen ? styles.cardWithChip : {}}>
         <Card.Cover
           resizeMode="stretch"
           source={{

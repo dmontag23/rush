@@ -309,7 +309,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
         value: 23.0
       },
       lowPriceForRushTickets: null,
-      marketableLocationIds: [2],
+      marketableLocationIds: [TodayTixLocation.London],
       maxDiscountPercentage: 0,
       name: 'Hamilton',
       posterImageUrl:
@@ -467,7 +467,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
         displayRounded: '£25',
         value: 25
       },
-      marketableLocationIds: [2],
+      marketableLocationIds: [TodayTixLocation.London],
       maxDiscountPercentage: 0,
       name: 'SIX',
       posterImageUrl:
@@ -615,7 +615,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       },
       isLotteryActive: false,
       isRushActive: true,
-      locationId: 2,
+      locationId: TodayTixLocation.London,
       locationSeoName: 'london',
       lotteryBannerText: null,
       lowPriceForLotteryTickets: null,
@@ -631,7 +631,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
         displayRounded: '£29.50',
         value: 29.5
       },
-      marketableLocationIds: [2],
+      marketableLocationIds: [TodayTixLocation.London],
       maxDiscountPercentage: 0,
       name: 'Wicked',
       posterImageUrl:
@@ -789,7 +789,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       },
       isLotteryActive: false,
       isRushActive: true,
-      locationId: 2,
+      locationId: TodayTixLocation.London,
       locationSeoName: 'london',
       lotteryBannerText: null,
       lowPriceForLotteryTickets: null,
@@ -805,7 +805,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
         display: '£25',
         displayRounded: '£25'
       },
-      marketableLocationIds: [2],
+      marketableLocationIds: [TodayTixLocation.London],
       maxDiscountPercentage: 50,
       name: 'Guys & Dolls',
       posterImageUrl:
@@ -832,6 +832,158 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       venue: 'Bridge Theatre',
       venueId: '76',
       venueUrl: 'the-bridge-theatre'
+    },
+    {
+      admissionType: AdmissionType.Timed,
+      areLotteryTicketsAvailable: false,
+      areRegularTicketsAvailable: true,
+      areRushTicketsAvailable: true,
+      areaTags: ['West End'],
+      avgRating: 4.6289,
+      carouselMedia: [],
+      category: {
+        _type: 'Category',
+        name: 'Musicals',
+        id: 8,
+        slug: 'musicals'
+      },
+      description:
+        'Simply the best musical in the West End! Journey through Tina Turner\'s chart-topping hits, from "Proud Mary" to "What\'s Love Got to Do with It." Discover the inspiring story of her early struggles and rise to stardom, and witness how this rock \'n\' roll legend defied boundaries.',
+      displayName: 'Tina',
+      endDate: '2025-05-31',
+      genreTags: ['Musical'],
+      hasPromotion: true,
+      heroImageUrl:
+        'https://images.ctfassets.net/6pezt69ih962/4UVgHm95bydvrhFYCvnugV/4070ae37d6405150df6f916cf8566bc1/Tina_-_The_Tina_Turner_Musical_-_Hero',
+      id: 8547,
+      images: {
+        productMedia: {
+          imagesAndVideos: [],
+          posterImage: {
+            file: {
+              fileName: 'TINA 4x7.jpg',
+              details: {
+                image: {
+                  width: 480,
+                  height: 720
+                },
+                size: 54986
+              },
+              contentType: 'image/jpeg',
+              url: '//images.ctfassets.net/6pezt69ih962/7DHW1Gn7FTIniFg8pK3svw/abe07c3d7cbf08cdca0607fd8177be2e/TINA_4x7.jpg'
+            }
+          },
+          posterImageSquare: {
+            file: {
+              fileName: 'TINA_1080x1080px.jpg',
+              details: {
+                image: {
+                  width: 1080,
+                  height: 1080
+                },
+                size: 608964
+              },
+              contentType: 'image/jpeg',
+              url: '//images.ctfassets.net/6pezt69ih962/1HnacTo35egiFx0Qf2BUGd/1b9497bb544ba1563bd95e1d2e70bf62/TINA_1080x1080px.jpg'
+            }
+          },
+          entryTitle:
+            'Tina - The Tina Turner Musical [8547] - LON Product Media',
+          appHeroImage: {
+            file: {
+              fileName: 'Tina - The Tina Turner Musical - Hero',
+              details: {
+                image: {
+                  width: 1440,
+                  height: 580
+                },
+                size: 112451
+              },
+              contentType: 'image/jpeg',
+              url: '//images.ctfassets.net/6pezt69ih962/4UVgHm95bydvrhFYCvnugV/4070ae37d6405150df6f916cf8566bc1/Tina_-_The_Tina_Turner_Musical_-_Hero'
+            }
+          },
+          contentModelType: 'productMedia',
+          entryId: '523425897',
+          updatedAt: '2023-12-08T07:38:58.892Z'
+        },
+        posterImageLandscape: null,
+        heroImage: null,
+        imagesAndVideos: [],
+        posterImage: {
+          file: {
+            fileName: 'TINA 4x7.jpg',
+            details: {
+              image: {
+                width: 480,
+                height: 720
+              },
+              size: 54986
+            },
+            contentType: 'image/jpeg',
+            url: '//images.ctfassets.net/6pezt69ih962/7DHW1Gn7FTIniFg8pK3svw/abe07c3d7cbf08cdca0607fd8177be2e/TINA_4x7.jpg'
+          }
+        },
+        posterImageSquare: {
+          file: {
+            fileName: 'TINA_1080x1080px.jpg',
+            details: {
+              image: {
+                width: 1080,
+                height: 1080
+              },
+              size: 608964
+            },
+            contentType: 'image/jpeg',
+            url: '//images.ctfassets.net/6pezt69ih962/1HnacTo35egiFx0Qf2BUGd/1b9497bb544ba1563bd95e1d2e70bf62/TINA_1080x1080px.jpg'
+          }
+        }
+      },
+      isLotteryActive: false,
+      isRushActive: true,
+      locationId: TodayTixLocation.London,
+      locationSeoName: 'london',
+      lotteryBannerText: null,
+      lowPriceForLotteryTickets: null,
+      lowPriceForRegularTickets: {
+        display: '£13',
+        currency: 'GBP',
+        displayRounded: '£13',
+        value: 13.0
+      },
+      lowPriceForRushTickets: {
+        display: '£25',
+        currency: 'GBP',
+        displayRounded: '£25',
+        value: 25
+      },
+      marketableLocationIds: [TodayTixLocation.London],
+      maxDiscountPercentage: 0,
+      name: 'Tina - The Tina Turner Musical',
+      posterImageUrl:
+        'https://images.ctfassets.net/6pezt69ih962/7DHW1Gn7FTIniFg8pK3svw/abe07c3d7cbf08cdca0607fd8177be2e/TINA_4x7.jpg',
+      productType: ProductType.Show,
+      promotion: null,
+      ratingCount: 5188,
+      relatedShows: [],
+      rewards: {
+        _type: 'Rewards',
+        maxAmount: 2,
+        type: RewardType.Default
+      },
+      rushBannerText: '£25 Rush tickets',
+      savingsMessage: null,
+      salesMessage:
+        'A jubilant celebration of the iconic and unstoppable Tina Turner',
+      shouldShowPromotionsOnCards: true,
+      showId: 8547,
+      showName: 'Tina',
+      slug: 'tina',
+      startDate: '2021-08-05',
+      subcategories: [],
+      venue: 'Aldwych Theatre',
+      venueId: '112',
+      venueUrl: 'aldwych-theatre'
     }
   ]
 };

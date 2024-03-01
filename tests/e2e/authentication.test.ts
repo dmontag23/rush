@@ -4,7 +4,9 @@ import {describe, it} from '@jest/globals';
 describe('Authentication flow', () => {
   it('should be able to log in', async () => {
     // check the initial state of the email screen
-    await expect(element(by.text('Sign into TodayTix'))).toBeVisible();
+    await waitFor(element(by.text('Sign into TodayTix')))
+      .toBeVisible()
+      .withTimeout(10000);
     await expect(element(by.text("What's your email?"))).toBeVisible();
     const emailFormInput = element(by.label('Email')).atIndex(1);
     const continueButton = element(by.text('Continue'));

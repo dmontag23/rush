@@ -35,6 +35,7 @@ const RushShowList = ({route}: StackScreenProps<RootStack, 'RushShowList'>) => {
         }
       ]}>
       <ScrollView
+        testID="rushShows"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContentContainer}>
         {sortedRushShows.map(({show, showtimes}) => (
