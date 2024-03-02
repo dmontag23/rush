@@ -369,6 +369,22 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       id: 1,
       images: {
         productMedia: {
+          headerImage: {
+            file: {
+              fileName: 'SIX Header 2.jpg',
+              details: {
+                image: {
+                  width: 1600,
+                  height: 989
+                },
+                size: 2092608
+              },
+              contentType: 'image/jpeg',
+              url: '//images.ctfassets.net/6pezt69ih962/62nYHrfpgwsWFXWAvhn8CF/b0672177b384cc4c4d68aea2b2ed6457/SIX_Header_2.jpg'
+            },
+            description: '',
+            title: '359 96A0697 SIX 2021 Pamela Raith Photography RT'
+          },
           imagesAndVideos: [],
           posterImage: {
             file: {
@@ -693,6 +709,24 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       id: 3,
       images: {
         productMedia: {
+          headerImage: {
+            file: {
+              fileName:
+                '41. Cast of Guys _ Dolls at The Bridge Theatre, photo by Manuel Harlan.jpg',
+              details: {
+                image: {
+                  width: 1600,
+                  height: 1200
+                },
+                size: 1527572
+              },
+              contentType: 'image/jpeg',
+              url: '//images.ctfassets.net/6pezt69ih962/7pCxFFeZ8WIsA8iWrmpXg6/f5f0dc907c98958be4464569e07ce658/41._Cast_of_Guys___Dolls_at_The_Bridge_Theatre__photo_by_Manuel_Harlan.jpg'
+            },
+            description: '',
+            title:
+              '41. Cast of Guys Dolls at The Bridge Theatre, photo by Manuel Harlan'
+          },
           imagesAndVideos: [],
           posterImage: {
             file: {
