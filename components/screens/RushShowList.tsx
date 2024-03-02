@@ -5,7 +5,6 @@ import {TodayTixShowtime} from '../../types/showtimes';
 import {RootStack} from './RootNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useTheme} from 'react-native-paper';
 
 const addTickets = (showtimes: TodayTixShowtime[]) =>
   showtimes.reduce(
@@ -14,7 +13,10 @@ const addTickets = (showtimes: TodayTixShowtime[]) =>
     0
   );
 
-const RushShowList = ({route}: StackScreenProps<RootStack, 'RushShowList'>) => {
+const RushShowList = ({
+  route,
+  navigation
+}: StackScreenProps<RootStack, 'RushShowList'>) => {
   const {top, bottom} = useSafeAreaInsets();
   const {showsAndTimes} = route.params;
 
@@ -26,11 +28,7 @@ const RushShowList = ({route}: StackScreenProps<RootStack, 'RushShowList'>) => {
   );
 
   return (
-    <View
-      style={[
-        styles.container,
-        {backgroundColor: useTheme().colors.inversePrimary}
-      ]}>
+    <View style={[styles.container]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
@@ -39,7 +37,17 @@ const RushShowList = ({route}: StackScreenProps<RootStack, 'RushShowList'>) => {
         ]}
         testID="rushShows">
         {sortedRushShows.map(({show, showtimes}) => (
-          <ShowCard key={show.id} show={show} showtimes={showtimes} />
+          <ShowCard
+            key={show.id}
+            show={show}
+            showtimes={showtimes}
+            onCardPress={() =>
+              navigation.navigate('ShowDetails', {
+                show,
+                showtimes
+              })
+            }
+          />
         ))}
       </ScrollView>
     </View>

@@ -1,6 +1,6 @@
 import React from 'react';
 import {TodayTixShow} from '../types/shows';
-import {Card, Chip, Text, useTheme} from 'react-native-paper';
+import {Card, Chip, Text, TouchableRipple, useTheme} from 'react-native-paper';
 import {TodayTixShowtime} from '../types/showtimes';
 import {StyleSheet, View} from 'react-native';
 
@@ -29,9 +29,10 @@ const RushShowtimeInfo = (rushShowtimes: TodayTixShowtime[]) => (
 type ShowCardProps = {
   show: TodayTixShow;
   showtimes: TodayTixShowtime[];
+  onCardPress?: () => void;
 };
 
-const ShowCard = ({show, showtimes}: ShowCardProps) => {
+const ShowCard = ({show, showtimes, onCardPress = () => {}}: ShowCardProps) => {
   const {roundness, colors} = useTheme();
 
   const maxNumOfRushTickets = showtimes[0]?.rushTickets?.maxTickets;
@@ -47,40 +48,48 @@ const ShowCard = ({show, showtimes}: ShowCardProps) => {
 
   return (
     <View>
-      <Card
-        accessibilityLabel="Show card"
-        mode="contained"
-        style={isRushOpen ? styles.cardWithChip : {}}>
-        <Card.Cover
-          resizeMode="stretch"
-          source={{
-            uri: `https:${show.images.productMedia.appHeroImage.file.url}`
-          }}
-          theme={{roundness: 0}}
-          style={[
-            styles.image,
-            {
-              borderTopLeftRadius: roundness,
-              borderTopRightRadius: roundness
+      <TouchableRipple
+        borderless
+        onPress={onCardPress}
+        style={[
+          isRushOpen ? styles.cardWithChip : {},
+          {
+            borderRadius: roundness
+          },
+          styles.cardBorder
+        ]}>
+        <Card accessibilityLabel="Show card" mode="contained">
+          <Card.Cover
+            resizeMode="stretch"
+            source={{
+              uri: `https:${show.images.productMedia.appHeroImage.file.url}`
+            }}
+            theme={{roundness: 0}}
+            style={[
+              styles.image,
+              {
+                borderTopLeftRadius: roundness,
+                borderTopRightRadius: roundness
+              }
+            ]}
+          />
+          <Card.Title
+            title={show.displayName}
+            subtitle={
+              isRushOpen && (
+                <View>
+                  <Text style={styles.subtitle}>{rushTicketPrice}</Text>
+                  <Text style={styles.subtitle}>
+                    {`${maxNumOfRushTickets} per person max`}
+                  </Text>
+                </View>
+              )
             }
-          ]}
-        />
-        <Card.Title
-          title={show.displayName}
-          subtitle={
-            isRushOpen && (
-              <View>
-                <Text style={styles.subtitle}>{rushTicketPrice}</Text>
-                <Text style={styles.subtitle}>
-                  {`${maxNumOfRushTickets} per person max`}
-                </Text>
-              </View>
-            )
-          }
-          right={() => RushShowtimeInfo(showtimes)}
-          titleStyle={styles.title}
-        />
-      </Card>
+            right={() => RushShowtimeInfo(showtimes)}
+            titleStyle={styles.title}
+          />
+        </Card>
+      </TouchableRipple>
       {isRushOpen ? (
         <Chip compact style={styles.chip} textStyle={styles.chipText}>
           {`${rushStartTime} to ${rushEndTime}`}
@@ -93,7 +102,8 @@ const ShowCard = ({show, showtimes}: ShowCardProps) => {
             {
               backgroundColor: colors.shadow,
               borderRadius: roundness
-            }
+            },
+            styles.cardBorder
           ]}
         />
       )}
@@ -104,6 +114,7 @@ const ShowCard = ({show, showtimes}: ShowCardProps) => {
 export default ShowCard;
 
 const styles = StyleSheet.create({
+  cardBorder: {borderBottomLeftRadius: 12, borderBottomRightRadius: 12},
   cardWithChip: {marginTop: 15},
   chip: {position: 'absolute', left: 10},
   chipText: {fontSize: 8},
@@ -111,9 +122,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    opacity: 0.3,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12
+    opacity: 0.3
   },
   image: {height: 150},
   showtimeAndTicketNumContainer: {alignItems: 'center'},

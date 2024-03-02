@@ -24,14 +24,18 @@ import {
 } from '../../types/shows';
 import useGetShowtimesWithRushAvailability from '../../hooks/useGetShowtimesWithRushAvailability';
 import {TodayTixShowtime} from '../../types/showtimes';
+import ShowDetails from '../ShowDetails/ShowDetails';
+
+type ShowAndShowtimes = {
+  show: TodayTixShow;
+  showtimes: TodayTixShowtime[];
+};
 
 export type RootStack = {
   RushShowList: {
-    showsAndTimes: {
-      show: TodayTixShow;
-      showtimes: TodayTixShowtime[];
-    }[];
+    showsAndTimes: ShowAndShowtimes[];
   };
+  ShowDetails: ShowAndShowtimes;
   EnterEmail: undefined;
   EnterLink: undefined;
 };
@@ -160,6 +164,7 @@ const RootNavigator = () => {
                 }))
               }}
             />
+            <Stack.Screen name="ShowDetails" component={ShowDetails} />
           </Stack.Group>
         ) : (
           <>
