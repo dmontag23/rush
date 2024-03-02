@@ -19,6 +19,7 @@ const ShowDetails = ({
   return (
     <View style={styles.container}>
       <Image
+        accessibilityLabel="Header image"
         source={{
           uri: `https:${headerImage?.file.url ?? show.images.productMedia.appHeroImage.file.url}`
         }}
@@ -27,10 +28,15 @@ const ShowDetails = ({
         style={styles.image}
       />
       {isImageLoading ? (
-        <ActivityIndicator size="large" style={styles.loadingSpinner} />
+        <ActivityIndicator
+          size="large"
+          style={styles.loadingSpinner}
+          testID="loadingHeaderImageSpinner"
+        />
       ) : (
         <>
           <IconButton
+            accessibilityLabel="Back button"
             icon="arrow-left"
             mode="contained-tonal"
             size={30}
