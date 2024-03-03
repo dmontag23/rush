@@ -1,15 +1,15 @@
-import {useMutation} from '@tanstack/react-query';
-import {todayTixAPI} from '../axiosConfig';
+import {useMutation} from "@tanstack/react-query";
+import {todayTixAPI} from "../axiosConfig";
 import {
   TodayTixAccessTokensReq,
   TodayTixAccessTokensRes
-} from '../types/loginTokens';
-import {TodayTixAPIError} from '../types/base';
+} from "../types/loginTokens";
+import {TodayTixAPIError} from "../types/base";
 
 const exchangeCodeForTokens = async (code: string) =>
   todayTixAPI.post<TodayTixAccessTokensReq, TodayTixAccessTokensRes>(
-    'accessTokens',
-    {code, grantType: 'authorizationCode', scope: 'customer'}
+    "accessTokens",
+    {code, grantType: "authorizationCode", scope: "customer"}
   );
 
 const usePostCodeForAccessTokens = () =>

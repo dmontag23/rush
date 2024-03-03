@@ -1,10 +1,10 @@
-import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
-import ShowCard from '../ShowCard';
-import {TodayTixShowtime} from '../../types/showtimes';
-import {RootStack} from './RootNavigator';
-import {StackScreenProps} from '@react-navigation/stack';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import React from "react";
+import {ScrollView, StyleSheet, View} from "react-native";
+import ShowCard from "../ShowCard";
+import {TodayTixShowtime} from "../../types/showtimes";
+import {RootStack} from "./RootNavigator";
+import {StackScreenProps} from "@react-navigation/stack";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 const addTickets = (showtimes: TodayTixShowtime[]) =>
   showtimes.reduce(
@@ -16,7 +16,7 @@ const addTickets = (showtimes: TodayTixShowtime[]) =>
 const RushShowList = ({
   route,
   navigation
-}: StackScreenProps<RootStack, 'RushShowList'>) => {
+}: StackScreenProps<RootStack, "RushShowList">) => {
   const {top, bottom} = useSafeAreaInsets();
   const {showsAndTimes} = route.params;
 
@@ -42,7 +42,7 @@ const RushShowList = ({
             show={show}
             showtimes={showtimes}
             onCardPress={() =>
-              navigation.navigate('ShowDetails', {
+              navigation.navigate("ShowDetails", {
                 show,
                 showtimes
               })

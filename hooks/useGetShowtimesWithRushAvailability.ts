@@ -1,6 +1,6 @@
-import {useQueries} from '@tanstack/react-query';
-import {todayTixAPI} from '../axiosConfig';
-import {TodayTixShowtime} from '../types/showtimes';
+import {useQueries} from "@tanstack/react-query";
+import {todayTixAPI} from "../axiosConfig";
+import {TodayTixShowtime} from "../types/showtimes";
 
 const getShowtimesWithRushAvailability = async (showId: number) =>
   todayTixAPI.get<TodayTixShowtime[]>(
@@ -16,7 +16,7 @@ const useGetShowtimesWithRushAvailability = ({
 }: UseGetShowtimesWithRushAvailabilityProps) =>
   useQueries({
     queries: showIds.map(showId => ({
-      queryKey: ['showtimesWithRushAvailability', showId],
+      queryKey: ["showtimesWithRushAvailability", showId],
       queryFn: () => getShowtimesWithRushAvailability(showId)
     })),
     combine: results => ({

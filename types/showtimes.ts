@@ -1,18 +1,18 @@
-import {AdmissionType, Platform, Rewards, TicketPrice} from './shows';
+import {AdmissionType, Platform, Rewards, TicketPrice} from "./shows";
 
 export enum Daypart {
-  Evening = 'EVENING',
-  Matinee = 'MATINEE'
+  Evening = "EVENING",
+  Matinee = "MATINEE"
 }
 
 export enum DayOfWeek {
-  Monday = 'MONDAY',
-  Tuesday = 'TUESDAY',
-  Wednesday = 'WEDNESDAY',
-  Thursday = 'THURSDAY',
-  Friday = 'FRIDAY',
-  Saturday = 'SATURDAY',
-  Sunday = 'SUNDAY'
+  Monday = "MONDAY",
+  Tuesday = "TUESDAY",
+  Wednesday = "WEDNESDAY",
+  Thursday = "THURSDAY",
+  Friday = "FRIDAY",
+  Saturday = "SATURDAY",
+  Sunday = "SUNDAY"
 }
 
 type PriceBand = {

@@ -1,4 +1,4 @@
-import {beforeEach} from '@jest/globals';
+import {beforeEach} from "@jest/globals";
 
 beforeEach(async () => {
   // this is necessary in order to clear async storage before each test

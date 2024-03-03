@@ -1,13 +1,10 @@
-import {UseMutationResult} from '@tanstack/react-query';
-import React, {useCallback, useEffect} from 'react';
 import {
   ActivityIndicator,
   Button,
   Text,
   TextInput,
   useTheme
-} from 'react-native-paper';
-import {zodResolver} from '@hookform/resolvers/zod';
+} from "react-native-paper";
 import {
   Controller,
   DefaultValues,
@@ -15,20 +12,23 @@ import {
   FieldValues,
   SubmitHandler,
   useForm
-} from 'react-hook-form';
-import {z} from 'zod';
-import {useFocusEffect} from '@react-navigation/native';
+} from "react-hook-form";
 import {
   InputModeOptions,
-  StyleSheet,
-  View,
-  TextInputProps,
   KeyboardAvoidingView,
-  Platform
-} from 'react-native';
-import {TodayTixAPIError} from '../types/base';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useHeaderHeight} from '@react-navigation/elements';
+  Platform,
+  StyleSheet,
+  TextInputProps,
+  View
+} from "react-native";
+import React, {useCallback, useEffect} from "react";
+import {UseMutationResult} from "@tanstack/react-query";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {TodayTixAPIError} from "../types/base";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {useFocusEffect} from "@react-navigation/native";
+import {useHeaderHeight} from "@react-navigation/elements";
+import {z} from "zod";
 
 const ErrorText = ({message}: {message: string | undefined}) => (
   <Text variant="titleMedium" style={{color: useTheme().colors.error}}>
@@ -41,7 +41,7 @@ type BaseAuthFormProps<TField extends FieldValues, TData, TVariables> = {
   defaultValues: DefaultValues<TField>;
   fieldName: FieldPath<TField>;
   fieldLabel: string;
-  inputType: InputModeOptions & TextInputProps['autoComplete'];
+  inputType: InputModeOptions & TextInputProps["autoComplete"];
   titleText: string;
   subText: string;
   submitButtonText: string;
@@ -80,7 +80,7 @@ const BaseAuthForm = <TField extends FieldValues, TData, TVariables>({
     reset: resetForm
   } = useForm({
     defaultValues,
-    mode: 'onTouched',
+    mode: "onTouched",
     resolver: zodResolver(validationSchema)
   });
 
@@ -107,7 +107,7 @@ const BaseAuthForm = <TField extends FieldValues, TData, TVariables>({
   return (
     <KeyboardAvoidingView
       accessibilityLabel="Form"
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       /* The top is needed below because the header has a top margin
       equal to the top safe area */
       keyboardVerticalOffset={useHeaderHeight() + top + 15}
@@ -183,9 +183,9 @@ const styles = StyleSheet.create({
   input: {height: 60, lineHeight: 20},
   screenContainer: {
     flex: 1,
-    justifyContent: 'space-between',
-    marginTop: '10%',
-    marginHorizontal: '8%'
+    justifyContent: "space-between",
+    marginTop: "10%",
+    marginHorizontal: "8%"
   },
-  title: {fontWeight: 'bold'}
+  title: {fontWeight: "bold"}
 });

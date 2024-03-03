@@ -1,5 +1,5 @@
-import {useMutation, useQueryClient} from '@tanstack/react-query';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const storeTokens = async (tokens: {
   accessToken: string;
@@ -8,9 +8,9 @@ const storeTokens = async (tokens: {
 }) => {
   // TODO: Use secure storage for tokens instead
   await AsyncStorage.multiSet([
-    ['access-token', tokens.accessToken],
-    ['refresh-token', tokens.refreshToken],
-    ['token-ttl', tokens.ttl.toString()]
+    ["access-token", tokens.accessToken],
+    ["refresh-token", tokens.refreshToken],
+    ["token-ttl", tokens.ttl.toString()]
   ]);
   return tokens;
 };
@@ -23,7 +23,7 @@ const useStoreAuthTokens = () => {
     // Always refetch the access token after success or error
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ['accessToken']
+        queryKey: ["accessToken"]
       });
     }
   });

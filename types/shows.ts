@@ -1,5 +1,5 @@
 export enum TodayTixFieldset {
-  Summary = 'SHOW_SUMMARY'
+  Summary = "SHOW_SUMMARY"
 }
 
 export enum TodayTixLocation {
@@ -8,12 +8,12 @@ export enum TodayTixLocation {
 }
 
 export enum AdmissionType {
-  Timed = 'TIMED'
+  Timed = "TIMED"
 }
 
 export enum AnchorPosition {
-  Top = 'TOP',
-  Center = 'CENTER'
+  Top = "TOP",
+  Center = "CENTER"
 }
 
 type Category = {
@@ -95,13 +95,13 @@ export type TicketPrice = {
 };
 
 export enum ProductType {
-  Show = 'SHOW'
+  Show = "SHOW"
 }
 
 export enum Platform {
-  IOS = 'ios',
-  Android = 'android',
-  Web = 'web'
+  IOS = "ios",
+  Android = "android",
+  Web = "web"
 }
 
 type Promotion = {
@@ -116,7 +116,7 @@ type Promotion = {
 };
 
 export enum RewardType {
-  Default = 'DEFAULT'
+  Default = "DEFAULT"
 }
 
 export type Rewards = {_type: string; maxAmount: number; type: RewardType};

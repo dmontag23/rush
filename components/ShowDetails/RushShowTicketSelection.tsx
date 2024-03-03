@@ -1,9 +1,9 @@
-import React, {useContext} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Button, Text} from 'react-native-paper';
-import SelectedShowtimeContext from '../../store/selected-showtime-context';
-import {TodayTixShow} from '../../types/shows';
-import {TodayTixShowtime} from '../../types/showtimes';
+import React, {useContext} from "react";
+import {StyleSheet, View} from "react-native";
+import {Button, Text} from "react-native-paper";
+import SelectedShowtimeContext from "../../store/selected-showtime-context";
+import {TodayTixShow} from "../../types/shows";
+import {TodayTixShowtime} from "../../types/showtimes";
 
 type RushShowTicketSelectionProps = {
   show: TodayTixShow;
@@ -41,8 +41,8 @@ const RushShowTicketSelection = ({
       <View style={styles.selectionContainer}>
         <Text variant="titleLarge">
           {showtimes.length
-            ? 'Select a Time'
-            : 'There are no rush shows currently available.'}
+            ? "Select a Time"
+            : "There are no rush shows currently available."}
         </Text>
         <View style={styles.selectionButtonsContainer}>
           {showtimes.map(showtime => {
@@ -54,7 +54,7 @@ const RushShowTicketSelection = ({
                   setSelectedShowtime(showtime);
                   setSelectedNumberOfTickets(NaN);
                 }}
-                mode={isSelected ? 'contained' : 'outlined'}
+                mode={isSelected ? "contained" : "outlined"}
                 contentStyle={styles.selectionButton}>
                 {showtime.localTime}
               </Button>
@@ -72,7 +72,7 @@ const RushShowTicketSelection = ({
                 <Button
                   key={number}
                   onPress={() => setSelectedNumberOfTickets(number)}
-                  mode={isSelected ? 'contained' : 'outlined'}
+                  mode={isSelected ? "contained" : "outlined"}
                   contentStyle={styles.selectionButton}>
                   {number}
                 </Button>
@@ -88,14 +88,14 @@ const RushShowTicketSelection = ({
 export default RushShowTicketSelection;
 
 const styles = StyleSheet.create({
-  container: {alignItems: 'center', rowGap: 30},
+  container: {alignItems: "center", rowGap: 30},
   selectionButton: {minWidth: 100, minHeight: 80},
   selectionButtonsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     rowGap: 15,
     columnGap: 50,
-    width: '100%'
+    width: "100%"
   },
-  selectionContainer: {alignItems: 'center', rowGap: 10}
+  selectionContainer: {alignItems: "center", rowGap: 10}
 });

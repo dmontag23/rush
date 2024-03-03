@@ -1,20 +1,20 @@
-import React from 'react';
-import {describe, it, expect, jest} from '@jest/globals';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {TodayTixShow} from '../../../types/shows';
-import RushShowList from '../RushShowList';
-import {render, userEvent, waitFor, fireEvent} from 'testing-library/extension';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {RootStack} from '../RootNavigator';
-import {TodayTixShowtime} from '../../../types/showtimes';
-import ShowDetails from '../../ShowDetails/ShowDetails';
-import {hadestownLightThemeColors} from '../../../themes';
+import React from "react";
+import {describe, it, expect, jest} from "@jest/globals";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {TodayTixShow} from "../../../types/shows";
+import RushShowList from "../RushShowList";
+import {render, userEvent, waitFor, fireEvent} from "testing-library/extension";
+import {NavigationContainer} from "@react-navigation/native";
+import {createStackNavigator} from "@react-navigation/stack";
+import {RootStack} from "../RootNavigator";
+import {TodayTixShowtime} from "../../../types/showtimes";
+import ShowDetails from "../../ShowDetails/ShowDetails";
+import {hadestownLightThemeColors} from "../../../themes";
 
-describe('Rush show list', () => {
-  it('sorts shows', async () => {
+describe("Rush show list", () => {
+  it("sorts shows", async () => {
     // setup
-    await AsyncStorage.setItem('access-token', 'access-token');
+    await AsyncStorage.setItem("access-token", "access-token");
 
     // render
     const Stack = createStackNavigator<RootStack>();
@@ -31,10 +31,10 @@ describe('Rush show list', () => {
                 {
                   show: {
                     id: 1,
-                    displayName: 'SIX the Musical',
+                    displayName: "SIX the Musical",
                     isRushActive: true,
                     images: {
-                      productMedia: {appHeroImage: {file: {url: 'test-url'}}}
+                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
                     }
                   } as TodayTixShow,
                   showtimes: [
@@ -47,10 +47,10 @@ describe('Rush show list', () => {
                 {
                   show: {
                     id: 2,
-                    displayName: 'Unfortunate',
+                    displayName: "Unfortunate",
                     isRushActive: true,
                     images: {
-                      productMedia: {appHeroImage: {file: {url: 'test-url'}}}
+                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
                     }
                   } as TodayTixShow,
                   showtimes: [
@@ -66,10 +66,10 @@ describe('Rush show list', () => {
                 {
                   show: {
                     id: 3,
-                    displayName: 'Hamilton',
+                    displayName: "Hamilton",
                     isRushActive: true,
                     images: {
-                      productMedia: {appHeroImage: {file: {url: 'test-url'}}}
+                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
                     }
                   } as TodayTixShow,
                   showtimes: [
@@ -86,10 +86,10 @@ describe('Rush show list', () => {
                 {
                   show: {
                     id: 4,
-                    displayName: 'Hadestown',
+                    displayName: "Hadestown",
                     isRushActive: true,
                     images: {
-                      productMedia: {appHeroImage: {file: {url: 'test-url'}}}
+                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
                     }
                   } as TodayTixShow,
                   showtimes: []
@@ -97,10 +97,10 @@ describe('Rush show list', () => {
                 {
                   show: {
                     id: 5,
-                    displayName: 'Come from Away',
+                    displayName: "Come from Away",
                     isRushActive: true,
                     images: {
-                      productMedia: {appHeroImage: {file: {url: 'test-url'}}}
+                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
                     }
                   } as TodayTixShow,
                   showtimes: [{id: 5} as TodayTixShowtime]
@@ -113,23 +113,23 @@ describe('Rush show list', () => {
     );
 
     // assert
-    const allShows = getAllByLabelText('Show card');
+    const allShows = getAllByLabelText("Show card");
     expect(allShows.length).toBe(5);
     [
-      'Hamilton',
-      'SIX the Musical',
-      'Unfortunate',
-      'Hadestown',
-      'Come from Away'
+      "Hamilton",
+      "SIX the Musical",
+      "Unfortunate",
+      "Hadestown",
+      "Come from Away"
     ].map((showName, i) => {
       expect(allShows[i]).toBeVisible();
       expect(allShows[i]).toContainElement(getByText(showName));
     });
   });
 
-  it('navigates to the show details screen and back', async () => {
+  it("navigates to the show details screen and back", async () => {
     // setup
-    await AsyncStorage.setItem('access-token', 'access-token');
+    await AsyncStorage.setItem("access-token", "access-token");
 
     // render
     const Stack = createStackNavigator<RootStack>();
@@ -146,10 +146,10 @@ describe('Rush show list', () => {
                 {
                   show: {
                     id: 1,
-                    displayName: 'SIX the Musical',
+                    displayName: "SIX the Musical",
                     isRushActive: true,
                     images: {
-                      productMedia: {appHeroImage: {file: {url: 'test-url'}}}
+                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
                     }
                   } as TodayTixShow,
                   showtimes: [
@@ -157,8 +157,8 @@ describe('Rush show list', () => {
                       id: 1,
                       rushTickets: {
                         quantityAvailable: 4,
-                        availableAfter: '2021-05-23T11:00:00.000+01:00',
-                        availableUntil: '2021-05-23T16:30:00.000+01:00'
+                        availableAfter: "2021-05-23T11:00:00.000+01:00",
+                        availableUntil: "2021-05-23T16:30:00.000+01:00"
                       }
                     } as TodayTixShowtime
                   ]
@@ -172,32 +172,32 @@ describe('Rush show list', () => {
     );
 
     // assert
-    const showCard = getByText('SIX the Musical');
+    const showCard = getByText("SIX the Musical");
     expect(showCard).toBeVisible();
-    expect(getByText('10:00 to 15:30')).toBeVisible();
+    expect(getByText("10:00 to 15:30")).toBeVisible();
 
     // navigate to the show details screen
     userEvent.press(showCard);
 
     // load the header image
     await waitFor(() => {
-      const loadingSpinner = getByTestId('loadingHeaderImageSpinner');
+      const loadingSpinner = getByTestId("loadingHeaderImageSpinner");
       expect(loadingSpinner).toBeVisible();
-      fireEvent(getByLabelText('Header image'), 'onLoadEnd');
+      fireEvent(getByLabelText("Header image"), "onLoadEnd");
       expect(loadingSpinner).not.toBeOnTheScreen();
     });
-    const backButton = getByLabelText('Back button');
+    const backButton = getByLabelText("Back button");
     expect(backButton).toBeVisible();
 
     // go back to the rush show list
     userEvent.press(backButton);
 
-    await waitFor(() => expect(getByText('10:00 to 15:30')).toBeVisible());
+    await waitFor(() => expect(getByText("10:00 to 15:30")).toBeVisible());
   });
 
-  it('maintains selected show state when navigating to other shows and back', async () => {
+  it("maintains selected show state when navigating to other shows and back", async () => {
     // setup
-    await AsyncStorage.setItem('access-token', 'access-token');
+    await AsyncStorage.setItem("access-token", "access-token");
 
     // render
     const Stack = createStackNavigator<RootStack>();
@@ -214,21 +214,21 @@ describe('Rush show list', () => {
                 {
                   show: {
                     id: 1,
-                    displayName: 'SIX the Musical',
+                    displayName: "SIX the Musical",
                     isRushActive: true,
                     images: {
-                      productMedia: {appHeroImage: {file: {url: 'test-url'}}}
+                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
                     }
                   } as TodayTixShow,
                   showtimes: [
                     {
                       id: 1,
-                      localTime: '19:00',
+                      localTime: "19:00",
                       rushTickets: {
                         minTickets: 1,
                         maxTickets: 2,
-                        availableAfter: '2021-05-23T11:00:00.000+01:00',
-                        availableUntil: '2021-05-23T16:30:00.000+01:00'
+                        availableAfter: "2021-05-23T11:00:00.000+01:00",
+                        availableUntil: "2021-05-23T16:30:00.000+01:00"
                       }
                     } as TodayTixShowtime
                   ]
@@ -236,24 +236,24 @@ describe('Rush show list', () => {
                 {
                   show: {
                     id: 2,
-                    displayName: 'Hamilton',
+                    displayName: "Hamilton",
                     isRushActive: true,
                     images: {
                       productMedia: {
-                        appHeroImage: {file: {url: 'test-url-for-show-card'}},
-                        headerImage: {file: {url: 'test-url-for-header-photo'}}
+                        appHeroImage: {file: {url: "test-url-for-show-card"}},
+                        headerImage: {file: {url: "test-url-for-header-photo"}}
                       }
                     }
                   } as TodayTixShow,
                   showtimes: [
                     {
                       id: 2,
-                      localTime: '14:00',
+                      localTime: "14:00",
                       rushTickets: {
                         minTickets: 1,
                         maxTickets: 2,
-                        availableAfter: '2021-05-23T11:00:00.000+01:00',
-                        availableUntil: '2021-05-23T16:30:00.000+01:00'
+                        availableAfter: "2021-05-23T11:00:00.000+01:00",
+                        availableUntil: "2021-05-23T16:30:00.000+01:00"
                       }
                     } as TodayTixShowtime
                   ]
@@ -267,23 +267,23 @@ describe('Rush show list', () => {
     );
 
     // navigate to the show details screen
-    userEvent.press(getByText('SIX the Musical'));
+    userEvent.press(getByText("SIX the Musical"));
 
     // load the header image
     await waitFor(() => {
-      fireEvent(getByLabelText('Header image'), 'onLoadEnd');
-      expect(getByLabelText('Back button')).toBeVisible();
+      fireEvent(getByLabelText("Header image"), "onLoadEnd");
+      expect(getByLabelText("Back button")).toBeVisible();
     });
 
     // select two shows for the evening
-    const eveningShowtimeButton = getByText('19:00');
+    const eveningShowtimeButton = getByText("19:00");
     userEvent.press(eveningShowtimeButton);
     await waitFor(() =>
       expect(eveningShowtimeButton).toHaveStyle({
         color: hadestownLightThemeColors.onPrimary
       })
     );
-    const ticketNumberButton = getByText('2');
+    const ticketNumberButton = getByText("2");
     userEvent.press(ticketNumberButton);
     await waitFor(() =>
       expect(ticketNumberButton).toHaveStyle({
@@ -292,39 +292,39 @@ describe('Rush show list', () => {
     );
 
     // navigate to a different show
-    userEvent.press(getByLabelText('Back button'));
-    await waitFor(() => expect(getByText('Hamilton')).toBeVisible());
+    userEvent.press(getByLabelText("Back button"));
+    await waitFor(() => expect(getByText("Hamilton")).toBeVisible());
     /* TODO: Investigate why this is necessary to press the card after navigating
     back to the card list screen. Perhaps it's a limitation with the react navigation library */
     jest.runAllTimers();
-    userEvent.press(getByText('Hamilton'));
+    userEvent.press(getByText("Hamilton"));
 
     // check that the show button is de-selected
     await waitFor(() => {
-      fireEvent(getByLabelText('Header image'), 'onLoadEnd');
-      expect(getByLabelText('Back button')).toBeVisible();
+      fireEvent(getByLabelText("Header image"), "onLoadEnd");
+      expect(getByLabelText("Back button")).toBeVisible();
     });
-    expect(getByText('14:00')).toHaveStyle({
+    expect(getByText("14:00")).toHaveStyle({
       color: hadestownLightThemeColors.primary
     });
 
     // navigate back to the first show
-    userEvent.press(getByLabelText('Back button'));
-    await waitFor(() => expect(getByText('SIX the Musical')).toBeVisible());
+    userEvent.press(getByLabelText("Back button"));
+    await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
     /* TODO: Investigate why this is necessary to press the card after navigating
     back to the card list screen. Perhaps it's a limitation with the react navigation library */
     jest.runAllTimers();
-    userEvent.press(getByText('SIX the Musical'));
+    userEvent.press(getByText("SIX the Musical"));
 
     // check that the show and tickets are still selected
     await waitFor(() => {
-      fireEvent(getByLabelText('Header image'), 'onLoadEnd');
-      expect(getByLabelText('Back button')).toBeVisible();
+      fireEvent(getByLabelText("Header image"), "onLoadEnd");
+      expect(getByLabelText("Back button")).toBeVisible();
     });
-    expect(getByText('19:00')).toHaveStyle({
+    expect(getByText("19:00")).toHaveStyle({
       color: hadestownLightThemeColors.onPrimary
     });
-    expect(getByText('2')).toHaveStyle({
+    expect(getByText("2")).toHaveStyle({
       color: hadestownLightThemeColors.onPrimary
     });
   });

@@ -1,1 +1,1 @@
-declare module 'rn-flipper-async-storage-advanced';
+declare module "rn-flipper-async-storage-advanced";

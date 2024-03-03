@@ -1,22 +1,22 @@
-import React, {useCallback} from 'react';
-import {z} from 'zod';
-import usePostCodeForAccessTokens from '../../../hooks/usePostCodeForAccessTokens';
-import BaseAuthForm from '../../BaseAuthForm';
-import {TodayTixAccessTokensRes} from '../../../types/loginTokens';
-import useStoreAuthTokens from '../../../hooks/useStoreAuthTokens';
+import React, {useCallback} from "react";
+import {z} from "zod";
+import usePostCodeForAccessTokens from "../../../hooks/usePostCodeForAccessTokens";
+import BaseAuthForm from "../../BaseAuthForm";
+import {TodayTixAccessTokensRes} from "../../../types/loginTokens";
+import useStoreAuthTokens from "../../../hooks/useStoreAuthTokens";
 
 const VALIDATION_SCHEMA = z.object({
   code: z
     .string()
     .trim()
-    .url('Please enter a valid url')
+    .url("Please enter a valid url")
     .transform((link, ctx) => {
-      const code = link.split('token=')[1];
+      const code = link.split("token=")[1];
       if (!code) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message:
-            'A token was not found in the link. Please try pasting the link again.'
+            "A token was not found in the link. Please try pasting the link again."
         });
 
         // This is a special symbol you can use to
@@ -45,7 +45,7 @@ const EnterLinkScreen = () => {
   return (
     <BaseAuthForm
       validationSchema={VALIDATION_SCHEMA}
-      defaultValues={{code: ''}}
+      defaultValues={{code: ""}}
       fieldName="code"
       fieldLabel="Link"
       inputType="url"

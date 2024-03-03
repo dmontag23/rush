@@ -1,8 +1,8 @@
-import React from 'react';
-import {TodayTixShow} from '../types/shows';
-import {Card, Chip, Text, TouchableRipple, useTheme} from 'react-native-paper';
-import {TodayTixShowtime} from '../types/showtimes';
-import {StyleSheet, View} from 'react-native';
+import React from "react";
+import {TodayTixShow} from "../types/shows";
+import {Card, Chip, Text, TouchableRipple, useTheme} from "react-native-paper";
+import {TodayTixShowtime} from "../types/showtimes";
+import {StyleSheet, View} from "react-native";
 
 const extractTimeFromDateString = (dateString: string | undefined) => {
   if (dateString) return new Date(dateString).toTimeString().slice(0, 5);
@@ -116,20 +116,20 @@ export default ShowCard;
 const styles = StyleSheet.create({
   cardBorder: {borderBottomLeftRadius: 12, borderBottomRightRadius: 12},
   cardWithChip: {marginTop: 15},
-  chip: {position: 'absolute', left: 10},
+  chip: {position: "absolute", left: 10},
   chipText: {fontSize: 8},
   disabledOverlay: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
+    position: "absolute",
+    width: "100%",
+    height: "100%",
     opacity: 0.3
   },
   image: {height: 150},
-  showtimeAndTicketNumContainer: {alignItems: 'center'},
+  showtimeAndTicketNumContainer: {alignItems: "center"},
   showtimesInfoContainer: {
     maxWidth: 120,
     marginRight: 10,
-    flexDirection: 'row',
+    flexDirection: "row",
     columnGap: 10
   },
   subtitle: {fontSize: 11},

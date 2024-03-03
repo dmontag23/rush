@@ -1,30 +1,30 @@
-import React from 'react';
-import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import React from "react";
+import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
 import {
   Icon,
   IconButton,
   MD3Theme,
   adaptNavigationTheme,
   useTheme
-} from 'react-native-paper';
-import {LIGHT_THEME} from '../../themes';
-import EnterEmailScreen from './authentication/EnterEmailScreen';
-import {View, Animated, StyleSheet} from 'react-native';
-import EnterLinkScreen from './authentication/EnterLinkScreen';
-import TodayTixLogoOnBackground from '../TodayTixLogoOnBackground';
-import useGetAccessToken from '../../hooks/useGetAccessToken';
-import RushShowList from './RushShowList';
-import {StackHeaderProps, createStackNavigator} from '@react-navigation/stack';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import useGetShows from '../../hooks/useGetShows';
+} from "react-native-paper";
+import {LIGHT_THEME} from "../../themes";
+import EnterEmailScreen from "./authentication/EnterEmailScreen";
+import {View, Animated, StyleSheet} from "react-native";
+import EnterLinkScreen from "./authentication/EnterLinkScreen";
+import TodayTixLogoOnBackground from "../TodayTixLogoOnBackground";
+import useGetAccessToken from "../../hooks/useGetAccessToken";
+import RushShowList from "./RushShowList";
+import {StackHeaderProps, createStackNavigator} from "@react-navigation/stack";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
+import useGetShows from "../../hooks/useGetShows";
 import {
   TodayTixFieldset,
   TodayTixLocation,
   TodayTixShow
-} from '../../types/shows';
-import useGetShowtimesWithRushAvailability from '../../hooks/useGetShowtimesWithRushAvailability';
-import {TodayTixShowtime} from '../../types/showtimes';
-import ShowDetails from '../ShowDetails/ShowDetails';
+} from "../../types/shows";
+import useGetShowtimesWithRushAvailability from "../../hooks/useGetShowtimesWithRushAvailability";
+import {TodayTixShowtime} from "../../types/showtimes";
+import ShowDetails from "../ShowDetails/ShowDetails";
 
 type ShowAndShowtimes = {
   show: TodayTixShow;
@@ -57,7 +57,7 @@ const HeaderDot = ({
 }) => (
   <Icon
     source={
-      isCircleFilled ? 'checkbox-blank-circle' : 'checkbox-blank-circle-outline'
+      isCircleFilled ? "checkbox-blank-circle" : "checkbox-blank-circle-outline"
     }
     color={color}
     size={20}
@@ -99,11 +99,11 @@ const Header =
         </View>
         <View style={styles.headerTitle}>
           <HeaderDot
-            isCircleFilled={route.name === 'EnterEmail'}
+            isCircleFilled={route.name === "EnterEmail"}
             color={colors.primary}
           />
           <HeaderDot
-            isCircleFilled={route.name !== 'EnterEmail'}
+            isCircleFilled={route.name !== "EnterEmail"}
             color={colors.primary}
           />
         </View>
@@ -149,7 +149,7 @@ const RootNavigator = () => {
       <Stack.Navigator
         screenOptions={{
           header: Header(theme, top),
-          headerMode: 'float',
+          headerMode: "float",
           headerStyle: {height: HEADER_HEIGHT}
         }}>
         {accessToken ? (
@@ -181,10 +181,10 @@ export default RootNavigator;
 
 const styles = StyleSheet.create({
   headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: '4%'
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: "4%"
   },
   headerSideItem: {flex: 1},
-  headerTitle: {flexDirection: 'row', gap: 20}
+  headerTitle: {flexDirection: "row", gap: 20}
 });

@@ -4,8 +4,8 @@ import React, {
   PropsWithChildren,
   SetStateAction,
   useState
-} from 'react';
-import {TodayTixShowtime} from '../types/showtimes';
+} from "react";
+import {TodayTixShowtime} from "../types/showtimes";
 
 const SelectedShowtimeContext = createContext<{
   selectedShowtime?: TodayTixShowtime;

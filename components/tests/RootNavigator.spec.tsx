@@ -1,18 +1,18 @@
-import {describe, it, expect} from '@jest/globals';
-import {render, waitFor} from 'testing-library/extension';
-import React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import nock from 'nock';
-import {TodayTixFieldset, TodayTixLocation} from '../../types/shows';
-import RootNavigator from '../screens/RootNavigator';
+import {describe, it, expect} from "@jest/globals";
+import {render, waitFor} from "testing-library/extension";
+import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import nock from "nock";
+import {TodayTixFieldset, TodayTixLocation} from "../../types/shows";
+import RootNavigator from "../screens/RootNavigator";
 
-describe('The root navigator', () => {
-  it('renders the splash screen when loading the auth token', async () => {
+describe("The root navigator", () => {
+  it("renders the splash screen when loading the auth token", async () => {
     // setup
     const scope = nock(process.env.TODAY_TIX_API_BASE_URL)
-      .get('/shows')
+      .get("/shows")
       .query({
-        areAccessProgramsActive: '1',
+        areAccessProgramsActive: "1",
         fieldset: TodayTixFieldset.Summary,
         limit: 10000,
         location: TodayTixLocation.London
@@ -28,16 +28,16 @@ describe('The root navigator', () => {
     await waitFor(() => scope.isDone());
 
     // assert
-    expect(getByLabelText('TodayTix logo')).toBeVisible();
+    expect(getByLabelText("TodayTix logo")).toBeVisible();
   });
 
-  it('renders the splash screen when loading the shows', async () => {
+  it("renders the splash screen when loading the shows", async () => {
     // setup
-    await AsyncStorage.setItem('access-token', 'access-token');
+    await AsyncStorage.setItem("access-token", "access-token");
     nock(process.env.TODAY_TIX_API_BASE_URL)
-      .get('/shows')
+      .get("/shows")
       .query({
-        areAccessProgramsActive: '1',
+        areAccessProgramsActive: "1",
         fieldset: TodayTixFieldset.Summary,
         limit: 10000,
         location: TodayTixLocation.London
@@ -52,16 +52,16 @@ describe('The root navigator', () => {
     const {getByLabelText} = render(<RootNavigator />);
 
     // assert
-    expect(getByLabelText('TodayTix logo')).toBeVisible();
+    expect(getByLabelText("TodayTix logo")).toBeVisible();
   });
 
-  it('renders the splash screen when loading the showtimes', async () => {
+  it("renders the splash screen when loading the showtimes", async () => {
     // setup
-    await AsyncStorage.setItem('access-token', 'access-token');
+    await AsyncStorage.setItem("access-token", "access-token");
     nock(process.env.TODAY_TIX_API_BASE_URL)
-      .get('/shows')
+      .get("/shows")
       .query({
-        areAccessProgramsActive: '1',
+        areAccessProgramsActive: "1",
         fieldset: TodayTixFieldset.Summary,
         limit: 10000,
         location: TodayTixLocation.London
@@ -71,13 +71,13 @@ describe('The root navigator', () => {
         data: [
           {
             id: 1,
-            displayName: 'SIX the Musical',
+            displayName: "SIX the Musical",
             isRushActive: true,
-            images: {productMedia: {appHeroImage: {file: {url: 'test-url'}}}}
+            images: {productMedia: {appHeroImage: {file: {url: "test-url"}}}}
           }
         ]
       })
-      .get('/shows/1/showtimes/with_rush_availability')
+      .get("/shows/1/showtimes/with_rush_availability")
       .delay(5000)
       .reply(200, {
         code: 200,
@@ -88,15 +88,15 @@ describe('The root navigator', () => {
     const {getByLabelText} = render(<RootNavigator />);
 
     // assert
-    expect(getByLabelText('TodayTix logo')).toBeVisible();
+    expect(getByLabelText("TodayTix logo")).toBeVisible();
   });
 
-  it('renders the initial auth screen without an auth token', async () => {
+  it("renders the initial auth screen without an auth token", async () => {
     // setup
     nock(process.env.TODAY_TIX_API_BASE_URL)
-      .get('/shows')
+      .get("/shows")
       .query({
-        areAccessProgramsActive: '1',
+        areAccessProgramsActive: "1",
         fieldset: TodayTixFieldset.Summary,
         limit: 10000,
         location: TodayTixLocation.London
@@ -110,16 +110,16 @@ describe('The root navigator', () => {
     const {getByText} = render(<RootNavigator />);
 
     // assert
-    await waitFor(() => expect(getByText('Sign into TodayTix')).toBeVisible());
+    await waitFor(() => expect(getByText("Sign into TodayTix")).toBeVisible());
   });
 
-  it('renders the rush screen with an auth token', async () => {
+  it("renders the rush screen with an auth token", async () => {
     // setup
-    await AsyncStorage.setItem('access-token', 'access-token');
+    await AsyncStorage.setItem("access-token", "access-token");
     nock(process.env.TODAY_TIX_API_BASE_URL)
-      .get('/shows')
+      .get("/shows")
       .query({
-        areAccessProgramsActive: '1',
+        areAccessProgramsActive: "1",
         fieldset: TodayTixFieldset.Summary,
         limit: 10000,
         location: TodayTixLocation.London
@@ -129,19 +129,19 @@ describe('The root navigator', () => {
         data: [
           {
             id: 1,
-            displayName: 'SIX the Musical',
+            displayName: "SIX the Musical",
             isRushActive: true,
-            images: {productMedia: {appHeroImage: {file: {url: 'test-url'}}}}
+            images: {productMedia: {appHeroImage: {file: {url: "test-url"}}}}
           },
           {
             id: 2,
-            displayName: 'Hamilton',
+            displayName: "Hamilton",
             isRushActive: true,
-            images: {productMedia: {appHeroImage: {file: {url: 'test-url'}}}}
+            images: {productMedia: {appHeroImage: {file: {url: "test-url"}}}}
           }
         ]
       })
-      .get('/shows/1/showtimes/with_rush_availability')
+      .get("/shows/1/showtimes/with_rush_availability")
       .reply(200, {
         code: 200,
         data: []
@@ -151,6 +151,6 @@ describe('The root navigator', () => {
     const {getByText} = render(<RootNavigator />);
 
     // assert
-    await waitFor(() => expect(getByText('SIX the Musical')).toBeVisible());
+    await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
   });
 });

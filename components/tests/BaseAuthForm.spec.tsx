@@ -1,15 +1,15 @@
-import {describe, it, expect, jest} from '@jest/globals';
-import {render, renderHook, waitFor} from 'testing-library/extension';
-import BaseAuthForm from '../BaseAuthForm';
-import React from 'react';
-import {z} from 'zod';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {useMutation} from '@tanstack/react-query';
-import {TodayTixAPIError} from '../../types/base';
+import {describe, it, expect, jest} from "@jest/globals";
+import {render, renderHook, waitFor} from "testing-library/extension";
+import BaseAuthForm from "../BaseAuthForm";
+import React from "react";
+import {z} from "zod";
+import {NavigationContainer} from "@react-navigation/native";
+import {createStackNavigator} from "@react-navigation/stack";
+import {useMutation} from "@tanstack/react-query";
+import {TodayTixAPIError} from "../../types/base";
 
-describe('BaseAuthForm unit tests', () => {
-  it('calls the no-op onMutationSuccess function if not passed in', async () => {
+describe("BaseAuthForm unit tests", () => {
+  it("calls the no-op onMutationSuccess function if not passed in", async () => {
     const {
       result: {current: mutationHookResult}
     } = renderHook(() => useMutation<unknown, TodayTixAPIError>({}));
@@ -33,7 +33,7 @@ describe('BaseAuthForm unit tests', () => {
                   ...mutationHookResult,
                   isSuccess: true,
                   isIdle: false,
-                  status: 'success',
+                  status: "success",
                   isPending: false,
                   isError: false,
                   error: null,
@@ -46,12 +46,12 @@ describe('BaseAuthForm unit tests', () => {
       </NavigationContainer>
     );
 
-    await waitFor(() => expect(getByText('Title text')).toBeVisible());
+    await waitFor(() => expect(getByText("Title text")).toBeVisible());
   });
 
-  it('behavior is height on non-ios devices', async () => {
-    jest.doMock('react-native/Libraries/Utilities/Platform', () => ({
-      OS: 'android',
+  it("behavior is height on non-ios devices", async () => {
+    jest.doMock("react-native/Libraries/Utilities/Platform", () => ({
+      OS: "android",
       select: jest.fn
     }));
 
@@ -82,7 +82,7 @@ describe('BaseAuthForm unit tests', () => {
       </NavigationContainer>
     );
 
-    await waitFor(() => expect(getByLabelText('Form')).toBeVisible());
-    jest.dontMock('react-native/Libraries/Utilities/Platform');
+    await waitFor(() => expect(getByLabelText("Form")).toBeVisible());
+    jest.dontMock("react-native/Libraries/Utilities/Platform");
   });
 });

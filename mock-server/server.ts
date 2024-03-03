@@ -1,8 +1,8 @@
-import {Server} from 'http';
-import {AddressInfo} from 'net';
+import {Server} from "http";
+import {AddressInfo} from "net";
 
-import express from 'express';
-import v2Router from './routers';
+import express from "express";
+import v2Router from "./routers";
 
 // app needs to be exported for netlify
 export const app = express();
@@ -10,7 +10,7 @@ let server: Server;
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use('/api/v2', v2Router);
+app.use("/api/v2", v2Router);
 
 const port = process.env.PORT || 3000;
 
@@ -28,7 +28,7 @@ export const listen = async () =>
 export const close = async () =>
   await new Promise<void>(resolve =>
     server.close(() => {
-      console.log('Closed mock server.');
+      console.log("Closed mock server.");
       resolve();
     })
   );

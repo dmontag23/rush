@@ -2,9 +2,9 @@
 which defaults many of the types to "any". This method also enables correct
 typing of requests. */
 
-export * from 'axios';
+export * from "axios";
 
-declare module 'axios' {
+declare module "axios" {
   export interface AxiosInstance {
     request<T = any>(config: AxiosRequestConfig): Promise<T>;
     get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;

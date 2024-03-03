@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const todayTixAPI = axios.create({
   baseURL: process.env.TODAY_TIX_API_BASE_URL,
-  headers: {'Content-Type': 'application/json'}
+  headers: {"Content-Type": "application/json"}
 });
 
 todayTixAPI.interceptors.response.use(
