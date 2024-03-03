@@ -32,4 +32,5 @@ export const SelectedShowtimeContextProvider = ({
     </SelectedShowtimeContext.Provider>
   );
 };
+
 export default SelectedShowtimeContext;

@@ -239,7 +239,10 @@ describe('Rush show list', () => {
                     displayName: 'Hamilton',
                     isRushActive: true,
                     images: {
-                      productMedia: {appHeroImage: {file: {url: 'test-url'}}}
+                      productMedia: {
+                        appHeroImage: {file: {url: 'test-url-for-show-card'}},
+                        headerImage: {file: {url: 'test-url-for-header-photo'}}
+                      }
                     }
                   } as TodayTixShow,
                   showtimes: [

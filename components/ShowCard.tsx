@@ -32,7 +32,7 @@ type ShowCardProps = {
   onCardPress?: () => void;
 };
 
-const ShowCard = ({show, showtimes, onCardPress = () => {}}: ShowCardProps) => {
+const ShowCard = ({show, showtimes, onCardPress}: ShowCardProps) => {
   const {roundness, colors} = useTheme();
 
   const maxNumOfRushTickets = showtimes[0]?.rushTickets?.maxTickets;
