@@ -39,7 +39,11 @@ const RushShowTicketSelection = ({
     <View style={styles.container}>
       <Text variant="displaySmall">{show.displayName}</Text>
       <View style={styles.selectionContainer}>
-        <Text variant="titleLarge">Select a Time</Text>
+        <Text variant="titleLarge">
+          {showtimes.length
+            ? 'Select a Time'
+            : 'There are no rush shows currently available.'}
+        </Text>
         <View style={styles.selectionButtonsContainer}>
           {showtimes.map(showtime => {
             const isSelected = showtime.id === selectedShowtime?.id;

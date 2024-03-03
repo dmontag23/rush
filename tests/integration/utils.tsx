@@ -10,6 +10,7 @@ import {
   renderHook
 } from '@testing-library/react-native';
 import {SelectedShowtimeContextProvider} from '../../store/selected-showtime-context';
+import {LIGHT_THEME} from '../../themes';
 
 // ensures a new query client is created for each test
 export const createQueryClient = () =>
@@ -32,7 +33,7 @@ export const createQueryClient = () =>
 const Providers = ({children}: PropsWithChildren) => (
   <QueryClientProvider client={createQueryClient()}>
     <SelectedShowtimeContextProvider>
-      <PaperProvider>{children}</PaperProvider>
+      <PaperProvider theme={LIGHT_THEME}>{children}</PaperProvider>
     </SelectedShowtimeContextProvider>
   </QueryClientProvider>
 );
