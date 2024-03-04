@@ -1,12 +1,16 @@
-import {describe, it, expect, jest} from "@jest/globals";
-import {render, waitFor, userEvent} from "testing-library/extension";
 import React from "react";
-import nock from "nock";
-import {createStackNavigator} from "@react-navigation/stack";
-import {RootStack} from "../../RootNavigator";
-import {NavigationContainer} from "@react-navigation/native";
-import EnterLinkScreen from "../EnterLinkScreen";
+
+import {describe, expect, it, jest} from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {NavigationContainer} from "@react-navigation/native";
+import {createStackNavigator} from "@react-navigation/stack";
+import nock from "nock";
+import {render, userEvent, waitFor} from "testing-library/extension";
+
+import EnterLinkScreen from "../EnterLinkScreen";
+
+import {RootStack} from "../../RootNavigator";
+
 import {systemTime} from "../../../../tests/integration/setup";
 
 describe("Link screen", () => {

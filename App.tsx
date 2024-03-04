@@ -1,10 +1,13 @@
 import React from "react";
+
 import {PaperProvider} from "react-native-paper";
-import {LIGHT_THEME} from "./themes";
-import RootNavigator from "./components/screens/RootNavigator";
+
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
+
+import RootNavigator from "./components/screens/RootNavigator";
 import {SelectedShowtimeContextProvider} from "./store/selected-showtime-context";
+import {LIGHT_THEME} from "./themes";
 
 const QUERY_CLIENT = new QueryClient();
 

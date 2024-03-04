@@ -1,5 +1,6 @@
 import React from "react";
-import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
+import {Animated, StyleSheet, View} from "react-native";
+
 import {
   Icon,
   IconButton,
@@ -7,24 +8,28 @@ import {
   adaptNavigationTheme,
   useTheme
 } from "react-native-paper";
-import {LIGHT_THEME} from "../../themes";
-import EnterEmailScreen from "./authentication/EnterEmailScreen";
-import {View, Animated, StyleSheet} from "react-native";
-import EnterLinkScreen from "./authentication/EnterLinkScreen";
-import TodayTixLogoOnBackground from "../TodayTixLogoOnBackground";
-import useGetAccessToken from "../../hooks/useGetAccessToken";
-import RushShowList from "./RushShowList";
-import {StackHeaderProps, createStackNavigator} from "@react-navigation/stack";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+
+import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
+import {StackHeaderProps, createStackNavigator} from "@react-navigation/stack";
+
+import RushShowList from "./RushShowList";
+import EnterEmailScreen from "./authentication/EnterEmailScreen";
+import EnterLinkScreen from "./authentication/EnterLinkScreen";
+
+import ShowDetails from "../ShowDetails/ShowDetails";
+import TodayTixLogoOnBackground from "../TodayTixLogoOnBackground";
+
+import useGetAccessToken from "../../hooks/useGetAccessToken";
 import useGetShows from "../../hooks/useGetShows";
+import useGetShowtimesWithRushAvailability from "../../hooks/useGetShowtimesWithRushAvailability";
+import {LIGHT_THEME} from "../../themes";
 import {
   TodayTixFieldset,
   TodayTixLocation,
   TodayTixShow
 } from "../../types/shows";
-import useGetShowtimesWithRushAvailability from "../../hooks/useGetShowtimesWithRushAvailability";
 import {TodayTixShowtime} from "../../types/showtimes";
-import ShowDetails from "../ShowDetails/ShowDetails";
 
 type ShowAndShowtimes = {
   show: TodayTixShow;

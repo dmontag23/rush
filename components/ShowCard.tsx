@@ -1,8 +1,10 @@
 import React from "react";
-import {TodayTixShow} from "../types/shows";
-import {Card, Chip, Text, TouchableRipple, useTheme} from "react-native-paper";
-import {TodayTixShowtime} from "../types/showtimes";
 import {StyleSheet, View} from "react-native";
+
+import {Card, Chip, Text, TouchableRipple, useTheme} from "react-native-paper";
+
+import {TodayTixShow} from "../types/shows";
+import {TodayTixShowtime} from "../types/showtimes";
 
 const extractTimeFromDateString = (dateString: string | undefined) => {
   if (dateString) return new Date(dateString).toTimeString().slice(0, 5);

@@ -1,7 +1,8 @@
 import {Router} from "express";
+
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
-import {DayOfWeek, Daypart, TodayTixShowtime} from "../types/showtimes";
 import {AdmissionType} from "../types/shows";
+import {DayOfWeek, Daypart, TodayTixShowtime} from "../types/showtimes";
 
 const getShowtimesWithRushSix200Response: TodayTixAPIRes<TodayTixShowtime[]> = {
   code: 200,

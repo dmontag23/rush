@@ -1,7 +1,7 @@
+import express from "express";
 import {Server} from "http";
 import {AddressInfo} from "net";
 
-import express from "express";
 import v2Router from "./routers";
 
 // app needs to be exported for netlify

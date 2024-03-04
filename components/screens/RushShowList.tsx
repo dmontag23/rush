@@ -1,10 +1,15 @@
 import React from "react";
 import {ScrollView, StyleSheet, View} from "react-native";
-import ShowCard from "../ShowCard";
-import {TodayTixShowtime} from "../../types/showtimes";
-import {RootStack} from "./RootNavigator";
-import {StackScreenProps} from "@react-navigation/stack";
+
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+
+import {StackScreenProps} from "@react-navigation/stack";
+
+import {RootStack} from "./RootNavigator";
+
+import ShowCard from "../ShowCard";
+
+import {TodayTixShowtime} from "../../types/showtimes";
 
 const addTickets = (showtimes: TodayTixShowtime[]) =>
   showtimes.reduce(

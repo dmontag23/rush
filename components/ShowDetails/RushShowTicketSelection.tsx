@@ -1,6 +1,8 @@
 import React, {useContext} from "react";
 import {StyleSheet, View} from "react-native";
+
 import {Button, Text} from "react-native-paper";
+
 import SelectedShowtimeContext from "../../store/selected-showtime-context";
 import {TodayTixShow} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";

@@ -1,7 +1,9 @@
-import {describe, it, expect} from "@jest/globals";
-import {render, waitFor, userEvent} from "testing-library/extension";
 import React from "react";
+
+import {describe, expect, it} from "@jest/globals";
 import nock from "nock";
+import {render, userEvent, waitFor} from "testing-library/extension";
+
 import RootNavigator from "../../RootNavigator";
 
 describe("The authentication flow", () => {

@@ -1,10 +1,13 @@
 import React from "react";
-import {describe, it, expect} from "@jest/globals";
+
+import {describe, expect, it} from "@jest/globals";
 import {render, userEvent, waitFor} from "testing-library/extension";
+
 import RushShowTicketSelection from "../RushShowTicketSelection";
+
+import {hadestownLightThemeColors} from "../../../themes";
 import {TodayTixShow} from "../../../types/shows";
 import {TodayTixShowtime} from "../../../types/showtimes";
-import {hadestownLightThemeColors} from "../../../themes";
 
 describe("The rush show ticket selection component", () => {
   it("does not show tickets if none are available", () => {

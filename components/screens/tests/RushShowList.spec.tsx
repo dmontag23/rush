@@ -1,15 +1,19 @@
 import React from "react";
-import {describe, it, expect, jest} from "@jest/globals";
+
+import {describe, expect, it, jest} from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {TodayTixShow} from "../../../types/shows";
-import RushShowList from "../RushShowList";
-import {render, userEvent, waitFor, fireEvent} from "testing-library/extension";
 import {NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
+import {fireEvent, render, userEvent, waitFor} from "testing-library/extension";
+
 import {RootStack} from "../RootNavigator";
-import {TodayTixShowtime} from "../../../types/showtimes";
+import RushShowList from "../RushShowList";
+
 import ShowDetails from "../../ShowDetails/ShowDetails";
+
 import {hadestownLightThemeColors} from "../../../themes";
+import {TodayTixShow} from "../../../types/shows";
+import {TodayTixShowtime} from "../../../types/showtimes";
 
 describe("Rush show list", () => {
   it("sorts shows", async () => {

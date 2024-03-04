@@ -1,7 +1,8 @@
 import {useMutation} from "@tanstack/react-query";
+
 import {todayTixAPI} from "../axiosConfig";
-import {TodayTixLoginReq, TodayTixLoginRes} from "../types/loginTokens";
 import {TodayTixAPIError} from "../types/base";
+import {TodayTixLoginReq, TodayTixLoginRes} from "../types/loginTokens";
 
 const sendEmail = async (emailAddress: string) =>
   todayTixAPI.post<TodayTixLoginReq, TodayTixLoginRes>("loginTokens", {

@@ -1,8 +1,9 @@
 import express from "express";
-import postAccessTokensRoute from "./postAccessTokensRoute";
-import loginTokensRoute from "./postLoginTokensRoute";
+
 import getShowsRoute from "./getShowsRoute";
 import getShowtimesWithRushAvailabilityRoute from "./getShowtimesWithRushAvailabilityRoute";
+import postAccessTokensRoute from "./postAccessTokensRoute";
+import loginTokensRoute from "./postLoginTokensRoute";
 
 const v2Router = express.Router();
 loginTokensRoute(v2Router);

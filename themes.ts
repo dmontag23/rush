@@ -1,4 +1,4 @@
-import {MD3LightTheme, configureFonts, MD3DarkTheme} from "react-native-paper";
+import {MD3DarkTheme, MD3LightTheme, configureFonts} from "react-native-paper";
 
 export const hadestownLightThemeColors = {
   primary: "rgb(192, 0, 21)",

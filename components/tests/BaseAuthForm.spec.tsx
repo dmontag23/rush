@@ -1,11 +1,14 @@
-import {describe, it, expect, jest} from "@jest/globals";
-import {render, renderHook, waitFor} from "testing-library/extension";
-import BaseAuthForm from "../BaseAuthForm";
 import React from "react";
-import {z} from "zod";
+
+import {describe, expect, it, jest} from "@jest/globals";
 import {NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
 import {useMutation} from "@tanstack/react-query";
+import {render, renderHook, waitFor} from "testing-library/extension";
+import {z} from "zod";
+
+import BaseAuthForm from "../BaseAuthForm";
+
 import {TodayTixAPIError} from "../../types/base";
 
 describe("BaseAuthForm unit tests", () => {

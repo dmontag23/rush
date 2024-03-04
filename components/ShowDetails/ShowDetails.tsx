@@ -1,10 +1,14 @@
 import React, {useState} from "react";
-import {StackScreenProps} from "@react-navigation/stack";
-import {RootStack} from "../screens/RootNavigator";
-import {ActivityIndicator, IconButton} from "react-native-paper";
 import {Image, StyleSheet, View} from "react-native";
+
+import {ActivityIndicator, IconButton} from "react-native-paper";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+
+import {StackScreenProps} from "@react-navigation/stack";
+
 import RushShowTicketSelection from "./RushShowTicketSelection";
+
+import {RootStack} from "../screens/RootNavigator";
 
 const ShowDetails = ({
   route,

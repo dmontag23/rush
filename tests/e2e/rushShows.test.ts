@@ -1,5 +1,6 @@
+import {beforeEach, describe, it} from "@jest/globals";
 import {expect} from "detox";
-import {describe, it, beforeEach} from "@jest/globals";
+
 import {login} from "./utils/utils";
 
 describe("Rush shows", () => {

@@ -1,4 +1,5 @@
 import {Router} from "express";
+
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
 import {
   AdmissionType,
@@ -8,7 +9,7 @@ import {
   RewardType,
   TodayTixLocation,
   TodayTixShow,
-  TodayTixShowsReqQueryParams as TodayTixShowsReqQueryParams
+  TodayTixShowsReqQueryParams
 } from "../types/shows";
 
 const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {

@@ -1,7 +1,8 @@
-import {describe, it, expect} from "@jest/globals";
-import {renderHook, waitFor} from "testing-library/extension";
-import useGetShows from "../useGetShows";
+import {describe, expect, it} from "@jest/globals";
 import nock from "nock";
+import {renderHook, waitFor} from "testing-library/extension";
+
+import useGetShows from "../useGetShows";
 
 describe("useGetShows hook", () => {
   it("returns shows without any query params", async () => {

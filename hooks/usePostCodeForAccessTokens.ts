@@ -1,10 +1,11 @@
 import {useMutation} from "@tanstack/react-query";
+
 import {todayTixAPI} from "../axiosConfig";
+import {TodayTixAPIError} from "../types/base";
 import {
   TodayTixAccessTokensReq,
   TodayTixAccessTokensRes
 } from "../types/loginTokens";
-import {TodayTixAPIError} from "../types/base";
 
 const exchangeCodeForTokens = async (code: string) =>
   todayTixAPI.post<TodayTixAccessTokensReq, TodayTixAccessTokensRes>(

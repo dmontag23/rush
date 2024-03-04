@@ -1,10 +1,13 @@
+import React, {useCallback, useEffect} from "react";
 import {
-  ActivityIndicator,
-  Button,
-  Text,
-  TextInput,
-  useTheme
-} from "react-native-paper";
+  InputModeOptions,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TextInputProps,
+  View
+} from "react-native";
+
 import {
   Controller,
   DefaultValues,
@@ -14,21 +17,21 @@ import {
   useForm
 } from "react-hook-form";
 import {
-  InputModeOptions,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  TextInputProps,
-  View
-} from "react-native";
-import React, {useCallback, useEffect} from "react";
-import {UseMutationResult} from "@tanstack/react-query";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {TodayTixAPIError} from "../types/base";
+  ActivityIndicator,
+  Button,
+  Text,
+  TextInput,
+  useTheme
+} from "react-native-paper";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import {useFocusEffect} from "@react-navigation/native";
+
+import {zodResolver} from "@hookform/resolvers/zod";
 import {useHeaderHeight} from "@react-navigation/elements";
+import {useFocusEffect} from "@react-navigation/native";
+import {UseMutationResult} from "@tanstack/react-query";
 import {z} from "zod";
+
+import {TodayTixAPIError} from "../types/base";
 
 const ErrorText = ({message}: {message: string | undefined}) => (
   <Text variant="titleMedium" style={{color: useTheme().colors.error}}>

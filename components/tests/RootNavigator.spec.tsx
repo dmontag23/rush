@@ -1,10 +1,13 @@
-import {describe, it, expect} from "@jest/globals";
-import {render, waitFor} from "testing-library/extension";
 import React from "react";
+
+import {describe, expect, it} from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import nock from "nock";
-import {TodayTixFieldset, TodayTixLocation} from "../../types/shows";
+import {render, waitFor} from "testing-library/extension";
+
 import RootNavigator from "../screens/RootNavigator";
+
+import {TodayTixFieldset, TodayTixLocation} from "../../types/shows";
 
 describe("The root navigator", () => {
   it("renders the splash screen when loading the auth token", async () => {

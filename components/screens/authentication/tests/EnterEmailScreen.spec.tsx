@@ -1,11 +1,14 @@
-import {describe, it, expect} from "@jest/globals";
-import {render, waitFor, userEvent} from "testing-library/extension";
 import React from "react";
-import nock from "nock";
-import EnterEmailScreen from "../EnterEmailScreen";
-import {createStackNavigator} from "@react-navigation/stack";
-import {RootStack} from "../../RootNavigator";
+
+import {describe, expect, it} from "@jest/globals";
 import {NavigationContainer} from "@react-navigation/native";
+import {createStackNavigator} from "@react-navigation/stack";
+import nock from "nock";
+import {render, userEvent, waitFor} from "testing-library/extension";
+
+import EnterEmailScreen from "../EnterEmailScreen";
+
+import {RootStack} from "../../RootNavigator";
 
 describe("Email screen", () => {
   it("displays elements in their initial state on the screen", async () => {

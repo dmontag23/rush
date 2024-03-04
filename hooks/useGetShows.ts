@@ -1,12 +1,13 @@
 import {useQuery} from "@tanstack/react-query";
+
 import {todayTixAPI} from "../axiosConfig";
+import {TodayTixAPIError} from "../types/base";
 import {
   TodayTixFieldset,
   TodayTixLocation,
   TodayTixShow,
   TodayTixShowsReqQueryParams
 } from "../types/shows";
-import {TodayTixAPIError} from "../types/base";
 
 const getShows = async (
   areAccessProgramsActive?: boolean,
