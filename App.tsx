@@ -1,8 +1,7 @@
 import React from "react";
 
-import {PaperProvider} from "react-native-paper";
-
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {PaperProvider} from "react-native-paper";
 import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
 
 import RootNavigator from "./components/screens/RootNavigator";

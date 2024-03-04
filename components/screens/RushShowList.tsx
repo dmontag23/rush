@@ -1,9 +1,8 @@
 import React from "react";
 import {ScrollView, StyleSheet, View} from "react-native";
 
-import {useSafeAreaInsets} from "react-native-safe-area-context";
-
 import {StackScreenProps} from "@react-navigation/stack";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 import {RootStack} from "./RootNavigator";
 

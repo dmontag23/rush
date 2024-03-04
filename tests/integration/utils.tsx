@@ -1,8 +1,6 @@
 import React, {ReactElement, ReactNode} from "react";
 import {PropsWithChildren} from "react";
 
-import {PaperProvider} from "react-native-paper";
-
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {
   RenderHookOptions,
@@ -11,6 +9,7 @@ import {
   render,
   renderHook
 } from "@testing-library/react-native";
+import {PaperProvider} from "react-native-paper";
 
 import {SelectedShowtimeContextProvider} from "../../store/selected-showtime-context";
 import {LIGHT_THEME} from "../../themes";

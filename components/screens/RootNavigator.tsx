@@ -1,6 +1,8 @@
 import React from "react";
 import {Animated, StyleSheet, View} from "react-native";
 
+import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
+import {StackHeaderProps, createStackNavigator} from "@react-navigation/stack";
 import {
   Icon,
   IconButton,
@@ -9,9 +11,6 @@ import {
   useTheme
 } from "react-native-paper";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-
-import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
-import {StackHeaderProps, createStackNavigator} from "@react-navigation/stack";
 
 import RushShowList from "./RushShowList";
 import EnterEmailScreen from "./authentication/EnterEmailScreen";

@@ -4,7 +4,6 @@ module.exports = {
   bracketSpacing: false,
   importOrder: [
     "^react$|^react-native$",
-    "^react(.*)",
     "<THIRD_PARTY_MODULES>",
     "^./[a-zA-Z0-9]",
     "^../[a-zA-Z0-9]",

@@ -1,10 +1,9 @@
 import React, {useState} from "react";
 import {Image, StyleSheet, View} from "react-native";
 
+import {StackScreenProps} from "@react-navigation/stack";
 import {ActivityIndicator, IconButton} from "react-native-paper";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-
-import {StackScreenProps} from "@react-navigation/stack";
 
 import RushShowTicketSelection from "./RushShowTicketSelection";
 
