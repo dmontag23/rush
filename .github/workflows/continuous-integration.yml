@@ -1,5 +1,5 @@
 name: Continuous Integration
-run-name: 'Verifying commit "${{ github.event.head_commit.message }}" on ${{ github.event.ref }}, authored by ${{ github.event.head_commit.author.username }} 🚀'
+run-name: '"${{ github.event.head_commit.message }}" on ${{ github.event.ref }}, authored by ${{ github.event.head_commit.author.username }} 🚀'
 on: push
 jobs:
   lint:
