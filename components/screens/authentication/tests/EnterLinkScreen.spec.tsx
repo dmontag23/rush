@@ -56,14 +56,18 @@ describe("Link screen", () => {
 
   it("displays a TodayTix validation error", async () => {
     // setup mock error response from the TodayTix API
-    nock(process.env.TODAY_TIX_API_BASE_URL).post("/accessTokens").reply(400, {
-      code: 404,
-      error: "MissingResource",
-      context: null,
-      title: "MissingResource",
-      message:
-        "No login token found. Try logging in again or contact TodayTix Support if the issue persists."
-    });
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .post("/accessTokens")
+      .reply(400, {
+        code: 404,
+        error: "MissingResource",
+        context: null,
+        title: "MissingResource",
+        message:
+          "No login token found. Try logging in again or contact TodayTix Support if the issue persists."
+      });
 
     const Stack = createStackNavigator<RootStack>();
     const {getByRole, getByText, getByLabelText} = render(
@@ -97,13 +101,15 @@ describe("Link screen", () => {
   });
 
   it("displays an AsyncStorage error", async () => {
-    // setup mock error response from the TodayTix API
+    // setup mock error response from async storage
     (
       AsyncStorage.multiSet as jest.MockedFunction<typeof AsyncStorage.multiSet>
-    ).mockRejectedValueOnce({message: "Error with AsyncStorage multiSet"});
+    ).mockRejectedValueOnce("Error with AsyncStorage multiSet");
 
     // setup mock success response from the TodayTix API
-    nock(process.env.TODAY_TIX_API_BASE_URL)
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .post("/accessTokens")
       .reply(201, {
         code: 201,
@@ -136,7 +142,7 @@ describe("Link screen", () => {
     await waitFor(() =>
       expect(
         getByText(
-          "There was an error storing the authentication tokens: Error with AsyncStorage multiSet. Please try submitting the link again."
+          'There was an error storing the authentication tokens: An error occurred when trying to store the access token access-token, refresh token refresh-token, and ttl 1621729800480: "Error with AsyncStorage multiSet". Please try submitting the link again.'
         )
       ).toBeVisible()
     );
@@ -145,7 +151,9 @@ describe("Link screen", () => {
 
   it("can login successfully", async () => {
     // setup mock success response from the TodayTix API
-    nock(process.env.TODAY_TIX_API_BASE_URL)
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .post("/accessTokens")
       .reply(201, {
         code: 201,

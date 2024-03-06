@@ -6,7 +6,9 @@ import useGetShows from "../useGetShows";
 
 describe("useGetShows hook", () => {
   it("returns shows without any query params", async () => {
-    nock(process.env.TODAY_TIX_API_BASE_URL)
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .get("/shows")
       .reply(200, {
         data: [{id: "Test show"}]
@@ -17,7 +19,9 @@ describe("useGetShows hook", () => {
   });
 
   it("handles an offset", async () => {
-    nock(process.env.TODAY_TIX_API_BASE_URL)
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .get("/shows")
       .query({
         offset: "10"

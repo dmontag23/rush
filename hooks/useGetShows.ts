@@ -1,6 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 
-import {todayTixAPI} from "../axiosConfig";
+import {todayTixAPIv2} from "../api/axiosConfig";
 import {TodayTixAPIError} from "../types/base";
 import {
   TodayTixFieldset,
@@ -25,7 +25,7 @@ const getShows = async (
   ]
     .filter(param => param)
     .join("&");
-  return todayTixAPI.get<TodayTixShow[]>(
+  return todayTixAPIv2.get<TodayTixShow[]>(
     `shows${queryParams ? `?${queryParams}` : ""}`
   );
 };

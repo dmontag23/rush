@@ -12,7 +12,9 @@ import {TodayTixFieldset, TodayTixLocation} from "../../types/shows";
 describe("The root navigator", () => {
   it("renders the splash screen when loading the auth token", async () => {
     // setup
-    const scope = nock(process.env.TODAY_TIX_API_BASE_URL)
+    const scope = nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .get("/shows")
       .query({
         areAccessProgramsActive: "1",
@@ -37,7 +39,9 @@ describe("The root navigator", () => {
   it("renders the splash screen when loading the shows", async () => {
     // setup
     await AsyncStorage.setItem("access-token", "access-token");
-    nock(process.env.TODAY_TIX_API_BASE_URL)
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .get("/shows")
       .query({
         areAccessProgramsActive: "1",
@@ -61,7 +65,9 @@ describe("The root navigator", () => {
   it("renders the splash screen when loading the showtimes", async () => {
     // setup
     await AsyncStorage.setItem("access-token", "access-token");
-    nock(process.env.TODAY_TIX_API_BASE_URL)
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .get("/shows")
       .query({
         areAccessProgramsActive: "1",
@@ -96,7 +102,9 @@ describe("The root navigator", () => {
 
   it("renders the initial auth screen without an auth token", async () => {
     // setup
-    nock(process.env.TODAY_TIX_API_BASE_URL)
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .get("/shows")
       .query({
         areAccessProgramsActive: "1",
@@ -116,10 +124,51 @@ describe("The root navigator", () => {
     await waitFor(() => expect(getByText("Sign into TodayTix")).toBeVisible());
   });
 
-  it("renders the rush screen with an auth token", async () => {
+  const dataSet = [
+    {tokenKey: "access-token", tokenValue: "access-token"},
+    {tokenKey: "refresh-token", tokenValue: "refresh-token"}
+  ];
+  it.each(dataSet)(
+    "renders the initial auth screen with just a $tokenKey",
+    async ({tokenKey, tokenValue}) => {
+      // setup
+      await AsyncStorage.setItem(tokenKey, tokenValue);
+      nock(
+        `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+      )
+        .get("/shows")
+        .query({
+          areAccessProgramsActive: "1",
+          fieldset: TodayTixFieldset.Summary,
+          limit: 10000,
+          location: TodayTixLocation.London
+        })
+        .reply(200, {
+          code: 200,
+          data: []
+        });
+
+      // render
+      const {getByText} = render(<RootNavigator />);
+
+      // assert
+      await waitFor(() =>
+        expect(getByText("Sign into TodayTix")).toBeVisible()
+      );
+    }
+  );
+
+  it("renders the home screen with an auth and refresh token", async () => {
     // setup
     await AsyncStorage.setItem("access-token", "access-token");
-    nock(process.env.TODAY_TIX_API_BASE_URL)
+    await AsyncStorage.setItem("refresh-token", "refresh-token");
+    await AsyncStorage.setItem(
+      "token-ttl",
+      new Date("01-01-2024").getTime().toString()
+    );
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .get("/shows")
       .query({
         areAccessProgramsActive: "1",
@@ -135,19 +184,8 @@ describe("The root navigator", () => {
             displayName: "SIX the Musical",
             isRushActive: true,
             images: {productMedia: {appHeroImage: {file: {url: "test-url"}}}}
-          },
-          {
-            id: 2,
-            displayName: "Hamilton",
-            isRushActive: true,
-            images: {productMedia: {appHeroImage: {file: {url: "test-url"}}}}
           }
         ]
-      })
-      .get("/shows/1/showtimes/with_rush_availability")
-      .reply(200, {
-        code: 200,
-        data: []
       });
 
     // render

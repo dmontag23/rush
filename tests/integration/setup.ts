@@ -11,7 +11,7 @@ import "react-native-gesture-handler/jestSetup";
 
 jest.mock("@react-native-async-storage/async-storage", () => MockAsyncStorage);
 
-export const systemTime = new Date(2021, 5, 23);
+export const systemTime = new Date(2021, 4, 23);
 
 beforeAll(() => {
   /* useFakeTimers is needed for animated components

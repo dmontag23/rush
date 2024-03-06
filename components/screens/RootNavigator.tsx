@@ -19,7 +19,7 @@ import EnterLinkScreen from "./authentication/EnterLinkScreen";
 import ShowDetails from "../ShowDetails/ShowDetails";
 import TodayTixLogoOnBackground from "../TodayTixLogoOnBackground";
 
-import useGetAccessToken from "../../hooks/useGetAccessToken";
+import useGetAuthTokens from "../../hooks/useGetAuthTokens";
 import useGetShows from "../../hooks/useGetShows";
 import useGetShowtimesWithRushAvailability from "../../hooks/useGetShowtimesWithRushAvailability";
 import {LIGHT_THEME} from "../../themes";
@@ -121,8 +121,9 @@ const RootNavigator = () => {
   const theme = useTheme();
   const {top} = useSafeAreaInsets();
 
-  const {data: accessToken, isPending: isLoadingAccessToken} =
-    useGetAccessToken();
+  const {data, isPending: isLoadingTokens} = useGetAuthTokens();
+  const accessToken = data?.accessToken;
+  const refreshToken = data?.refreshToken;
 
   const {data: rushAndLotteryShows, isPending: isLoadingRushAndLotteryShows} =
     useGetShows({
@@ -141,11 +142,7 @@ const RootNavigator = () => {
       showIds: rushShows.map(show => show.id)
     });
 
-  if (
-    isLoadingAccessToken ||
-    isLoadingRushAndLotteryShows ||
-    isLoadingRushShowtimes
-  )
+  if (isLoadingTokens || isLoadingRushAndLotteryShows || isLoadingRushShowtimes)
     return <TodayTixLogoOnBackground />;
 
   return (
@@ -156,7 +153,7 @@ const RootNavigator = () => {
           headerMode: "float",
           headerStyle: {height: HEADER_HEIGHT}
         }}>
-        {accessToken ? (
+        {accessToken && refreshToken ? (
           <Stack.Group screenOptions={{headerShown: false}}>
             <Stack.Screen
               name="RushShowList"

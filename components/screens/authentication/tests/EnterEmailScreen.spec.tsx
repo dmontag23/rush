@@ -51,7 +51,9 @@ describe("Email screen", () => {
 
   it("displays a TodayTix validation error", async () => {
     // setup mock error response
-    nock(process.env.TODAY_TIX_API_BASE_URL)
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .post("/loginTokens")
       .reply(400, {
         code: 400,

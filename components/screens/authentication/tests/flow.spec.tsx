@@ -11,7 +11,9 @@ describe("The authentication flow", () => {
 
   it("can navigate back to the previous screen", async () => {
     // setup
-    nock(process.env.TODAY_TIX_API_BASE_URL)
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
       .post("/loginTokens")
       .reply(201, {code: 201, data: {}});
 
