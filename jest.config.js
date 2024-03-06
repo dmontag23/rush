@@ -18,6 +18,6 @@ module.exports = {
   setupFilesAfterEnv: ["<rootDir>/tests/integration/setup.ts"],
   testPathIgnorePatterns: ["<rootDir>/tests/e2e"],
   transformIgnorePatterns: [
-    "node_modules/(?!(@react-native|react-native|@react-navigation/elements|rn-flipper-async-storage-advanced|react-native-flipper|react-native-vector-icons)/)"
+    "node_modules/(?!(@react-native|react-native|@react-navigation/elements|react-native-vector-icons)/)"
   ]
 };

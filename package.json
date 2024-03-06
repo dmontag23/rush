@@ -53,9 +53,7 @@
     "nock": "^13.5.3",
     "prettier": "3.2.5",
     "react-native-dotenv": "^3.4.10",
-    "react-native-flipper": "^0.164.0",
     "react-test-renderer": "18.2.0",
-    "rn-flipper-async-storage-advanced": "^1.0.5",
     "typescript": "5.0.4"
   },
   "engines": {
