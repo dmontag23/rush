@@ -8,7 +8,7 @@ export const todayTixOAuthAPI = axios.create({
 });
 
 todayTixOAuthAPI.interceptors.response.use(
-  response => response.data.data,
+  response => response.data,
   errorResponse => Promise.reject(errorResponse.response.data)
 );
 

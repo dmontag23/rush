@@ -27,3 +27,8 @@ export type TodayTixAPIError = {
   title?: string;
   message?: string;
 };
+
+export type TodayTixOauthAPIError = {
+  error: string;
+  error_description: string;
+};

@@ -59,14 +59,11 @@ describe("API utils", () => {
     )
       .post("/token")
       .reply(200, {
-        code: 200,
-        data: {
-          access_token: "new-access-token",
-          token_type: "Bearer",
-          original_token_id: "65c8b405a5a4f70001f6ae20",
-          expires_in: 1800,
-          scope: "customer"
-        }
+        access_token: "new-access-token",
+        token_type: "Bearer",
+        original_token_id: "65c8b405a5a4f70001f6ae20",
+        expires_in: 1800,
+        scope: "customer"
       });
 
     expect(
