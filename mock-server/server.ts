@@ -2,7 +2,7 @@ import express from "express";
 import {Server} from "http";
 import {AddressInfo} from "net";
 
-import v2Router from "./routers";
+import {oauthRouter, v2Router} from "./routers";
 
 // app needs to be exported for netlify
 export const app = express();
@@ -10,6 +10,7 @@ let server: Server;
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use("/oauth/v1", oauthRouter);
 app.use("/api/v2", v2Router);
 
 const port = process.env.PORT || 3000;

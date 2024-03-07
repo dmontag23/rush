@@ -32,4 +32,6 @@ describe("Authentication flow", () => {
     await loginButton.tap();
     await expect(element(by.text("Guys & Dolls"))).toBeVisible();
   });
+
+  // TODO: Add a test that keeps the user logged in (using refresh-token-no-ttl and trying to make a request to an endpoint that requires auth)
 });

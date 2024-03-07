@@ -38,6 +38,16 @@ const postAccessTokensRoute = (router: Router) =>
       return res.status(201).json(postAccessTokens201Response);
     }
 
+    if (req.body.code === "refresh-token-no-ttl") {
+      return res.status(201).json({
+        ...postAccessTokens201Response,
+        data: {
+          ...postAccessTokens201Response.data,
+          expiresIn: 0
+        }
+      });
+    }
+
     return res.status(404).json(postAccessTokens404Response);
   });
 
