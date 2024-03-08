@@ -1,4 +1,4 @@
-import {AdmissionType, Platform, Rewards, TicketPrice} from "./shows";
+import {Platform, Rewards, TicketPrice} from "./shows";
 
 export enum Daypart {
   Evening = "EVENING",
@@ -79,7 +79,7 @@ type RushTicketsInfo = {
 
 export type TodayTixShowtime = {
   _type: string;
-  admissionType: AdmissionType;
+  admissionType: string;
   datetime: string;
   datetimeEpoch: number;
   dayOfWeek: DayOfWeek;

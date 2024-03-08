@@ -1,7 +1,6 @@
 import {Router} from "express";
 
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
-import {AdmissionType} from "../types/shows";
 import {DayOfWeek, Daypart, TodayTixShowtime} from "../types/showtimes";
 
 const getShowtimesWithRushSix200Response: TodayTixAPIRes<TodayTixShowtime[]> = {
@@ -10,7 +9,7 @@ const getShowtimesWithRushSix200Response: TodayTixAPIRes<TodayTixShowtime[]> = {
     {
       _type: "Showtime",
       id: 1,
-      admissionType: AdmissionType.Timed,
+      admissionType: "TIMED",
       endDatetime: null,
       endDatetimeEpoch: null,
       endLocalDate: null,
@@ -65,7 +64,7 @@ const getShowtimesWithRushGuysNDolls200Response: TodayTixAPIRes<
     {
       _type: "Showtime",
       id: 2,
-      admissionType: AdmissionType.Timed,
+      admissionType: "TIMED",
       endDatetime: null,
       endDatetimeEpoch: null,
       endLocalDate: null,
@@ -105,7 +104,7 @@ const getShowtimesWithRushGuysNDolls200Response: TodayTixAPIRes<
     {
       _type: "Showtime",
       id: 3,
-      admissionType: AdmissionType.Timed,
+      admissionType: "TIMED",
       endDatetime: null,
       endDatetimeEpoch: null,
       endLocalDate: null,

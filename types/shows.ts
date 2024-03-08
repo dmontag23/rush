@@ -7,10 +7,6 @@ export enum TodayTixLocation {
   London = 2
 }
 
-export enum AdmissionType {
-  Timed = "TIMED"
-}
-
 export enum AnchorPosition {
   Top = "TOP",
   Center = "CENTER"
@@ -122,7 +118,7 @@ export enum RewardType {
 export type Rewards = {_type: string; maxAmount: number; type: RewardType};
 
 export type TodayTixShow = {
-  admissionType: AdmissionType;
+  admissionType: string;
   areLotteryTicketsAvailable: boolean;
   areRegularTicketsAvailable: boolean;
   areRushTicketsAvailable: boolean;

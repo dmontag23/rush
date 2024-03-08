@@ -2,7 +2,6 @@ import {Router} from "express";
 
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
 import {
-  AdmissionType,
   AnchorPosition,
   Platform,
   ProductType,
@@ -16,7 +15,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
   code: 200,
   data: [
     {
-      admissionType: AdmissionType.Timed,
+      admissionType: "TIMED",
       areLotteryTicketsAvailable: true,
       areRegularTicketsAvailable: true,
       areRushTicketsAvailable: false,
@@ -346,7 +345,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       venueUrl: "victoria-palace-theatre"
     },
     {
-      admissionType: AdmissionType.Timed,
+      admissionType: "TIMED",
       areLotteryTicketsAvailable: false,
       areRegularTicketsAvailable: true,
       areRushTicketsAvailable: false,
@@ -513,7 +512,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       venueUrl: "vaudeville-theatre"
     },
     {
-      admissionType: AdmissionType.Timed,
+      admissionType: "TIMED",
       areLotteryTicketsAvailable: false,
       areRegularTicketsAvailable: true,
       areRushTicketsAvailable: false,
@@ -686,7 +685,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       venueUrl: "apollo-victoria-theatre"
     },
     {
-      admissionType: AdmissionType.Timed,
+      admissionType: "TIMED",
       areLotteryTicketsAvailable: false,
       areRegularTicketsAvailable: true,
       areRushTicketsAvailable: false,
@@ -869,7 +868,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       venueUrl: "the-bridge-theatre"
     },
     {
-      admissionType: AdmissionType.Timed,
+      admissionType: "TIMED",
       areLotteryTicketsAvailable: false,
       areRegularTicketsAvailable: true,
       areRushTicketsAvailable: true,
