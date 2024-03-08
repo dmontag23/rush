@@ -1,4 +1,4 @@
-import {Platform, Rewards, TicketPrice} from "./shows";
+import {Platform, Rewards, TicketPrice, TodayTixShow} from "./shows";
 
 export enum Daypart {
   Evening = "EVENING",
@@ -91,11 +91,12 @@ export type TodayTixShowtime = {
   id: number;
   localDate: string;
   localTime: string;
-  lotteryTickets: LotteryTicketsInfo | null;
+  lotteryTickets?: LotteryTicketsInfo | null;
   numDaysOut: number;
   partTwoDatetime: string | null;
   partTwoDatetimeEpoch: number | null;
-  providerShowtimeId: unknown | null;
-  regularTickets: RegularTicketsInfo | null;
-  rushTickets: RushTicketsInfo | null;
+  providerShowtimeId?: unknown | null;
+  regularTickets?: RegularTicketsInfo | null;
+  rushTickets?: RushTicketsInfo | null;
+  show?: TodayTixShow;
 };
