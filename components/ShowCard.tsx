@@ -64,7 +64,8 @@ const ShowCard = ({show, showtimes, onCardPress}: ShowCardProps) => {
           <Card.Cover
             resizeMode="stretch"
             source={{
-              uri: `https:${show.images.productMedia.appHeroImage.file.url}`
+              // TODO: Add a fallback image here
+              uri: `https:${show.images?.productMedia.appHeroImage.file.url}`
             }}
             theme={{roundness: 0}}
             style={[

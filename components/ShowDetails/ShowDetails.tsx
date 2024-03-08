@@ -17,14 +17,15 @@ const ShowDetails = ({
   const {top} = useSafeAreaInsets();
   const {show, showtimes} = route.params;
 
-  const headerImage = show.images.productMedia.headerImage;
+  const headerImage = show.images?.productMedia.headerImage;
 
   return (
     <View style={styles.container}>
       <Image
         accessibilityLabel="Header image"
         source={{
-          uri: `https:${headerImage?.file.url ?? show.images.productMedia.appHeroImage.file.url}`
+          // TODO: Add a fallback image here
+          uri: `https:${headerImage?.file.url ?? show.images?.productMedia.appHeroImage.file.url}`
         }}
         resizeMode={headerImage ? "cover" : "stretch"}
         onLoadEnd={() => setIsImageLoading(false)}
