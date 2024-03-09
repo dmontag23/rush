@@ -19,7 +19,7 @@ const postLoginTokens400Response: TodayTixAPIError = {
   message: "Please enter a valid email"
 };
 
-const loginTokensRoute = (router: Router) =>
+const postLoginTokensRoute = (router: Router) =>
   router.post<
     "/loginTokens",
     null,
@@ -32,4 +32,4 @@ const loginTokensRoute = (router: Router) =>
     return res.status(400).json(postLoginTokens400Response);
   });
 
-export default loginTokensRoute;
+export default postLoginTokensRoute;
