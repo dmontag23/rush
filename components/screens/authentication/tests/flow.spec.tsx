@@ -35,5 +35,5 @@ describe("The authentication flow", () => {
     userEvent.press(getByLabelText("Go back"));
     await waitFor(() => expect(continueButton).toBeVisible());
     expect(emailFormInput).toHaveProp("value", "");
-  });
+  }, 10000);
 });

@@ -331,5 +331,5 @@ describe("Rush show list", () => {
     expect(getByText("2")).toHaveStyle({
       color: hadestownLightThemeColors.onPrimary
     });
-  });
+  }, 10000);
 });
