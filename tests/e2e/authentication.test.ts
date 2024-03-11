@@ -3,35 +3,34 @@ import {expect} from "detox";
 
 describe("Authentication flow", () => {
   it("should be able to log in", async () => {
-    // check the initial state of the email screen
+    // check the initial state of the login screen
     await waitFor(element(by.text("Sign into TodayTix")))
       .toBeVisible()
       .withTimeout(10000);
-    await expect(element(by.text("What's your email?"))).toBeVisible();
-    const emailFormInput = element(by.label("Email")).atIndex(1);
-    const continueButton = element(by.text("Continue"));
-    await expect(emailFormInput).toBeVisible();
-    await expect(continueButton).toBeVisible();
-
-    // enter a valid email
-    await emailFormInput.typeText("good@gmail.com");
-    await continueButton.tap();
-
-    // check the initial state of the link screen
-    await expect(element(by.text("Almost there..."))).toBeVisible();
     await expect(
-      element(by.text("Please enter the login link from the TodayTix email"))
+      element(
+        by.text("Enter the access tokens from the current TodayTix session.")
+      )
     ).toBeVisible();
-    const linkFormInput = element(by.label("Link")).atIndex(1);
+    const accessTokenFormInput = element(
+      by.label("Access token input")
+    ).atIndex(1);
+    await expect(accessTokenFormInput).toBeVisible();
+    const refreshTokenFormInput = element(
+      by.label("Refresh token input")
+    ).atIndex(1);
+    await expect(refreshTokenFormInput).toBeVisible();
     const loginButton = element(by.text("Login"));
-    await expect(linkFormInput).toBeVisible();
     await expect(loginButton).toBeVisible();
 
-    // enter a valid code and login
-    await linkFormInput.typeText("https://todaytix.com?token=good-code");
+    // enter valid access and refresh tokens
+    await accessTokenFormInput.typeText("access-token");
+    await refreshTokenFormInput.typeText("refresh-token");
+
+    // login
     await loginButton.tap();
     await expect(element(by.text("Guys & Dolls"))).toBeVisible();
   });
 
-  // TODO: Add a test that keeps the user logged in (using refresh-token-no-ttl and trying to make a request to an endpoint that requires auth)
+  // TODO: Add or amend the above test to keep the user logged in by trying to make a request to an endpoint that requires auth
 });

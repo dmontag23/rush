@@ -5,12 +5,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import nock from "nock";
 import {render, waitFor} from "testing-library/extension";
 
-import RootNavigator from "../screens/RootNavigator";
+import RootNavigator from "../RootNavigator";
 
-import {TodayTixFieldset, TodayTixLocation} from "../../types/shows";
+import {TodayTixFieldset, TodayTixLocation} from "../../../types/shows";
 
 describe("The root navigator", () => {
-  it("renders the splash screen when loading the auth token", async () => {
+  it("renders the splash screen when loading the access tokens", async () => {
     // setup
     const scope = nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
@@ -29,7 +29,7 @@ describe("The root navigator", () => {
 
     // render
     const {getByLabelText} = render(<RootNavigator />);
-    // wait for the above call to complete so the auth token is the only thing loading
+    // wait for the above call to complete so the access tokens are the only thing loading
     await waitFor(() => scope.isDone());
 
     // assert
@@ -158,7 +158,7 @@ describe("The root navigator", () => {
     }
   );
 
-  it("renders the home screen with an auth and refresh token", async () => {
+  it("renders the home screen with an access and refresh token", async () => {
     // setup
     await AsyncStorage.setItem("access-token", "access-token");
     await AsyncStorage.setItem("refresh-token", "refresh-token");
