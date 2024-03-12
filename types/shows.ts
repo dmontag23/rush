@@ -4,7 +4,8 @@ export enum TodayTixFieldset {
 
 export enum TodayTixLocation {
   NewYork = 1,
-  London = 2
+  London = 2,
+  Sydney = 17
 }
 
 export enum AnchorPosition {
