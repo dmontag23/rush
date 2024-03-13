@@ -8,12 +8,12 @@ import {render, userEvent, waitFor} from "testing-library/extension";
 
 import EnterTokensScreen from "../EnterTokensScreen";
 
-import {RootStack} from "../../RootNavigator";
+import {RootStackParamList} from "../../../../types/navigation";
 
 describe("EnterTokensScreen", () => {
   describe("integration tests", () => {
     it("displays elements in their initial state on the screen", () => {
-      const Stack = createStackNavigator<RootStack>();
+      const Stack = createStackNavigator<RootStackParamList>();
       const {getByRole, getByText, getByLabelText} = render(
         <NavigationContainer>
           <Stack.Navigator>
@@ -44,7 +44,7 @@ describe("EnterTokensScreen", () => {
     it.each(dataSet)(
       "displays an $tokenType validation error",
       async ({tokenType, validationPrefix}) => {
-        const Stack = createStackNavigator<RootStack>();
+        const Stack = createStackNavigator<RootStackParamList>();
         const {getByRole, getByText, getByLabelText} = render(
           <NavigationContainer>
             <Stack.Navigator>
@@ -70,7 +70,7 @@ describe("EnterTokensScreen", () => {
         >
       ).mockRejectedValueOnce("Error with AsyncStorage multiSet");
 
-      const Stack = createStackNavigator<RootStack>();
+      const Stack = createStackNavigator<RootStackParamList>();
       const {getByRole, getByText, getByLabelText} = render(
         <NavigationContainer>
           <Stack.Navigator>
@@ -104,7 +104,7 @@ describe("EnterTokensScreen", () => {
     });
 
     it("can login successfully", async () => {
-      const Stack = createStackNavigator<RootStack>();
+      const Stack = createStackNavigator<RootStackParamList>();
       const {getByRole, getByLabelText} = render(
         <NavigationContainer>
           <Stack.Navigator>

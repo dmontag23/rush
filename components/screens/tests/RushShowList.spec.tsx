@@ -4,14 +4,15 @@ import {describe, expect, it, jest} from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
+import nock from "nock";
 import {fireEvent, render, userEvent, waitFor} from "testing-library/extension";
 
-import {RootStack} from "../RootNavigator";
 import RushShowList from "../RushShowList";
 
 import ShowDetails from "../../ShowDetails/ShowDetails";
 
 import {hadestownLightThemeColors} from "../../../themes";
+import {RootStackParamList} from "../../../types/navigation";
 import {TodayTixShow} from "../../../types/shows";
 import {TodayTixShowtime} from "../../../types/showtimes";
 
@@ -21,7 +22,7 @@ describe("Rush show list", () => {
     await AsyncStorage.setItem("access-token", "access-token");
 
     // render
-    const Stack = createStackNavigator<RootStack>();
+    const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getAllByLabelText} = render(
       <NavigationContainer>
         <Stack.Navigator>
@@ -136,7 +137,7 @@ describe("Rush show list", () => {
     await AsyncStorage.setItem("access-token", "access-token");
 
     // render
-    const Stack = createStackNavigator<RootStack>();
+    const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByTestId, getByLabelText} = render(
       <NavigationContainer>
         <Stack.Navigator>
@@ -202,9 +203,14 @@ describe("Rush show list", () => {
   it("maintains selected show state when navigating to other shows and back", async () => {
     // setup
     await AsyncStorage.setItem("access-token", "access-token");
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .post("/holds")
+      .reply(201, {data: {}});
 
     // render
-    const Stack = createStackNavigator<RootStack>();
+    const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByLabelText} = render(
       <NavigationContainer>
         <Stack.Navigator>
@@ -279,7 +285,7 @@ describe("Rush show list", () => {
       expect(getByLabelText("Back button")).toBeVisible();
     });
 
-    // select two shows for the evening
+    // select two tickets for the evening show
     const eveningShowtimeButton = getByText("19:00");
     userEvent.press(eveningShowtimeButton);
     await waitFor(() =>

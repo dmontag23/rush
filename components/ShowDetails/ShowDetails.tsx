@@ -1,18 +1,17 @@
 import React, {useState} from "react";
 import {Image, StyleSheet, View} from "react-native";
 
-import {StackScreenProps} from "@react-navigation/stack";
 import {ActivityIndicator, IconButton} from "react-native-paper";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 import RushShowTicketSelection from "./RushShowTicketSelection";
 
-import {RootStack} from "../screens/RootNavigator";
+import {RootStackScreenProps} from "../../types/navigation";
 
 const ShowDetails = ({
   route,
   navigation
-}: StackScreenProps<RootStack, "ShowDetails">) => {
+}: RootStackScreenProps<"ShowDetails">) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const {top} = useSafeAreaInsets();
   const {show, showtimes} = route.params;

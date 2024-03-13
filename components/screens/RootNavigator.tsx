@@ -1,8 +1,6 @@
 import React from "react";
 
-import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
-import {adaptNavigationTheme} from "react-native-paper";
 
 import RushShowList from "./RushShowList";
 import EnterTokensScreen from "./authentication/EnterTokensScreen";
@@ -13,32 +11,10 @@ import TodayTixLogoOnBackground from "../TodayTixLogoOnBackground";
 import useGetAuthTokens from "../../hooks/useGetAuthTokens";
 import useGetShows from "../../hooks/useGetShows";
 import useGetShowtimesWithRushAvailability from "../../hooks/useGetShowtimesWithRushAvailability";
-import {LIGHT_THEME} from "../../themes";
-import {
-  TodayTixFieldset,
-  TodayTixLocation,
-  TodayTixShow
-} from "../../types/shows";
-import {TodayTixShowtime} from "../../types/showtimes";
+import {RootStackParamList} from "../../types/navigation";
+import {TodayTixFieldset, TodayTixLocation} from "../../types/shows";
 
-type ShowAndShowtimes = {
-  show: TodayTixShow;
-  showtimes: TodayTixShowtime[];
-};
-
-export type RootStack = {
-  RushShowList: {
-    showsAndTimes: ShowAndShowtimes[];
-  };
-  ShowDetails: ShowAndShowtimes;
-  EnterTokens: undefined;
-};
-const Stack = createStackNavigator<RootStack>();
-
-const {LightTheme: NAV_LIGHT_THEME} = adaptNavigationTheme({
-  reactNavigationLight: DefaultTheme,
-  materialLight: LIGHT_THEME
-});
+const Stack = createStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
   const {data, isPending: isLoadingTokens} = useGetAuthTokens();
@@ -66,27 +42,25 @@ const RootNavigator = () => {
     return <TodayTixLogoOnBackground />;
 
   return (
-    <NavigationContainer theme={NAV_LIGHT_THEME}>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        {accessToken && refreshToken ? (
-          <>
-            <Stack.Screen
-              name="RushShowList"
-              component={RushShowList}
-              initialParams={{
-                showsAndTimes: rushShows.map((show, i) => ({
-                  show,
-                  showtimes: rushShowtimes[i] ?? []
-                }))
-              }}
-            />
-            <Stack.Screen name="ShowDetails" component={ShowDetails} />
-          </>
-        ) : (
-          <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      {accessToken && refreshToken ? (
+        <>
+          <Stack.Screen
+            name="RushShowList"
+            component={RushShowList}
+            initialParams={{
+              showsAndTimes: rushShows.map((show, i) => ({
+                show,
+                showtimes: rushShowtimes[i] ?? []
+              }))
+            }}
+          />
+          <Stack.Screen name="ShowDetails" component={ShowDetails} />
+        </>
+      ) : (
+        <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
+      )}
+    </Stack.Navigator>
   );
 };
 

@@ -1,13 +1,11 @@
 import React from "react";
 import {ScrollView, StyleSheet, View} from "react-native";
 
-import {StackScreenProps} from "@react-navigation/stack";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-
-import {RootStack} from "./RootNavigator";
 
 import ShowCard from "../ShowCard";
 
+import {RootStackScreenProps} from "../../types/navigation";
 import {TodayTixShowtime} from "../../types/showtimes";
 
 const addTickets = (showtimes: TodayTixShowtime[]) =>
@@ -20,7 +18,7 @@ const addTickets = (showtimes: TodayTixShowtime[]) =>
 const RushShowList = ({
   route,
   navigation
-}: StackScreenProps<RootStack, "RushShowList">) => {
+}: RootStackScreenProps<"RushShowList">) => {
   const {top, bottom} = useSafeAreaInsets();
   const {showsAndTimes} = route.params;
 
