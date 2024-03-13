@@ -1,6 +1,7 @@
 import React, {ReactElement, ReactNode} from "react";
 import {PropsWithChildren} from "react";
 
+import {NavigationContainer} from "@react-navigation/native";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {
   RenderHookOptions,
@@ -34,9 +35,11 @@ export const createQueryClient = () =>
 
 const Providers = ({children}: PropsWithChildren) => (
   <QueryClientProvider client={createQueryClient()}>
-    <SelectedShowtimeContextProvider>
-      <PaperProvider theme={LIGHT_THEME}>{children}</PaperProvider>
-    </SelectedShowtimeContextProvider>
+    <NavigationContainer>
+      <SelectedShowtimeContextProvider>
+        <PaperProvider theme={LIGHT_THEME}>{children}</PaperProvider>
+      </SelectedShowtimeContextProvider>
+    </NavigationContainer>
   </QueryClientProvider>
 );
 

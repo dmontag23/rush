@@ -2,7 +2,6 @@ import React from "react";
 
 import {describe, expect, it, jest} from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
 import nock from "nock";
 import {fireEvent, render, userEvent, waitFor} from "testing-library/extension";
@@ -24,97 +23,95 @@ describe("Rush show list", () => {
     // render
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getAllByLabelText} = render(
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="RushShowList"
-            component={RushShowList}
-            initialParams={{
-              /* The typecast is used because a TodayTixShow has many required fields,
+      <Stack.Navigator>
+        <Stack.Screen
+          name="RushShowList"
+          component={RushShowList}
+          initialParams={{
+            /* The typecast is used because a TodayTixShow has many required fields,
                  most of which are not necessary for the functionality of the component. */
-              showsAndTimes: [
-                {
-                  show: {
+            showsAndTimes: [
+              {
+                show: {
+                  id: 1,
+                  displayName: "SIX the Musical",
+                  isRushActive: true,
+                  images: {
+                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
+                  }
+                } as TodayTixShow,
+                showtimes: [
+                  {
                     id: 1,
-                    displayName: "SIX the Musical",
-                    isRushActive: true,
-                    images: {
-                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                    }
-                  } as TodayTixShow,
-                  showtimes: [
-                    {
-                      id: 1,
-                      rushTickets: {quantityAvailable: 4}
-                    } as TodayTixShowtime
-                  ]
-                },
-                {
-                  show: {
+                    rushTickets: {quantityAvailable: 4}
+                  } as TodayTixShowtime
+                ]
+              },
+              {
+                show: {
+                  id: 2,
+                  displayName: "Unfortunate",
+                  isRushActive: true,
+                  images: {
+                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
+                  }
+                } as TodayTixShow,
+                showtimes: [
+                  {
                     id: 2,
-                    displayName: "Unfortunate",
-                    isRushActive: true,
-                    images: {
-                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
+                    rushTickets: {
+                      quantityAvailable: 0,
+                      availableAfterEpoch: 10
                     }
-                  } as TodayTixShow,
-                  showtimes: [
-                    {
-                      id: 2,
-                      rushTickets: {
-                        quantityAvailable: 0,
-                        availableAfterEpoch: 10
-                      }
-                    } as TodayTixShowtime
-                  ]
-                },
-                {
-                  show: {
+                  } as TodayTixShowtime
+                ]
+              },
+              {
+                show: {
+                  id: 3,
+                  displayName: "Hamilton",
+                  isRushActive: true,
+                  images: {
+                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
+                  }
+                } as TodayTixShow,
+                showtimes: [
+                  {
                     id: 3,
-                    displayName: "Hamilton",
-                    isRushActive: true,
-                    images: {
-                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                    }
-                  } as TodayTixShow,
-                  showtimes: [
-                    {
-                      id: 3,
-                      rushTickets: {quantityAvailable: 3}
-                    } as TodayTixShowtime,
-                    {
-                      id: 4,
-                      rushTickets: {quantityAvailable: 2}
-                    } as TodayTixShowtime
-                  ]
-                },
-                {
-                  show: {
+                    rushTickets: {quantityAvailable: 3}
+                  } as TodayTixShowtime,
+                  {
                     id: 4,
-                    displayName: "Hadestown",
-                    isRushActive: true,
-                    images: {
-                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                    }
-                  } as TodayTixShow,
-                  showtimes: []
-                },
-                {
-                  show: {
-                    id: 5,
-                    displayName: "Come from Away",
-                    isRushActive: true,
-                    images: {
-                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                    }
-                  } as TodayTixShow,
-                  showtimes: [{id: 5} as TodayTixShowtime]
-                }
-              ]
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+                    rushTickets: {quantityAvailable: 2}
+                  } as TodayTixShowtime
+                ]
+              },
+              {
+                show: {
+                  id: 4,
+                  displayName: "Hadestown",
+                  isRushActive: true,
+                  images: {
+                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
+                  }
+                } as TodayTixShow,
+                showtimes: []
+              },
+              {
+                show: {
+                  id: 5,
+                  displayName: "Come from Away",
+                  isRushActive: true,
+                  images: {
+                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
+                  }
+                } as TodayTixShow,
+                showtimes: [{id: 5} as TodayTixShowtime]
+              }
+            ]
+          }}
+        />
+      </Stack.Navigator>
     );
 
     // assert
@@ -139,41 +136,39 @@ describe("Rush show list", () => {
     // render
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByTestId, getByLabelText} = render(
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="RushShowList"
-            component={RushShowList}
-            initialParams={{
-              /* The typecast is used because a TodayTixShow has many required fields,
+      <Stack.Navigator>
+        <Stack.Screen
+          name="RushShowList"
+          component={RushShowList}
+          initialParams={{
+            /* The typecast is used because a TodayTixShow has many required fields,
                  most of which are not necessary for the functionality of the component. */
-              showsAndTimes: [
-                {
-                  show: {
+            showsAndTimes: [
+              {
+                show: {
+                  id: 1,
+                  displayName: "SIX the Musical",
+                  isRushActive: true,
+                  images: {
+                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
+                  }
+                } as TodayTixShow,
+                showtimes: [
+                  {
                     id: 1,
-                    displayName: "SIX the Musical",
-                    isRushActive: true,
-                    images: {
-                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
+                    rushTickets: {
+                      quantityAvailable: 4,
+                      availableAfter: "2021-05-23T11:00:00.000+01:00",
+                      availableUntil: "2021-05-23T16:30:00.000+01:00"
                     }
-                  } as TodayTixShow,
-                  showtimes: [
-                    {
-                      id: 1,
-                      rushTickets: {
-                        quantityAvailable: 4,
-                        availableAfter: "2021-05-23T11:00:00.000+01:00",
-                        availableUntil: "2021-05-23T16:30:00.000+01:00"
-                      }
-                    } as TodayTixShowtime
-                  ]
-                }
-              ]
-            }}
-          />
-          <Stack.Screen name="ShowDetails" component={ShowDetails} />
-        </Stack.Navigator>
-      </NavigationContainer>
+                  } as TodayTixShowtime
+                ]
+              }
+            ]
+          }}
+        />
+        <Stack.Screen name="ShowDetails" component={ShowDetails} />
+      </Stack.Navigator>
     );
 
     // assert
@@ -212,68 +207,66 @@ describe("Rush show list", () => {
     // render
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByLabelText} = render(
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="RushShowList"
-            component={RushShowList}
-            initialParams={{
-              /* The typecast is used because a TodayTixShow has many required fields,
+      <Stack.Navigator>
+        <Stack.Screen
+          name="RushShowList"
+          component={RushShowList}
+          initialParams={{
+            /* The typecast is used because a TodayTixShow has many required fields,
                  most of which are not necessary for the functionality of the component. */
-              showsAndTimes: [
-                {
-                  show: {
+            showsAndTimes: [
+              {
+                show: {
+                  id: 1,
+                  displayName: "SIX the Musical",
+                  isRushActive: true,
+                  images: {
+                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
+                  }
+                } as TodayTixShow,
+                showtimes: [
+                  {
                     id: 1,
-                    displayName: "SIX the Musical",
-                    isRushActive: true,
-                    images: {
-                      productMedia: {appHeroImage: {file: {url: "test-url"}}}
+                    localTime: "19:00",
+                    rushTickets: {
+                      minTickets: 1,
+                      maxTickets: 2,
+                      availableAfter: "2021-05-23T11:00:00.000+01:00",
+                      availableUntil: "2021-05-23T16:30:00.000+01:00"
                     }
-                  } as TodayTixShow,
-                  showtimes: [
-                    {
-                      id: 1,
-                      localTime: "19:00",
-                      rushTickets: {
-                        minTickets: 1,
-                        maxTickets: 2,
-                        availableAfter: "2021-05-23T11:00:00.000+01:00",
-                        availableUntil: "2021-05-23T16:30:00.000+01:00"
-                      }
-                    } as TodayTixShowtime
-                  ]
-                },
-                {
-                  show: {
+                  } as TodayTixShowtime
+                ]
+              },
+              {
+                show: {
+                  id: 2,
+                  displayName: "Hamilton",
+                  isRushActive: true,
+                  images: {
+                    productMedia: {
+                      appHeroImage: {file: {url: "test-url-for-show-card"}},
+                      headerImage: {file: {url: "test-url-for-header-photo"}}
+                    }
+                  }
+                } as TodayTixShow,
+                showtimes: [
+                  {
                     id: 2,
-                    displayName: "Hamilton",
-                    isRushActive: true,
-                    images: {
-                      productMedia: {
-                        appHeroImage: {file: {url: "test-url-for-show-card"}},
-                        headerImage: {file: {url: "test-url-for-header-photo"}}
-                      }
+                    localTime: "14:00",
+                    rushTickets: {
+                      minTickets: 1,
+                      maxTickets: 2,
+                      availableAfter: "2021-05-23T11:00:00.000+01:00",
+                      availableUntil: "2021-05-23T16:30:00.000+01:00"
                     }
-                  } as TodayTixShow,
-                  showtimes: [
-                    {
-                      id: 2,
-                      localTime: "14:00",
-                      rushTickets: {
-                        minTickets: 1,
-                        maxTickets: 2,
-                        availableAfter: "2021-05-23T11:00:00.000+01:00",
-                        availableUntil: "2021-05-23T16:30:00.000+01:00"
-                      }
-                    } as TodayTixShowtime
-                  ]
-                }
-              ]
-            }}
-          />
-          <Stack.Screen name="ShowDetails" component={ShowDetails} />
-        </Stack.Navigator>
-      </NavigationContainer>
+                  } as TodayTixShowtime
+                ]
+              }
+            ]
+          }}
+        />
+        <Stack.Screen name="ShowDetails" component={ShowDetails} />
+      </Stack.Navigator>
     );
 
     // navigate to the show details screen

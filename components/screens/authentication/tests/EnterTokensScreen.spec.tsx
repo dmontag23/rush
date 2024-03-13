@@ -2,7 +2,6 @@ import React from "react";
 
 import {describe, expect, it, jest} from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
 import {render, userEvent, waitFor} from "testing-library/extension";
 
@@ -15,11 +14,9 @@ describe("EnterTokensScreen", () => {
     it("displays elements in their initial state on the screen", () => {
       const Stack = createStackNavigator<RootStackParamList>();
       const {getByRole, getByText, getByLabelText} = render(
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
+        </Stack.Navigator>
       );
 
       expect(getByText("Sign into TodayTix")).toBeVisible();
@@ -46,11 +43,9 @@ describe("EnterTokensScreen", () => {
       async ({tokenType, validationPrefix}) => {
         const Stack = createStackNavigator<RootStackParamList>();
         const {getByRole, getByText, getByLabelText} = render(
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
-            </Stack.Navigator>
-          </NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
+          </Stack.Navigator>
         );
 
         // enter an invalid link
@@ -72,11 +67,9 @@ describe("EnterTokensScreen", () => {
 
       const Stack = createStackNavigator<RootStackParamList>();
       const {getByRole, getByText, getByLabelText} = render(
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
+        </Stack.Navigator>
       );
 
       // enter a valid access and refresh token
@@ -106,11 +99,9 @@ describe("EnterTokensScreen", () => {
     it("can login successfully", async () => {
       const Stack = createStackNavigator<RootStackParamList>();
       const {getByRole, getByLabelText} = render(
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
+        </Stack.Navigator>
       );
 
       // check that async storage is initially empty
@@ -143,11 +134,9 @@ describe("EnterTokensScreen", () => {
 
       const Stack = createStackNavigator();
       const {getByLabelText} = render(
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="test" component={EnterTokensScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="test" component={EnterTokensScreen} />
+        </Stack.Navigator>
       );
 
       await waitFor(() =>
