@@ -23,14 +23,14 @@ const RushShowTicketSelection = ({
     setSelectedNumberOfTickets
   } = useContext(SelectedShowtimeContext);
 
-  const selectedShowtimeForThisShow =
+  const locallySelectedShowtime =
     selectedShowtime &&
     showtimes.find(showtime => showtime.id === selectedShowtime.id);
 
   const minNumberOfTickets =
-    selectedShowtimeForThisShow?.rushTickets?.minTickets ?? 0;
+    locallySelectedShowtime?.rushTickets?.minTickets ?? 0;
   const maxNumberOfTickets =
-    selectedShowtimeForThisShow?.rushTickets?.maxTickets ?? 0;
+    locallySelectedShowtime?.rushTickets?.maxTickets ?? 0;
 
   const numberOfTickets = Array.from(
     {length: maxNumberOfTickets - minNumberOfTickets + 1},
