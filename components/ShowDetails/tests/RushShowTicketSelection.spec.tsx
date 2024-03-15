@@ -35,7 +35,11 @@ describe("The rush show ticket selection component", () => {
           {
             id: 1,
             localTime: "14:30",
-            rushTickets: {minTickets: 1, maxTickets: 4}
+            rushTickets: {
+              minTickets: 1,
+              maxTickets: 4,
+              availableAfterEpoch: 1621764000
+            }
           } as TodayTixShowtime,
           {
             id: 2,
@@ -124,15 +128,6 @@ describe("The rush show ticket selection component", () => {
         color: hadestownLightThemeColors.primary
       });
     });
-
-    // select the number of tickets for the matinee
-    const ticketNumberButton = getByText("2");
-    userEvent.press(ticketNumberButton);
-    await waitFor(() =>
-      expect(ticketNumberButton).toHaveStyle({
-        color: hadestownLightThemeColors.onPrimary
-      })
-    );
 
     // select the evening show
     const eveningButton = getByText("19:45");

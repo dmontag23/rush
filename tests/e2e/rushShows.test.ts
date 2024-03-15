@@ -21,20 +21,20 @@ describe("Rush shows", () => {
   });
 
   it("can select a show and number of tickets", async () => {
-    // select the matinee show
+    // select the showtime in the distant future
     const guysAndDollsText = element(by.text("Guys & Dolls"));
     await guysAndDollsText.tap();
     await expect(guysAndDollsText).toBeVisible();
     const selectATimeText = element(by.text("Select a Time"));
     await expect(selectATimeText).toBeVisible();
-    const matineeShow = element(by.text("14:00"));
-    await expect(matineeShow).toBeVisible();
+    const futureShowtime = element(by.text("23:59"));
+    await expect(futureShowtime).toBeVisible();
     await expect(element(by.text("19:30"))).toBeVisible();
     const numberOfTicketText = element(by.text("Number of Tickets"));
     await expect(numberOfTicketText).not.toBeVisible();
 
     // select the number of desired tickets
-    await matineeShow.tap();
+    await futureShowtime.tap();
     await expect(numberOfTicketText).toBeVisible();
     const ticketButton = element(by.text("1"));
     await expect(ticketButton).toBeVisible();

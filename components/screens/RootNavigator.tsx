@@ -2,6 +2,7 @@ import React from "react";
 
 import {createStackNavigator} from "@react-navigation/stack";
 
+import HoldConfirmation from "./HoldConfirmation";
 import RushShowList from "./RushShowList";
 import EnterTokensScreen from "./authentication/EnterTokensScreen";
 
@@ -56,6 +57,7 @@ const RootNavigator = () => {
             }}
           />
           <Stack.Screen name="ShowDetails" component={ShowDetails} />
+          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
         </>
       ) : (
         <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />

@@ -12,6 +12,7 @@ import {
 } from "@testing-library/react-native";
 import {PaperProvider} from "react-native-paper";
 
+import {HoldContextProvider} from "../../store/hold-context";
 import {SelectedShowtimeContextProvider} from "../../store/selected-showtime-context";
 import {LIGHT_THEME} from "../../themes";
 
@@ -37,7 +38,9 @@ const Providers = ({children}: PropsWithChildren) => (
   <QueryClientProvider client={createQueryClient()}>
     <NavigationContainer>
       <SelectedShowtimeContextProvider>
-        <PaperProvider theme={LIGHT_THEME}>{children}</PaperProvider>
+        <HoldContextProvider>
+          <PaperProvider theme={LIGHT_THEME}>{children}</PaperProvider>
+        </HoldContextProvider>
       </SelectedShowtimeContextProvider>
     </NavigationContainer>
   </QueryClientProvider>

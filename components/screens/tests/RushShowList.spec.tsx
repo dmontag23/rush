@@ -6,6 +6,7 @@ import {createStackNavigator} from "@react-navigation/stack";
 import nock from "nock";
 import {fireEvent, render, userEvent, waitFor} from "testing-library/extension";
 
+import HoldConfirmation from "../HoldConfirmation";
 import RushShowList from "../RushShowList";
 
 import ShowDetails from "../../ShowDetails/ShowDetails";
@@ -232,6 +233,7 @@ describe("Rush show list", () => {
                       minTickets: 1,
                       maxTickets: 2,
                       availableAfter: "2021-05-23T11:00:00.000+01:00",
+                      availableAfterEpoch: 1621764000,
                       availableUntil: "2021-05-23T16:30:00.000+01:00"
                     }
                   } as TodayTixShowtime
@@ -266,6 +268,7 @@ describe("Rush show list", () => {
           }}
         />
         <Stack.Screen name="ShowDetails" component={ShowDetails} />
+        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
       </Stack.Navigator>
     );
 
@@ -299,7 +302,7 @@ describe("Rush show list", () => {
     await waitFor(() => expect(getByText("Hamilton")).toBeVisible());
     /* TODO: Investigate why this is necessary to press the card after navigating
     back to the card list screen. Perhaps it's a limitation with the react navigation library */
-    jest.runAllTimers();
+    jest.advanceTimersByTime(1000);
     userEvent.press(getByText("Hamilton"));
 
     // check that the show button is de-selected
@@ -316,7 +319,7 @@ describe("Rush show list", () => {
     await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
     /* TODO: Investigate why this is necessary to press the card after navigating
     back to the card list screen. Perhaps it's a limitation with the react navigation library */
-    jest.runAllTimers();
+    jest.advanceTimersByTime(1000);
     userEvent.press(getByText("SIX the Musical"));
 
     // check that the show and tickets are still selected
