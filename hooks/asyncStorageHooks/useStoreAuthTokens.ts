@@ -15,7 +15,7 @@ const useStoreAuthTokens = () => {
       refreshToken: string;
       ttl: number;
     }) => storeTokens(accessToken, refreshToken, ttl),
-    // Always refetch the access token after success or error
+    // Always refetch the access tokens after success or error
     onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: ["authTokens"]
