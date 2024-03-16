@@ -3,7 +3,6 @@ import React, {
   PropsWithChildren,
   SetStateAction,
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useState
@@ -28,7 +27,7 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
     useContext(SelectedShowtimeContext);
   const [hold, setHold] = useState<TodayTixHold>();
 
-  const placeHold = useCallback(async () => {
+  const placeHold = async () => {
     try {
       if (showtime && numberOfTickets) {
         setHold(
@@ -49,7 +48,7 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
         JSON.stringify(error)
       );
     }
-  }, [showtime, numberOfTickets, navigate]);
+  };
 
   const {
     scheduleCallback: scheduleHold,
@@ -61,7 +60,7 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
       scheduleHold({
         callsPerSecond: 10,
         // Start making requests 1 second before rush tickets are due to open
-        runAtEpochTime: showtime?.rushTickets?.availableAfterEpoch ?? 0 - 1
+        runAtEpochTime: (showtime?.rushTickets?.availableAfterEpoch ?? 0) - 1
       });
     return stopCallingHoldsEndpoint;
   }, [showtime, numberOfTickets, hold, scheduleHold, stopCallingHoldsEndpoint]);
