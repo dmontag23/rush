@@ -1,10 +1,10 @@
 import {Money} from "./shows";
 
-enum MarketingEmailConsent {
+export enum MarketingEmailConsent {
   Granted = "GRANTED"
 }
 
-enum PrivacyLaw {
+export enum PrivacyLaw {
   None = "NONE"
 }
 

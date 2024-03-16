@@ -12,7 +12,7 @@ export type TodayTixAPIRes<T> = {
   code: number;
   data: T;
   metadata?: Metadata;
-  pagination?: Pagination;
+  pagination?: Pagination | null;
 };
 
 type TodayTixAPIErrorContext = {
