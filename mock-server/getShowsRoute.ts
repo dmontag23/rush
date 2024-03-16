@@ -1035,7 +1035,7 @@ const getShows400Response: TodayTixAPIError = {
     "Missing parameter location, discover, query, genres, date, maxPrice, or id"
 };
 
-const getShowsRouter = (router: Router) =>
+const getShowsRoute = (router: Router) =>
   router.get<
     "/shows",
     null,
@@ -1049,4 +1049,4 @@ const getShowsRouter = (router: Router) =>
     return res.status(400).json(getShows400Response);
   });
 
-export default getShowsRouter;
+export default getShowsRoute;
