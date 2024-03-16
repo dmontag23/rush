@@ -11,7 +11,7 @@ import {
 import {ProductType} from "../types/shows";
 import {DayOfWeek, Daypart} from "../types/showtimes";
 
-const postHolds201Response: TodayTixAPIRes<TodayTixHold> = {
+const postHoldsGuysAndDolls201Response: TodayTixAPIRes<TodayTixHold> = {
   code: 201,
   data: {
     _type: "Hold",
@@ -235,10 +235,10 @@ const postHolds201Response: TodayTixAPIRes<TodayTixHold> = {
     sectionDescriptionMetadata: null,
     showEndDatetime: null,
     showDatetime: "2024-03-07T19:30:00.000Z",
-    showId: 22396,
+    showId: 3,
     showtime: {
       _type: "Showtime",
-      id: 1668586,
+      id: 3,
       admissionType: "Timed",
       endDatetime: null,
       endDatetimeEpoch: null,
@@ -270,7 +270,7 @@ const postHolds201Response: TodayTixAPIRes<TodayTixHold> = {
           name: "Musicals",
           slug: "musicals"
         },
-        displayName: "Back to the Future",
+        displayName: "Guys & Dolls",
         genreTags: ["Musical"],
         location: {
           _type: "Location",
@@ -286,7 +286,7 @@ const postHolds201Response: TodayTixAPIRes<TodayTixHold> = {
           seoName: "london",
           timezone: "Europe/London"
         },
-        name: "Back to the Future: The Musical",
+        name: "Guys & Dolls",
         numRatings: 6587,
         productType: ProductType.Show
       }
@@ -363,8 +363,8 @@ const holdsRoute = (router: Router) =>
     TodayTixAPIRes<TodayTixHold> | TodayTixAPIError,
     TodayTixHoldsReq
   >("/holds", (req, res) => {
-    if (req.body.numTickets === 1) {
-      return res.status(201).json(postHolds201Response);
+    if (req.body.showtime === 3 && req.body.numTickets === 1) {
+      return res.status(201).json(postHoldsGuysAndDolls201Response);
     }
     return res.status(401).json(postHolds401Response);
   });
