@@ -1,4 +1,4 @@
-import {TicketPrice} from "./shows";
+import {Money} from "./shows";
 import {TodayTixShowtime} from "./showtimes";
 
 export enum TodayTixHoldType {
@@ -54,18 +54,18 @@ type BasePrice = {
   result: string;
   resultSymbol: string;
   title: string;
-  total: TicketPrice;
+  total: Money;
   description: unknown | null;
 };
 
 type LocalPrices = {
   _type: string;
-  localCalculatedTotal: TicketPrice;
+  localCalculatedTotal: Money;
   localCurrency: Currency;
   localPriceItems: BasePrice[];
-  localTotalSalesTaxAmount: TicketPrice;
+  localTotalSalesTaxAmount: Money;
   localAvailableTicketProtectionFeeAmount: unknown | null;
-  localTotalAmountSaved: TicketPrice;
+  localTotalAmountSaved: Money;
 };
 
 export enum ProviderPlatformEnum {
@@ -108,7 +108,7 @@ type Retailer = {
 
 type EarnedRewardsSummary = {
   _type: string;
-  balance: TicketPrice;
+  balance: Money;
   rewardsAmount: unknown | null;
   earnedCredit: unknown | null;
 };
@@ -128,7 +128,7 @@ type DeliveryMethod = {
   method: DeliveryMethodEnum;
   postPurchaseText: string;
   prePurchaseText: string;
-  price: TicketPrice;
+  price: Money;
 };
 
 export type TodayTixHold = {
@@ -138,10 +138,10 @@ export type TodayTixHold = {
   accessibilityText: string | null;
   allocatedSeatId: number;
   availableTicketProtection: unknown | null;
-  baseTotal: TicketPrice;
+  baseTotal: Money;
   braintreeClientToken: string;
   localBraintreeClientToken: string;
-  calculatedTotal: TicketPrice;
+  calculatedTotal: Money;
   configurableTexts: HoldConfigurableTexts;
   createdDatetime: string;
   credits: unknown | null;
@@ -150,7 +150,7 @@ export type TodayTixHold = {
   deliveryMethod: DeliveryMethodEnum;
   deliveryMethodId: number;
   expirationDatetime: string;
-  faceValuePerTicket: TicketPrice;
+  faceValuePerTicket: Money;
   fractionalDiscount: number;
   hasPromotion: boolean;
   holdExpirationTime: string;
@@ -183,15 +183,15 @@ export type TodayTixHold = {
   showDatetime: string;
   showId: number;
   showtime: TodayTixShowtime;
-  subTotal: TicketPrice;
+  subTotal: Money;
   supportedDeliveryMethods: DeliveryMethod[];
   ticketProtectionPlanId: unknown | null;
   ticketType: TodayTixHoldType;
   ticketsType: TodayTixHoldType;
-  totalAmountSaved: TicketPrice;
-  totalPricePerTicket: TicketPrice;
-  totalTicketDiscount: TicketPrice;
-  totalSalesTaxAmount: TicketPrice;
+  totalAmountSaved: Money;
+  totalPricePerTicket: Money;
+  totalTicketDiscount: Money;
+  totalSalesTaxAmount: Money;
   venueAreaIds: unknown | null;
   voucher: unknown | null;
   voucherApplicationMessage: unknown | null;

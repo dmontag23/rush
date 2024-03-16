@@ -1,4 +1,4 @@
-import {Platform, Rewards, TicketPrice, TodayTixShow} from "./shows";
+import {Money, Platform, Rewards, TodayTixShow} from "./shows";
 
 export enum Daypart {
   Evening = "EVENING",
@@ -17,7 +17,7 @@ export enum DayOfWeek {
 
 type PriceBand = {
   _type: string;
-  price: TicketPrice;
+  price: Money;
   maxContiguousSeats: number;
   numAssignedSeatsAvailable: number;
 };
@@ -33,8 +33,8 @@ type RegularTicketsInfo = {
   discountAmountForPDP: number;
   hasNoBookingFee: boolean;
   hasPromotion: boolean;
-  lowPrice: TicketPrice;
-  lowPriceForShowtimeSelection: TicketPrice;
+  lowPrice: Money;
+  lowPriceForShowtimeSelection: Money;
   maxContiguousSeats: number;
   maxTickets: number;
   minTickets: number;
@@ -57,7 +57,7 @@ type LotteryTicketsInfo = {
   lotteryBannerText: string;
   lotteryGroupId: number;
   lotteryGroupTitle: string;
-  lowPrice: TicketPrice;
+  lowPrice: Money;
   maxTickets: number;
   minTickets: number;
 };
@@ -68,7 +68,7 @@ type RushTicketsInfo = {
   availableAfterEpoch: number;
   availableUntil: string;
   availableUntilEpoch: number;
-  lowPrice: TicketPrice;
+  lowPrice: Money;
   maxContiguousSeats: number;
   maxTickets: number;
   minTickets: number;

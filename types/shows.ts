@@ -84,7 +84,7 @@ type ProductMedia = {
   updatedAt: string;
 };
 
-export type TicketPrice = {
+export type Money = {
   display: string;
   currency: string;
   displayRounded: string;
@@ -164,9 +164,9 @@ export type TodayTixShow = {
   locationId?: TodayTixLocation;
   locationSeoName?: string;
   lotteryBannerText?: string | null;
-  lowPriceForLotteryTickets?: TicketPrice | null;
-  lowPriceForRegularTickets?: TicketPrice;
-  lowPriceForRushTickets?: TicketPrice | null;
+  lowPriceForLotteryTickets?: Money | null;
+  lowPriceForRegularTickets?: Money;
+  lowPriceForRushTickets?: Money | null;
   marketableLocationIds?: TodayTixLocation[];
   maxDiscountPercentage?: number;
   name: string;
