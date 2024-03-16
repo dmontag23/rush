@@ -3,7 +3,7 @@ import {useQueries} from "@tanstack/react-query";
 import {todayTixAPIv2} from "../../api/axiosConfig";
 import {TodayTixShowtime} from "../../types/showtimes";
 
-const getShowtimesWithRushAvailability = async (showId: number) =>
+const getShowtimesWithRushAvailability = (showId: number) =>
   todayTixAPIv2.get<TodayTixShowtime[]>(
     `shows/${showId}/showtimes/with_rush_availability`
   );

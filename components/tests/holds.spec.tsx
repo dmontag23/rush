@@ -1,6 +1,7 @@
 import React from "react";
 
 import {describe, expect, it, jest} from "@jest/globals";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {createStackNavigator} from "@react-navigation/stack";
 import nock from "nock";
 import {
@@ -21,6 +22,7 @@ import {TodayTixShowtime} from "../../types/showtimes";
 describe("Holds", () => {
   it("can be placed automatically when selecting a show time if rush is open", async () => {
     // setup
+    await AsyncStorage.setItem("customer-id", "customer-id");
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
@@ -78,6 +80,7 @@ describe("Holds", () => {
 
   it("schedules a hold if rush is closed", async () => {
     // setup
+    await AsyncStorage.setItem("customer-id", "customer-id");
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )

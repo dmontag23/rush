@@ -9,7 +9,7 @@ import {
   TodayTixShowsReqQueryParams
 } from "../../types/shows";
 
-const getShows = async (
+const getShows = (
   areAccessProgramsActive?: boolean,
   fieldset?: TodayTixFieldset,
   limit?: number,
