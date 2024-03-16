@@ -9,9 +9,9 @@ import EnterTokensScreen from "./authentication/EnterTokensScreen";
 import ShowDetails from "../ShowDetails/ShowDetails";
 import TodayTixLogoOnBackground from "../TodayTixLogoOnBackground";
 
-import useGetAuthTokens from "../../hooks/useGetAuthTokens";
-import useGetShows from "../../hooks/useGetShows";
-import useGetShowtimesWithRushAvailability from "../../hooks/useGetShowtimesWithRushAvailability";
+import useGetAuthTokens from "../../hooks/asyncStorageHooks/useGetAuthTokens";
+import useGetShows from "../../hooks/todayTixHooks/useGetShows";
+import useGetShowtimesWithRushAvailability from "../../hooks/todayTixHooks/useGetShowtimesWithRushAvailability";
 import {RootStackParamList} from "../../types/navigation";
 import {TodayTixFieldset, TodayTixLocation} from "../../types/shows";
 

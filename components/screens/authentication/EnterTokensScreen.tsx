@@ -20,7 +20,7 @@ import {
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {z} from "zod";
 
-import useStoreAuthTokens from "../../../hooks/useStoreAuthTokens";
+import useStoreAuthTokens from "../../../hooks/asyncStorageHooks/useStoreAuthTokens";
 
 const VALIDATION_SCHEMA = z.object({
   accessToken: z
