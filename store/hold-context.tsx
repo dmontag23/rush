@@ -13,6 +13,7 @@ import {useNavigation} from "@react-navigation/native";
 import SelectedShowtimeContext from "./selected-showtime-context";
 
 import {todayTixAPIv2} from "../api/axiosConfig";
+import useGetCustomerId from "../hooks/useGetCustomerId";
 import useScheduleCallback from "../hooks/useScheduleCallback";
 import {TodayTixHold, TodayTixHoldType, TodayTixHoldsReq} from "../types/holds";
 import {TodayTixShowtime} from "../types/showtimes";
@@ -27,8 +28,10 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
   const {selectedShowtime: showtime, selectedNumberOfTickets: numberOfTickets} =
     useContext(SelectedShowtimeContext);
   const [hold, setHold] = useState<TodayTixHold>();
+  const {customerId} = useGetCustomerId();
 
   const placeHold = async (
+    customer: string,
     holdShowtime: TodayTixShowtime,
     numTickets: number
   ) => {
@@ -36,8 +39,7 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
       setHold(
         await todayTixAPIv2.post<TodayTixHoldsReq, TodayTixHold>("holds", {
           showtime: holdShowtime.id,
-          // TODO: get the customer id dynamically
-          customer: "",
+          customer,
           holdType: TodayTixHoldType.Rush,
           numTickets
         })
@@ -58,15 +60,23 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
   } = useScheduleCallback(placeHold, {callsPerSecond: 10});
 
   useEffect(() => {
-    if (showtime && numberOfTickets && !hold)
+    if (customerId && showtime && numberOfTickets && !hold)
       scheduleHold(
         // Start making requests 1 second before rush tickets are due to open
         (showtime?.rushTickets?.availableAfterEpoch ?? 0) - 1,
+        customerId,
         showtime,
         numberOfTickets
       );
     return stopCallingHoldsEndpoint;
-  }, [showtime, numberOfTickets, hold, scheduleHold, stopCallingHoldsEndpoint]);
+  }, [
+    customerId,
+    showtime,
+    numberOfTickets,
+    hold,
+    scheduleHold,
+    stopCallingHoldsEndpoint
+  ]);
 
   return (
     <HoldContext.Provider value={{hold, setHold}}>
