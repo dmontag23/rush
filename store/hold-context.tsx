@@ -15,6 +15,7 @@ import SelectedShowtimeContext from "./selected-showtime-context";
 import {todayTixAPIv2} from "../api/axiosConfig";
 import useScheduleCallback from "../hooks/useScheduleCallback";
 import {TodayTixHold, TodayTixHoldType, TodayTixHoldsReq} from "../types/holds";
+import {TodayTixShowtime} from "../types/showtimes";
 
 const HoldContext = createContext<{
   hold?: TodayTixHold;
@@ -27,20 +28,21 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
     useContext(SelectedShowtimeContext);
   const [hold, setHold] = useState<TodayTixHold>();
 
-  const placeHold = async () => {
+  const placeHold = async (
+    holdShowtime: TodayTixShowtime,
+    numTickets: number
+  ) => {
     try {
-      if (showtime && numberOfTickets) {
-        setHold(
-          await todayTixAPIv2.post<TodayTixHoldsReq, TodayTixHold>("holds", {
-            showtime: showtime.id,
-            // TODO: get the customer id dynamically
-            customer: "",
-            holdType: TodayTixHoldType.Rush,
-            numTickets: numberOfTickets
-          })
-        );
-        navigate("HoldConfirmation");
-      }
+      setHold(
+        await todayTixAPIv2.post<TodayTixHoldsReq, TodayTixHold>("holds", {
+          showtime: holdShowtime.id,
+          // TODO: get the customer id dynamically
+          customer: "",
+          holdType: TodayTixHoldType.Rush,
+          numTickets
+        })
+      );
+      navigate("HoldConfirmation");
     } catch (error: unknown) {
       // TODO: Use something other than a console log here to capture the error
       console.log(
@@ -53,15 +55,16 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
   const {
     scheduleCallback: scheduleHold,
     stopCallbackExecution: stopCallingHoldsEndpoint
-  } = useScheduleCallback(placeHold);
+  } = useScheduleCallback(placeHold, {callsPerSecond: 10});
 
   useEffect(() => {
     if (showtime && numberOfTickets && !hold)
-      scheduleHold({
-        callsPerSecond: 10,
+      scheduleHold(
         // Start making requests 1 second before rush tickets are due to open
-        runAtEpochTime: (showtime?.rushTickets?.availableAfterEpoch ?? 0) - 1
-      });
+        (showtime?.rushTickets?.availableAfterEpoch ?? 0) - 1,
+        showtime,
+        numberOfTickets
+      );
     return stopCallingHoldsEndpoint;
   }, [showtime, numberOfTickets, hold, scheduleHold, stopCallingHoldsEndpoint]);
 

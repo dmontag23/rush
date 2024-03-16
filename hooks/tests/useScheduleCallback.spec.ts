@@ -26,7 +26,7 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback({runAtEpochTime: 1621728005});
+    result.current.scheduleCallback(1621728005);
     jest.advanceTimersByTime(4999);
     expect(callbackFn).not.toBeCalled();
     jest.advanceTimersByTime(1);
@@ -39,9 +39,11 @@ describe("useScheduleCallback hook", () => {
 
   it("runs callback immediately with 10 calls per second", () => {
     const callbackFn = jest.fn();
-    const {result} = renderHook(() => useScheduleCallback(callbackFn));
+    const {result} = renderHook(() =>
+      useScheduleCallback(callbackFn, {callsPerSecond: 10})
+    );
 
-    result.current.scheduleCallback({callsPerSecond: 10});
+    result.current.scheduleCallback();
     expect(callbackFn).not.toBeCalled();
     jest.runOnlyPendingTimers();
     expect(callbackFn).toBeCalledTimes(1);
@@ -55,7 +57,7 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback({runAtEpochTime: 1621728005});
+    result.current.scheduleCallback(1621728005);
     result.current.stopCallbackExecution();
     jest.advanceTimersByTime(5000);
     expect(callbackFn).not.toBeCalled();
@@ -79,7 +81,7 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback({runAtEpochTime: 1621728005});
+    result.current.scheduleCallback(1621728005);
     result.current.scheduleCallback();
     jest.advanceTimersByTime(1000);
     expect(callbackFn).not.toBeCalled();
@@ -91,11 +93,11 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback({runAtEpochTime: 1621728005});
+    result.current.scheduleCallback(1621728005);
     jest.advanceTimersByTime(4999);
     expect(callbackFn).not.toBeCalled();
     result.current.stopCallbackExecution();
-    result.current.scheduleCallback({runAtEpochTime: 1621728006});
+    result.current.scheduleCallback(1621728006);
     jest.advanceTimersByTime(1);
     expect(callbackFn).not.toBeCalled();
     jest.advanceTimersByTime(1000);
@@ -106,7 +108,7 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result, unmount} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback({runAtEpochTime: 1621728005});
+    result.current.scheduleCallback(1621728005);
     unmount();
     jest.advanceTimersByTime(5000);
     expect(callbackFn).not.toHaveBeenCalled();

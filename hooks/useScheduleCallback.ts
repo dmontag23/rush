@@ -1,30 +1,33 @@
 import {useCallback, useEffect, useRef} from "react";
 
-type ScheduleCallbackOptions = {
+type UseScheduleCallbackOptions = {
   callsPerSecond?: number;
-  runAtEpochTime?: number;
 };
 
-const useScheduleCallback = (callback: () => void) => {
+const useScheduleCallback = <T extends any[]>(
+  callback: (...args: T) => void,
+  {callsPerSecond = 1}: UseScheduleCallbackOptions = {}
+) => {
   const timeoutId = useRef<NodeJS.Timeout>();
   const intervalId = useRef<NodeJS.Timeout>();
 
   /* Note that, if this function is ever exposed as a part of this hook API,
   it would need to ensure that multiple intervals cannot be set at the same time
-  (e.g. using a if(!intervalId) ... statement).
-   Also, calls per second should be defaulted in this case (e.g. callsPerSecond=1) */
-  const continuouslyRunCallback = (callsPerSecond: number) => () => {
-    callback();
-    intervalId.current = setInterval(callback, 1000 / callsPerSecond);
-  };
+  (e.g. using a if(!intervalId) ... statement). */
+  const continuouslyRunCallback =
+    (...args: T) =>
+    () => {
+      callback(...args);
+      intervalId.current = setInterval(
+        () => callback(...args),
+        1000 / callsPerSecond
+      );
+    };
 
-  const scheduleCallback = ({
-    callsPerSecond = 1,
-    runAtEpochTime = 0
-  }: ScheduleCallbackOptions = {}) => {
+  const scheduleCallback = (runAtEpochTime = 0, ...args: T) => {
     if (!timeoutId.current)
       timeoutId.current = setTimeout(
-        continuouslyRunCallback(callsPerSecond),
+        continuouslyRunCallback(...args),
         runAtEpochTime * 1000 - new Date().getTime()
       );
   };
