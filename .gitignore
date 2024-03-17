@@ -76,3 +76,6 @@ mock-server/dist
 .env.development
 .env.production
 .env.test
+
+# Local Netlify folder
+.netlify
