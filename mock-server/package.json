@@ -17,6 +17,7 @@
   "devDependencies": {
     "@babel/core": "^7.23.9",
     "@types/express": "^4.17.21",
+    "netlify-cli": "^17.19.4",
     "typescript": "^5.3.3"
   }
 }
