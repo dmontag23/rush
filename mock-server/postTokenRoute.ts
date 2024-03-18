@@ -19,7 +19,7 @@ const postToken400Response: TodayTixOauthAPIError = {
   error: "invalid_request"
 };
 
-const tokenRoute = (router: Router) =>
+const postTokenRoute = (router: Router) =>
   router.post<
     "/token",
     null,
@@ -33,4 +33,4 @@ const tokenRoute = (router: Router) =>
     return res.status(400).json(postToken400Response);
   });
 
-export default tokenRoute;
+export default postTokenRoute;

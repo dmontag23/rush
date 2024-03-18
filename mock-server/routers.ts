@@ -4,10 +4,10 @@ import getCustomersMeRoute from "./getCustomersMeRoute";
 import getShowsRoute from "./getShowsRoute";
 import getShowtimesWithRushAvailabilityRoute from "./getShowtimesWithRushAvailabilityRoute";
 import postHoldsRoute from "./postHoldsRoute";
-import tokenRoute from "./postTokenRoute";
+import postTokenRoute from "./postTokenRoute";
 
 export const oauthRouter = express.Router();
-tokenRoute(oauthRouter);
+postTokenRoute(oauthRouter);
 
 export const v2Router = express.Router();
 postHoldsRoute(v2Router);
