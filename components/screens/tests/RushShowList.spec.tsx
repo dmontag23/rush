@@ -1,6 +1,6 @@
 import React from "react";
 
-import {describe, expect, it, jest} from "@jest/globals";
+import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {createStackNavigator} from "@react-navigation/stack";
 import nock from "nock";
@@ -17,10 +17,21 @@ import {TodayTixShow} from "../../../types/shows";
 import {TodayTixShowtime} from "../../../types/showtimes";
 
 describe("Rush show list", () => {
-  it("sorts shows", async () => {
-    // setup
-    await AsyncStorage.setItem("access-token", "access-token");
+  beforeEach(async () => {
+    await AsyncStorage.multiSet([
+      ["access-token", "access-token"],
+      ["refresh-token", "refresh-token"],
+      ["token-ttl", new Date("2024-01-01").getTime().toString()],
+      ["customer-id", "customer-id"]
+    ]);
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .get("/customers/me/rushGrants")
+      .reply(200, {data: []});
+  });
 
+  it("sorts shows", async () => {
     // render
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getAllByLabelText} = render(
@@ -30,7 +41,7 @@ describe("Rush show list", () => {
           component={RushShowList}
           initialParams={{
             /* The typecast is used because a TodayTixShow has many required fields,
-                 most of which are not necessary for the functionality of the component. */
+            most of which are not necessary for the functionality of the component. */
             showsAndTimes: [
               {
                 show: {
@@ -116,8 +127,8 @@ describe("Rush show list", () => {
     );
 
     // assert
+    await waitFor(() => expect(getAllByLabelText("Show card")).toHaveLength(5));
     const allShows = getAllByLabelText("Show card");
-    expect(allShows.length).toBe(5);
     [
       "Hamilton",
       "SIX the Musical",
@@ -131,9 +142,6 @@ describe("Rush show list", () => {
   });
 
   it("navigates to the show details screen and back", async () => {
-    // setup
-    await AsyncStorage.setItem("access-token", "access-token");
-
     // render
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByTestId, getByLabelText} = render(
@@ -143,7 +151,7 @@ describe("Rush show list", () => {
           component={RushShowList}
           initialParams={{
             /* The typecast is used because a TodayTixShow has many required fields,
-                 most of which are not necessary for the functionality of the component. */
+            most of which are not necessary for the functionality of the component. */
             showsAndTimes: [
               {
                 show: {
@@ -173,6 +181,7 @@ describe("Rush show list", () => {
     );
 
     // assert
+    await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
     const showCard = getByText("SIX the Musical");
     expect(showCard).toBeVisible();
     expect(getByText("10:00 to 15:30")).toBeVisible();
@@ -197,8 +206,6 @@ describe("Rush show list", () => {
   });
 
   it("maintains selected show state when navigating to other shows and back", async () => {
-    // setup
-    await AsyncStorage.setItem("access-token", "access-token");
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
@@ -214,7 +221,7 @@ describe("Rush show list", () => {
           component={RushShowList}
           initialParams={{
             /* The typecast is used because a TodayTixShow has many required fields,
-                 most of which are not necessary for the functionality of the component. */
+            most of which are not necessary for the functionality of the component. */
             showsAndTimes: [
               {
                 show: {
@@ -273,6 +280,7 @@ describe("Rush show list", () => {
     );
 
     // navigate to the show details screen
+    await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
     userEvent.press(getByText("SIX the Musical"));
 
     // load the header image
