@@ -7,6 +7,8 @@ beforeEach(async () => {
   await device.installApp();
   await device.launchApp();
 
+  console.log("THIS IS A TEST LOG!!!");
+
   // delete all data from Netlify
   const rushGrantsStore = getStore({
     name: "rush-grants",
