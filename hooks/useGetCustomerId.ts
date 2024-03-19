@@ -6,10 +6,12 @@ import useStoreCustomerId from "./asyncStorageHooks/useStoreCustomerId";
 import useGetCustomersMe from "./todayTixHooks/useGetCustomersMe";
 
 const useGetCustomerId = () => {
-  const {data: authTokens} = useGetAuthTokens();
+  const {data: authTokens, isPending: isGetAuthTokensPending} =
+    useGetAuthTokens();
 
   const {
     data: customerIdFromAsyncStorage,
+    isPending: isGetCustomerIdFromAsyncStoragePending,
     isSuccess: isGetCustomerIdFromAsyncStorageSuccess
   } = useGetCustomerIdFromAsyncStorage();
 
@@ -20,17 +22,21 @@ const useGetCustomerId = () => {
 
   const {
     data: customerFromTodayTix,
+    isPending: isGetCustomerFromTodayTixPending,
     isSuccess: isGetCustomerFromTodayTixSuccess
   } = useGetCustomersMe({
     enabled: shouldFetchCustomerFromTodayTixAPI
   });
 
-  const {mutate: storeCustomerIdInAsyncStorage} = useStoreCustomerId();
+  const {
+    mutate: storeCustomerIdInAsyncStorage,
+    isPending: isStoreCustomerIdInAsyncStoragePending
+  } = useStoreCustomerId();
 
   /* TODO: Note that there is a brief period where isPending for the whole hook will be false but the whole
-  hook is technically still loading because it needs to store the customer ID from the API endpoint, 
+  hook is technically still loading because it needs to store the customer ID from the TodayTix Customer API endpoint, 
   but the mutation function in this useEffect call hasn't been triggered yet. Come back to handle this in a clever
-  way so the hook always returns the right loading state */
+  way so the hook always returns the right pending state */
   useEffect(() => {
     if (isGetCustomerFromTodayTixSuccess)
       storeCustomerIdInAsyncStorage(customerFromTodayTix.id);
@@ -41,7 +47,13 @@ const useGetCustomerId = () => {
   ]);
 
   return {
-    customerId: customerIdFromAsyncStorage ?? customerFromTodayTix?.id
+    customerId: customerIdFromAsyncStorage ?? customerFromTodayTix?.id,
+    isPending:
+      isGetAuthTokensPending ||
+      isGetCustomerIdFromAsyncStoragePending ||
+      (shouldFetchCustomerFromTodayTixAPI &&
+        isGetCustomerFromTodayTixPending) ||
+      isStoreCustomerIdInAsyncStoragePending
   };
 };
 

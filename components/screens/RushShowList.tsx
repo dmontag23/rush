@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {ScrollView, StyleSheet, View} from "react-native";
 
+import {ActivityIndicator} from "react-native-paper";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 import ShowCard from "../ShowCard";
 
+import useGrantRushAccessForAllShows from "../../hooks/useGrantRushAccessForAllShows";
 import {RootStackScreenProps} from "../../types/navigation";
 import {TodayTixShowtime} from "../../types/showtimes";
 
@@ -22,12 +24,30 @@ const RushShowList = ({
   const {top, bottom} = useSafeAreaInsets();
   const {showsAndTimes} = route.params;
 
-  const sortedRushShows = [...showsAndTimes].sort(
-    (a, b) =>
-      addTickets(b.showtimes) - addTickets(a.showtimes) ||
-      (b.showtimes[0]?.rushTickets?.availableAfterEpoch ?? 0) -
-        (a.showtimes[0]?.rushTickets?.availableAfterEpoch ?? 0)
+  const sortedRushShows = useMemo(
+    () =>
+      [...showsAndTimes].sort(
+        (a, b) =>
+          addTickets(b.showtimes) - addTickets(a.showtimes) ||
+          (b.showtimes[0]?.rushTickets?.availableAfterEpoch ?? 0) -
+            (a.showtimes[0]?.rushTickets?.availableAfterEpoch ?? 0)
+      ),
+    [showsAndTimes]
   );
+
+  const allRushShows = useMemo(
+    () => sortedRushShows.map(({show}) => show),
+    [sortedRushShows]
+  );
+
+  const {isGrantingAccess} = useGrantRushAccessForAllShows(allRushShows);
+
+  if (isGrantingAccess)
+    return (
+      <View style={styles.loadingSpinnerContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
 
   return (
     <View style={[styles.container]}>
@@ -60,5 +80,6 @@ export default RushShowList;
 
 const styles = StyleSheet.create({
   container: {flex: 1, paddingHorizontal: 20},
+  loadingSpinnerContainer: {flex: 1, justifyContent: "center"},
   scrollContentContainer: {rowGap: 15}
 });
