@@ -1,3 +1,4 @@
+import {getStore} from "@netlify/blobs";
 import {Router} from "express";
 
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
@@ -356,16 +357,47 @@ const postHolds401Response: TodayTixAPIError = {
     "Sorry, something went wrong. Please try signing in again and contact TodayTix Support if the issue persists."
 };
 
+const postHolds409Response: TodayTixAPIError = {
+  code: 409,
+  error: "Conflict",
+  context: ["You are not eligible to purchase Rush tickets."],
+  title: "Not eligible",
+  message:
+    "You are not eligible to make this purchase. Please unlock Rush and try again.Contact TodayTix Support if you feel you have received this message in error."
+};
+
 const holdsRoute = (router: Router) =>
   router.post<
     "/holds",
     null,
     TodayTixAPIRes<TodayTixHold> | TodayTixAPIError,
     TodayTixHoldsReq
-  >("/holds", (req, res) => {
-    if (req.body.showtime === 3 && req.body.numTickets === 1) {
+  >("/holds", async (req, res) => {
+    // see if Guys & Dolls has been unlocked via Netlify blobs
+    let isGuysAndDollsUnlocked = true;
+    try {
+      const rushGrantsStore = getStore({
+        name: "rush-grants",
+        siteID: process.env.NETLIFY_SITE_ID,
+        token: process.env.NETLIFY_API_KEY
+      });
+
+      isGuysAndDollsUnlocked = Boolean(
+        await rushGrantsStore.get("3", {type: "json"})
+      );
+
+      if (!isGuysAndDollsUnlocked)
+        return res.status(409).json(postHolds409Response);
+    } catch (error: unknown) {
+      console.log(
+        `Could not get rush grants from Netlify: ${error}. Unlocking Guys & Dolls.`
+      );
+    }
+
+    if (req.body.showtime === 3 && isGuysAndDollsUnlocked) {
       return res.status(201).json(postHoldsGuysAndDolls201Response);
     }
+
     return res.status(401).json(postHolds401Response);
   });
 
