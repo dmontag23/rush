@@ -7,7 +7,7 @@ beforeEach(async () => {
   await device.installApp();
   await device.launchApp();
 
-  console.log("THIS IS A TEST LOG!!!");
+  console.log("NETLIFY SITE ID: ", process.env.NETLIFY_SITE_ID);
 
   // delete all data from Netlify
   const rushGrantsStore = getStore({
