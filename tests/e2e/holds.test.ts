@@ -15,4 +15,8 @@ describe("Holds", () => {
 
     // TODO: Expand this test once the hold confirmation page is more fully built out
   });
+
+  it("cannot place a hold for a show that has not been unlocked", async () => {
+    // TODO: Expand this test once the hold confirmation page is more fully built out
+  });
 });
