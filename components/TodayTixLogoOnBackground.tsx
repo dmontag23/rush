@@ -3,7 +3,7 @@ import {Image, SafeAreaView, StyleSheet, View} from "react-native";
 
 import {useTheme} from "react-native-paper";
 
-const LOGO_URL = `${process.env.TODAY_TIX_WEB_URL}/static/ttx_logo_horizontal_white.png`;
+import RushLogo from "../ios/rush/Images.xcassets/RushNeon.imageset/RushNeonTransparent.png";
 
 const TodayTixLogoOnBackground = () => (
   <View style={{backgroundColor: useTheme().colors.primary}}>
@@ -11,7 +11,7 @@ const TodayTixLogoOnBackground = () => (
       <Image
         accessibilityLabel="TodayTix logo"
         style={styles.logo}
-        source={{uri: LOGO_URL}}
+        source={RushLogo}
       />
     </SafeAreaView>
   </View>
