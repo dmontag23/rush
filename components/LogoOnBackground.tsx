@@ -5,7 +5,7 @@ import {useTheme} from "react-native-paper";
 
 import RushLogo from "../ios/rush/Images.xcassets/RushNeon.imageset/RushNeonTransparent.png";
 
-const TodayTixLogoOnBackground = () => (
+const LogoOnBackground = () => (
   <View style={{backgroundColor: useTheme().colors.primary}}>
     <SafeAreaView style={styles.logoContainer}>
       <Image
@@ -17,7 +17,7 @@ const TodayTixLogoOnBackground = () => (
   </View>
 );
 
-export default TodayTixLogoOnBackground;
+export default LogoOnBackground;
 
 const styles = StyleSheet.create({
   logoContainer: {marginHorizontal: "10%"},

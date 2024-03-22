@@ -6,8 +6,8 @@ import HoldConfirmation from "./HoldConfirmation";
 import RushShowList from "./RushShowList";
 import EnterTokensScreen from "./authentication/EnterTokensScreen";
 
+import LogoOnBackground from "../LogoOnBackground";
 import ShowDetails from "../ShowDetails/ShowDetails";
-import TodayTixLogoOnBackground from "../TodayTixLogoOnBackground";
 
 import useGetAuthTokens from "../../hooks/asyncStorageHooks/useGetAuthTokens";
 import useGetShows from "../../hooks/todayTixHooks/useGetShows";
@@ -40,7 +40,7 @@ const RootNavigator = () => {
     });
 
   if (isLoadingTokens || isLoadingRushAndLotteryShows || isLoadingRushShowtimes)
-    return <TodayTixLogoOnBackground />;
+    return <LogoOnBackground />;
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
