@@ -16,14 +16,12 @@ const postRushGrant = ({customerId, showId}: PostRushGrantsVariables) =>
   );
 
 const usePostRushGrants = () =>
-  useMutation<TodayTixRushGrantsReq, TodayTixAPIError, PostRushGrantsVariables>(
-    {
-      mutationFn: postRushGrant
-      /* The rushGrants query is not invalidated here because, when granting access to many shows at one time,
+  useMutation<TodayTixRushGrant, TodayTixAPIError, PostRushGrantsVariables>({
+    mutationFn: postRushGrant
+    /* The rushGrants query is not invalidated here because, when granting access to many shows at one time,
       the query invalidation would be run for each mutate function that resolves. This could lead to several
       re-fetches of the rush grants, which is not ideal at best. For an example, 
       see the useGrantRushAccessForAllShows hook */
-    }
-  );
+  });
 
 export default usePostRushGrants;
