@@ -198,3 +198,9 @@ export type TodayTixHold = {
   voucherCode: string;
   voucherDiscount: unknown | null;
 };
+
+export enum TodayTixHoldErrorCode {
+  CONFLICT = "Conflict",
+  SEATS_TAKEN = "AllSeatsInOtherUserCarts",
+  UNAUTHENTICATED = "UnauthenticatedException"
+}
