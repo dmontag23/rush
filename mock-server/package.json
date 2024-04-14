@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "npm run clean-mock-server && npm run mock-server-ts-compile",
+    "build": "yarn clean-mock-server && yarn mock-server-ts-compile",
     "clean-mock-server": "rm -rf dist",
+    "delete-blob": "npx netlify blobs:delete",
     "mock-server-ts-compile": "npx tsc",
-    "start": "npm run build && node dist/mock-server/runMockServer.js"
+    "start": "yarn build && node dist/mock-server/runMockServer.js"
   },
   "dependencies": {
     "@netlify/blobs": "^7.0.1",
