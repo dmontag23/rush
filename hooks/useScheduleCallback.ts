@@ -1,49 +1,32 @@
-import {useCallback, useEffect, useRef} from "react";
-
-type UseScheduleCallbackOptions = {
-  callsPerSecond?: number;
-};
+import {useEffect, useRef} from "react";
 
 const useScheduleCallback = <T extends any[]>(
-  callback: (...args: T) => void,
-  {callsPerSecond = 1}: UseScheduleCallbackOptions = {}
+  callback: (...args: T) => void
 ) => {
-  const timeoutId = useRef<NodeJS.Timeout>();
-  const intervalId = useRef<NodeJS.Timeout>();
-
-  /* Note that, if this function is ever exposed as a part of this hook API,
-  it would need to ensure that multiple intervals cannot be set at the same time
-  (e.g. using a if(!intervalId) ... statement). */
-  const continuouslyRunCallback =
-    (...args: T) =>
-    () => {
-      callback(...args);
-      intervalId.current = setInterval(
-        () => callback(...args),
-        1000 / callsPerSecond
-      );
-    };
+  const timeout = useRef<NodeJS.Timeout>();
 
   const scheduleCallback = (runAtEpochTime = 0, ...args: T) => {
-    if (!timeoutId.current)
-      timeoutId.current = setTimeout(
-        continuouslyRunCallback(...args),
+    if (!timeout.current)
+      timeout.current = setTimeout(
+        () => callback(...args),
         runAtEpochTime * 1000 - new Date().getTime()
       );
   };
 
-  const stopCallbackExecution = useCallback(() => {
-    clearTimeout(timeoutId.current);
-    clearInterval(intervalId.current);
-    timeoutId.current = undefined;
-    intervalId.current = undefined;
-  }, []);
+  const cancelScheduledExecution = () => {
+    clearTimeout(timeout.current);
+    timeout.current = undefined;
+  };
 
-  /* ensure all scheduled or running processes are stopped when any component
+  /* ensure all scheduled processes are stopped when any component
   that uses this hook is unmounted */
-  useEffect(() => stopCallbackExecution, [stopCallbackExecution]);
+  useEffect(() => cancelScheduledExecution, []);
 
-  return {scheduleCallback, stopCallbackExecution};
+  return {
+    scheduleCallback,
+    cancelScheduledExecution,
+    isScheduled: Boolean(timeout)
+  };
 };
 
 export default useScheduleCallback;
