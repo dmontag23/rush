@@ -10,7 +10,7 @@
     "test": "yarn typecheck && yarn lint && yarn test:integration && yarn test:e2e:local",
     "test:e2e": "detox test -c",
     "test:e2e:build": "detox build -c",
-    "test:e2e:local": "export $(grep -v '^#' .env.development | xargs) && NODE_ENV=DEV yarn test:e2e ios.sim.debug",
+    "test:e2e:local": "yarn test:e2e ios.sim.debug",
     "test:integration": "jest",
     "typecheck": "npx tsc"
   },
