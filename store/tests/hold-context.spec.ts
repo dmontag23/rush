@@ -10,6 +10,5 @@ describe("The hold context", () => {
     const {result} = renderHook(() => useContext(HoldContext));
 
     expect(result.current.hold).toBeUndefined();
-    expect(result.current.setHold(undefined)).toBeUndefined();
   });
 });

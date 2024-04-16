@@ -1,4 +1,5 @@
 import React, {useContext} from "react";
+import {SafeAreaView} from "react-native";
 
 import {Text} from "react-native-paper";
 
@@ -9,7 +10,9 @@ const HoldConfirmation = ({}: RootStackScreenProps<"HoldConfirmation">) => {
   const {hold} = useContext(HoldContext);
 
   return (
-    <Text variant="headlineLarge">{`You've won ${hold?.numSeats} ticket(s) to`}</Text>
+    <SafeAreaView>
+      <Text variant="headlineLarge">{`You've won ${hold?.numSeats} ticket(s) to ${hold?.showtime.show?.displayName}!`}</Text>
+    </SafeAreaView>
   );
 };
 

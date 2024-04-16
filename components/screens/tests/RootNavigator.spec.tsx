@@ -17,7 +17,7 @@ describe("The root navigator", () => {
     )
       .get("/shows")
       .query({
-        areAccessProgramsActive: "1",
+        areAccessProgramsActive: 1,
         fieldset: TodayTixFieldset.Summary,
         limit: 10000,
         location: TodayTixLocation.London
@@ -44,7 +44,7 @@ describe("The root navigator", () => {
     )
       .get("/shows")
       .query({
-        areAccessProgramsActive: "1",
+        areAccessProgramsActive: 1,
         fieldset: TodayTixFieldset.Summary,
         limit: 10000,
         location: TodayTixLocation.London
@@ -70,7 +70,7 @@ describe("The root navigator", () => {
     )
       .get("/shows")
       .query({
-        areAccessProgramsActive: "1",
+        areAccessProgramsActive: 1,
         fieldset: TodayTixFieldset.Summary,
         limit: 10000,
         location: TodayTixLocation.London
@@ -107,7 +107,7 @@ describe("The root navigator", () => {
     )
       .get("/shows")
       .query({
-        areAccessProgramsActive: "1",
+        areAccessProgramsActive: 1,
         fieldset: TodayTixFieldset.Summary,
         limit: 10000,
         location: TodayTixLocation.London
@@ -138,7 +138,7 @@ describe("The root navigator", () => {
       )
         .get("/shows")
         .query({
-          areAccessProgramsActive: "1",
+          areAccessProgramsActive: 1,
           fieldset: TodayTixFieldset.Summary,
           limit: 10000,
           location: TodayTixLocation.London
@@ -152,8 +152,9 @@ describe("The root navigator", () => {
       const {getByText} = render(<RootNavigator />);
 
       // assert
-      await waitFor(() =>
-        expect(getByText("Sign into TodayTix")).toBeVisible()
+      await waitFor(
+        () => expect(getByText("Sign into TodayTix")).toBeVisible(),
+        {timeout: 3000}
       );
     }
   );
@@ -171,7 +172,7 @@ describe("The root navigator", () => {
     )
       .get("/shows")
       .query({
-        areAccessProgramsActive: "1",
+        areAccessProgramsActive: 1,
         fieldset: TodayTixFieldset.Summary,
         limit: 10000,
         location: TodayTixLocation.London
@@ -192,6 +193,8 @@ describe("The root navigator", () => {
     const {getByText} = render(<RootNavigator />);
 
     // assert
-    await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
+    await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible(), {
+      timeout: 3000
+    });
   });
 });

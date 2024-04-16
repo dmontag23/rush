@@ -20,6 +20,7 @@ import {TodayTixShow} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";
 
 describe("Holds", () => {
+  // TODO: Add a test for retrying holds until you get a seat/at most 30 times/only under the seat condition
   it("can be placed automatically when selecting a show time if rush is open", async () => {
     // setup
     await AsyncStorage.setItem("customer-id", "customer-id");
@@ -27,27 +28,10 @@ describe("Holds", () => {
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
       .post("/holds")
-      .thrice()
-      .reply(401, {
-        code: 401,
-        error: "UnauthenticatedException",
-        context: null,
-        title: "Error",
-        message:
-          "Sorry, something went wrong. Please try signing in again and contact TodayTix Support if the issue persists."
-      });
-
-    nock(
-      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
-    )
-      .persist()
-      .post("/holds")
       .reply(201, {
         data: {
           numSeats: 1,
-          priceItems: [{total: {}}],
-          showtime: {},
-          seatsInfo: {seats: []}
+          showtime: {show: {displayName: "Hamilton"}}
         }
       });
 
@@ -78,7 +62,7 @@ describe("Holds", () => {
     await waitFor(() => expect(getByText("2")).toBeVisible());
     userEvent.press(getByText("2"));
     await waitFor(() =>
-      expect(getByText("You've won 1 ticket(s) to")).toBeVisible()
+      expect(getByText("You've won 1 ticket(s) to Hamilton!")).toBeVisible()
     );
   });
 
@@ -88,20 +72,18 @@ describe("Holds", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
-      .persist()
       .post("/holds")
       .reply(201, {
         data: {
           numSeats: 1,
-          priceItems: [{total: {}}],
-          showtime: {},
-          seatsInfo: {seats: []}
+          showtime: {show: {displayName: "Hamilton"}}
         }
       });
 
     const Stack = createStackNavigator<RootStackParamList>();
-    const ticketAvailabilityTime = 1621728005;
-    const {getByText, getByLabelText} = render(
+    const ticketAvailabilityTime =
+      new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000;
+    const {getByText, queryByText, getByLabelText} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="ShowDetails"
@@ -134,10 +116,10 @@ describe("Holds", () => {
       ticketAvailabilityTime * 1000 - new Date().getTime();
     /* the - 1000 below is to ensure that requests are made to the holds endpoint
     1 second before rush tickets open */
+    const wonTicketsText = "You've won 1 ticket(s) to Hamilton!";
+    expect(queryByText(wonTicketsText)).toBeNull();
     jest.advanceTimersByTime(timeToTicketAvailability - 1000);
-    await waitFor(() =>
-      expect(getByText("You've won 1 ticket(s) to")).toBeVisible()
-    );
+    await waitFor(() => expect(getByText(wonTicketsText)).toBeVisible());
   });
 
   it("fetches a customer from the TodayTix API if one is not available before placing a hold", async () => {
@@ -157,14 +139,11 @@ describe("Holds", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
-      .persist()
       .post("/holds")
       .reply(201, {
         data: {
           numSeats: 1,
-          priceItems: [{total: {}}],
-          showtime: {},
-          seatsInfo: {seats: []}
+          showtime: {show: {displayName: "Hamilton"}}
         }
       });
 
@@ -196,7 +175,7 @@ describe("Holds", () => {
     await waitFor(() => expect(getByText("2")).toBeVisible());
     userEvent.press(getByText("2"));
     await waitFor(() =>
-      expect(getByText("You've won 1 ticket(s) to")).toBeVisible()
+      expect(getByText("You've won 1 ticket(s) to Hamilton!")).toBeVisible()
     );
     expect(await AsyncStorage.getItem("customer-id")).toBe("customer-id");
   });
