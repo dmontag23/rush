@@ -6,7 +6,6 @@ import {createStackNavigator} from "@react-navigation/stack";
 import nock from "nock";
 import {fireEvent, render, userEvent, waitFor} from "testing-library/extension";
 
-import HoldConfirmation from "../HoldConfirmation";
 import RushShowList from "../RushShowList";
 
 import ShowDetails from "../../ShowDetails/ShowDetails";
@@ -206,12 +205,6 @@ describe("Rush show list", () => {
   });
 
   it("maintains selected show state when navigating to other shows and back", async () => {
-    nock(
-      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
-    )
-      .post("/holds")
-      .reply(201, {data: {}});
-
     // render
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByLabelText} = render(
@@ -275,7 +268,6 @@ describe("Rush show list", () => {
           }}
         />
         <Stack.Screen name="ShowDetails" component={ShowDetails} />
-        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
       </Stack.Navigator>
     );
 

@@ -15,6 +15,7 @@ import {
 import ShowDetails from "../ShowDetails/ShowDetails";
 import HoldConfirmation from "../screens/HoldConfirmation";
 
+import {TodayTixHoldType} from "../../types/holds";
 import {RootStackParamList} from "../../types/navigation";
 import {TodayTixShow} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";
@@ -27,7 +28,12 @@ describe("Holds", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
-      .post("/holds")
+      .post("/holds", {
+        customer: "customer-id",
+        showtime: 1,
+        numTickets: 2,
+        holdType: TodayTixHoldType.Rush
+      })
       .reply(201, {
         data: {
           numSeats: 1,
@@ -72,7 +78,12 @@ describe("Holds", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
-      .post("/holds")
+      .post("/holds", {
+        customer: "customer-id",
+        showtime: 1,
+        numTickets: 2,
+        holdType: TodayTixHoldType.Rush
+      })
       .reply(201, {
         data: {
           numSeats: 1,
@@ -134,12 +145,13 @@ describe("Holds", () => {
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
       .get("/customers/me")
-      .reply(200, {data: {id: "customer-id"}});
-
-    nock(
-      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
-    )
-      .post("/holds")
+      .reply(200, {data: {id: "customer-id"}})
+      .post("/holds", {
+        customer: "customer-id",
+        showtime: 1,
+        numTickets: 2,
+        holdType: TodayTixHoldType.Rush
+      })
       .reply(201, {
         data: {
           numSeats: 1,

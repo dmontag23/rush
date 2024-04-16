@@ -1,6 +1,14 @@
+export enum TodayTixClient {
+  IOS = "ios"
+}
+
+export enum TodayTixGrantType {
+  Refresh = "refresh_token"
+}
+
 export type TodayTixRefreshTokenReq = {
-  client_id: string;
-  grant_type: string;
+  client_id: TodayTixClient;
+  grant_type: TodayTixGrantType;
   parent_token: string;
   refresh_token: string;
 };

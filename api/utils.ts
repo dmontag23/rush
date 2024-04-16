@@ -4,6 +4,8 @@ import {todayTixOAuthAPI} from "./axiosConfig";
 
 import {getTokens, storeTokens} from "../store/asyncStorageUtils";
 import {
+  TodayTixClient,
+  TodayTixGrantType,
   TodayTixRefreshTokenReq,
   TodayTixRefreshTokenRes
 } from "../types/loginTokens";
@@ -14,8 +16,8 @@ const refetchToken = async (prevAccessToken: string, refreshToken: string) => {
       TodayTixRefreshTokenReq,
       TodayTixRefreshTokenRes
     >("token", {
-      client_id: "ios",
-      grant_type: "refresh_token",
+      client_id: TodayTixClient.IOS,
+      grant_type: TodayTixGrantType.Refresh,
       parent_token: prevAccessToken,
       refresh_token: refreshToken
     });

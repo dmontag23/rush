@@ -5,6 +5,8 @@ import nock from "nock";
 
 import {handleTodayTixApiRequest} from "../utils";
 
+import {TodayTixClient, TodayTixGrantType} from "../../types/loginTokens";
+
 describe("API utils", () => {
   it("does not refresh token if there is no access token", async () => {
     await AsyncStorage.setItem("refresh-token", "refresh-token");
@@ -57,7 +59,12 @@ describe("API utils", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_OAUTH_ENDPOINT}`
     )
-      .post("/token")
+      .post("/token", {
+        client_id: TodayTixClient.IOS,
+        grant_type: TodayTixGrantType.Refresh,
+        parent_token: "current-access-token",
+        refresh_token: "refresh-token"
+      })
       .reply(200, {
         access_token: "new-access-token",
         token_type: "Bearer",
@@ -92,7 +99,12 @@ describe("API utils", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_OAUTH_ENDPOINT}`
     )
-      .post("/token")
+      .post("/token", {
+        client_id: TodayTixClient.IOS,
+        grant_type: TodayTixGrantType.Refresh,
+        parent_token: "current-access-token",
+        refresh_token: "refresh-token"
+      })
       .reply(400, {
         error_description: "Request is missing username parameter.",
         error: "invalid_request"

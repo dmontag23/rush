@@ -13,6 +13,7 @@ describe("useGetShows hook", () => {
       .reply(200, {
         data: [{id: "Test show"}]
       });
+
     const {result} = renderHook(useGetShows);
 
     await waitFor(() => expect(result.current.data?.[0].id).toBe("Test show"));
@@ -29,6 +30,7 @@ describe("useGetShows hook", () => {
       .reply(200, {
         data: [{id: "Test show"}]
       });
+
     const {result} = renderHook(() => useGetShows({offset: 10}));
 
     await waitFor(() => expect(result.current.data?.[0].id).toBe("Test show"));
