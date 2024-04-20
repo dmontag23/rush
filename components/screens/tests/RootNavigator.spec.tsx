@@ -81,8 +81,7 @@ describe("The root navigator", () => {
           {
             id: 1,
             displayName: "SIX the Musical",
-            isRushActive: true,
-            images: {productMedia: {appHeroImage: {file: {url: "test-url"}}}}
+            isRushActive: true
           }
         ]
       })
@@ -183,8 +182,7 @@ describe("The root navigator", () => {
           {
             id: 1,
             displayName: "SIX the Musical",
-            isRushActive: true,
-            images: {productMedia: {appHeroImage: {file: {url: "test-url"}}}}
+            isRushActive: true
           }
         ]
       });

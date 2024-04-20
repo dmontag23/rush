@@ -25,7 +25,7 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
   // TODO: get the initial holds from the TodayTix API to populate here
   const {customerId} = useGetCustomerId();
   const {
-    mutateAsync: placeHold,
+    mutate: placeHold,
     data: hold,
     isPending: isPlacingHold
   } = usePostHolds();

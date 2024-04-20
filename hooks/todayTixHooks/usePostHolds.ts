@@ -27,7 +27,12 @@ const usePostHolds = () =>
   useMutation<TodayTixHold, TodayTixAPIError, PostHoldsVariables>({
     mutationFn: postHolds,
     retry: (failureCount, error) =>
-      error.error === TodayTixHoldErrorCode.SEATS_TAKEN && failureCount < 30,
+      /* failureCount < 29 will try the mutation at most 30 times before failing.
+      This is because failureCount is the number of previous failures of the hook,
+      not current failures. So the first time the hook fails, failureCount=0, so the
+      30th time the hook fails, failureCount=29. At this point, the hook should stop
+      retrying, i.e. the function below should return false. */
+      error.error === TodayTixHoldErrorCode.SEATS_TAKEN && failureCount < 29,
     retryDelay: 0
     // TODO: Invalidate the get holds query here once it has been added
   });
