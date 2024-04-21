@@ -10,6 +10,24 @@ const extractTimeFromDateString = (dateString: string | undefined) => {
   if (dateString) return new Date(dateString).toTimeString().slice(0, 5);
 };
 
+const isRushOpenToday = (showtime: TodayTixShowtime) => {
+  /* the rush open check assumes that rush is only open at some point in the day when there is
+  a start and end time associated to the rush tickets, i.e. the rushTickets.availableAfter 
+  and rushTickets.availableUntil have values */
+  const rushStartTime = extractTimeFromDateString(
+    showtime?.rushTickets?.availableAfter
+  );
+  const rushEndTime = extractTimeFromDateString(
+    showtime?.rushTickets?.availableUntil
+  );
+  return Boolean(rushStartTime && rushEndTime);
+};
+
+export const isShowActive = (
+  isRushUnlocked: boolean,
+  showtime: TodayTixShowtime
+) => isRushUnlocked && isRushOpenToday(showtime);
+
 const RushShowtimeInfo = (rushShowtimes: TodayTixShowtime[]) => (
   <View style={styles.showtimesInfoContainer}>
     {rushShowtimes.length ? (
@@ -79,9 +97,8 @@ const ShowCard = ({
   const rushEndTime = extractTimeFromDateString(
     showtimes[0]?.rushTickets?.availableUntil
   );
-
-  const isRushOpen = Boolean(rushStartTime && rushEndTime);
-  const isActive = isRushUnlocked && isRushOpen;
+  const isRushOpen = isRushOpenToday(showtimes[0]);
+  const isActive = isShowActive(isRushUnlocked, showtimes[0]);
 
   return (
     <View>

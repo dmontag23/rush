@@ -30,7 +30,13 @@ describe("Rush show list", () => {
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
       .get("/customers/me/rushGrants")
-      .reply(200, {data: []});
+      .reply(200, {
+        data: [
+          {showId: 1, showName: "SIX the Musical"},
+          {showId: 3, showName: "Hamilton"},
+          {showId: 5, showName: "Come from Away"}
+        ]
+      });
 
     // render
     const Stack = createStackNavigator<RootStackParamList>();
@@ -48,14 +54,16 @@ describe("Rush show list", () => {
                   id: 1,
                   displayName: "SIX the Musical",
                   isRushActive: true,
-                  images: {
-                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                  }
+                  showId: 1
                 } as TodayTixShow,
                 showtimes: [
                   {
                     id: 1,
-                    rushTickets: {quantityAvailable: 4}
+                    rushTickets: {
+                      quantityAvailable: 4,
+                      availableAfter: "2021-05-23T09:30:00.000",
+                      availableUntil: "2021-05-23T15:30:00.000"
+                    }
                   } as TodayTixShowtime
                 ]
               },
@@ -64,37 +72,33 @@ describe("Rush show list", () => {
                   id: 2,
                   displayName: "Unfortunate",
                   isRushActive: true,
-                  images: {
-                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                  }
+                  showId: 2
                 } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 2,
-                    rushTickets: {
-                      quantityAvailable: 0,
-                      availableAfterEpoch: 10
-                    }
-                  } as TodayTixShowtime
-                ]
+                showtimes: []
               },
               {
                 show: {
                   id: 3,
                   displayName: "Hamilton",
                   isRushActive: true,
-                  images: {
-                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                  }
+                  showId: 3
                 } as TodayTixShow,
                 showtimes: [
                   {
                     id: 3,
-                    rushTickets: {quantityAvailable: 3}
+                    rushTickets: {
+                      quantityAvailable: 3,
+                      availableAfter: "2021-05-23T09:30:00.000",
+                      availableUntil: "2021-05-23T15:30:00.000"
+                    }
                   } as TodayTixShowtime,
                   {
                     id: 4,
-                    rushTickets: {quantityAvailable: 2}
+                    rushTickets: {
+                      quantityAvailable: 2,
+                      availableAfter: "2021-05-23T09:30:00.000",
+                      availableUntil: "2021-05-23T15:30:00.000"
+                    }
                   } as TodayTixShowtime
                 ]
               },
@@ -103,22 +107,27 @@ describe("Rush show list", () => {
                   id: 4,
                   displayName: "Hadestown",
                   isRushActive: true,
-                  images: {
-                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                  }
+                  showId: 4
                 } as TodayTixShow,
-                showtimes: []
+                showtimes: [
+                  {
+                    id: 4,
+                    rushTickets: {
+                      quantityAvailable: 10,
+                      availableAfter: "2021-05-23T09:30:00.000",
+                      availableUntil: "2021-05-23T15:30:00.000"
+                    }
+                  } as TodayTixShowtime
+                ]
               },
               {
                 show: {
                   id: 5,
                   displayName: "Come from Away",
                   isRushActive: true,
-                  images: {
-                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                  }
+                  showId: 5
                 } as TodayTixShow,
-                showtimes: [{id: 5} as TodayTixShowtime]
+                showtimes: []
               }
             ]
           }}
@@ -132,8 +141,8 @@ describe("Rush show list", () => {
     [
       "Hamilton",
       "SIX the Musical",
-      "Unfortunate",
       "Hadestown",
+      "Unfortunate",
       "Come from Away"
     ].map((showName, i) => {
       expect(allShows[i]).toBeVisible();
@@ -164,9 +173,6 @@ describe("Rush show list", () => {
                   id: 1,
                   displayName: "SIX the Musical",
                   isRushActive: true,
-                  images: {
-                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                  },
                   showId: 1
                 } as TodayTixShow,
                 showtimes: [
@@ -234,10 +240,7 @@ describe("Rush show list", () => {
                 show: {
                   id: 1,
                   displayName: "SIX the Musical",
-                  isRushActive: true,
-                  images: {
-                    productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                  }
+                  isRushActive: true
                 } as TodayTixShow,
                 showtimes: [
                   {
@@ -455,19 +458,22 @@ describe("Rush show list", () => {
     const firstShow = showCards[0];
     const secondShow = showCards[1];
 
-    expect(firstShow).toHaveTextContent("Hamilton", {exact: false});
-    expect(firstShow).toHaveTextContent("Tickets: 10", {exact: false});
-    expect(firstShow).toHaveTextContent("Rush is not unlocked for this show.", {
-      exact: false
-    });
-    expect(getByLabelText("Inactive card")).toBeVisible();
-
-    expect(secondShow).toHaveTextContent("SIX the Musical", {exact: false});
-    expect(secondShow).toHaveTextContent("Tickets: 6", {exact: false});
-    expect(secondShow).not.toHaveTextContent(
+    expect(firstShow).toHaveTextContent("SIX the Musical", {exact: false});
+    expect(firstShow).toHaveTextContent("Tickets: 6", {exact: false});
+    expect(firstShow).not.toHaveTextContent(
       "Rush is not unlocked for this show.",
       {exact: false}
     );
+
+    expect(secondShow).toHaveTextContent("Hamilton", {exact: false});
+    expect(secondShow).toHaveTextContent("Tickets: 10", {exact: false});
+    expect(secondShow).toHaveTextContent(
+      "Rush is not unlocked for this show.",
+      {
+        exact: false
+      }
+    );
+    expect(getByLabelText("Inactive card")).toBeVisible();
   });
 
   it("unlocks all rush shows", async () => {

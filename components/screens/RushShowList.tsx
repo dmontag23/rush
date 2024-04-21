@@ -3,12 +3,16 @@ import {ScrollView, StyleSheet, View} from "react-native";
 
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
-import ShowCard from "../ShowCard";
+import ShowCard, {isShowActive} from "../ShowCard";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 import useGrantRushAccessForAllShows from "../../hooks/useGrantRushAccessForAllShows";
 import {RootStackScreenProps} from "../../types/navigation";
+import {TodayTixShow} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";
+
+const isRushUnlocked = (show: TodayTixShow, allUnlockedRushShowIds: number[]) =>
+  allUnlockedRushShowIds.includes(show.showId ?? NaN);
 
 const addTickets = (showtimes: TodayTixShowtime[]) =>
   showtimes.reduce(
@@ -24,20 +28,9 @@ const RushShowList = ({
   const {top, bottom} = useSafeAreaInsets();
   const {showsAndTimes} = route.params;
 
-  const sortedRushShows = useMemo(
-    () =>
-      [...showsAndTimes].sort(
-        (a, b) =>
-          addTickets(b.showtimes) - addTickets(a.showtimes) ||
-          (b.showtimes[0]?.rushTickets?.availableAfterEpoch ?? 0) -
-            (a.showtimes[0]?.rushTickets?.availableAfterEpoch ?? 0)
-      ),
-    [showsAndTimes]
-  );
-
   const allRushShows = useMemo(
-    () => sortedRushShows.map(({show}) => show),
-    [sortedRushShows]
+    () => showsAndTimes.map(({show}) => show),
+    [showsAndTimes]
   );
 
   const {isGrantingAccess, rushGrants} =
@@ -51,6 +44,26 @@ const RushShowList = ({
     );
 
   const allUnlockedRushShowIds = rushGrants?.map(({showId}) => showId) ?? [];
+
+  const sortedRushShows = showsAndTimes.sort((a, b) => {
+    const firstShowActiveNumber = isShowActive(
+      isRushUnlocked(a.show, allUnlockedRushShowIds),
+      a.showtimes[0]
+    )
+      ? 1
+      : -1;
+    const secondShowActiveNumber = isShowActive(
+      isRushUnlocked(b.show, allUnlockedRushShowIds),
+      b.showtimes[0]
+    )
+      ? 1
+      : -1;
+    return (
+      secondShowActiveNumber - firstShowActiveNumber ||
+      addTickets(b.showtimes) - addTickets(a.showtimes)
+    );
+  });
+
   return (
     <View style={[styles.container]}>
       <ScrollView
@@ -65,7 +78,7 @@ const RushShowList = ({
             key={show.id}
             show={show}
             showtimes={showtimes}
-            isRushUnlocked={allUnlockedRushShowIds.includes(show.showId ?? NaN)}
+            isRushUnlocked={isRushUnlocked(show, allUnlockedRushShowIds)}
             onCardPress={() =>
               navigation.navigate("ShowDetails", {
                 show,
