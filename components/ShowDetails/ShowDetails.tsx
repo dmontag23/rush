@@ -1,10 +1,12 @@
 import React, {useState} from "react";
 import {Image, StyleSheet, View} from "react-native";
 
-import {ActivityIndicator, IconButton} from "react-native-paper";
+import {IconButton} from "react-native-paper";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 import RushShowTicketSelection from "./RushShowTicketSelection";
+
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 import {RootStackScreenProps} from "../../types/navigation";
 
@@ -31,11 +33,7 @@ const ShowDetails = ({
         style={styles.image}
       />
       {isImageLoading ? (
-        <ActivityIndicator
-          size="large"
-          style={styles.loadingSpinner}
-          testID="loadingHeaderImageSpinner"
-        />
+        <LoadingSpinner size="large" style={styles.loadingSpinner} />
       ) : (
         <>
           <IconButton

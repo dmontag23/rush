@@ -42,6 +42,7 @@ describe("The show card", () => {
             }
           } as TodayTixShowtime
         ]}
+        isRushUnlocked={true}
       />
     );
 
@@ -69,6 +70,7 @@ describe("The show card", () => {
           } as TodayTixShow
         }
         showtimes={[]}
+        isRushUnlocked={true}
       />
     );
 

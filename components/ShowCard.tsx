@@ -28,13 +28,47 @@ const RushShowtimeInfo = (rushShowtimes: TodayTixShowtime[]) => (
   </View>
 );
 
+type CardSubtitleArgs = {
+  isRushUnlocked: boolean;
+  isRushOpen: boolean;
+  rushTicketPrice: string;
+  maxNumOfRushTickets: number;
+};
+
+const CardSubtitle = ({
+  isRushUnlocked,
+  isRushOpen,
+  rushTicketPrice,
+  maxNumOfRushTickets
+}: CardSubtitleArgs) => {
+  if (!isRushUnlocked)
+    return (
+      <Text style={styles.subtitle}>Rush is not unlocked for this show.</Text>
+    );
+  if (isRushOpen)
+    return (
+      <View>
+        <Text style={styles.subtitle}>{rushTicketPrice}</Text>
+        <Text style={styles.subtitle}>
+          {`${maxNumOfRushTickets} per person max`}
+        </Text>
+      </View>
+    );
+};
+
 type ShowCardProps = {
   show: TodayTixShow;
   showtimes: TodayTixShowtime[];
+  isRushUnlocked: boolean;
   onCardPress?: () => void;
 };
 
-const ShowCard = ({show, showtimes, onCardPress}: ShowCardProps) => {
+const ShowCard = ({
+  show,
+  showtimes,
+  isRushUnlocked,
+  onCardPress
+}: ShowCardProps) => {
   const {roundness, colors} = useTheme();
 
   const maxNumOfRushTickets = showtimes[0]?.rushTickets?.maxTickets;
@@ -47,6 +81,7 @@ const ShowCard = ({show, showtimes, onCardPress}: ShowCardProps) => {
   );
 
   const isRushOpen = Boolean(rushStartTime && rushEndTime);
+  const isActive = isRushUnlocked && isRushOpen;
 
   return (
     <View>
@@ -54,7 +89,7 @@ const ShowCard = ({show, showtimes, onCardPress}: ShowCardProps) => {
         borderless
         onPress={onCardPress}
         style={[
-          isRushOpen ? styles.cardWithChip : {},
+          isActive ? styles.cardWithChip : {},
           {
             borderRadius: roundness
           },
@@ -78,22 +113,18 @@ const ShowCard = ({show, showtimes, onCardPress}: ShowCardProps) => {
           />
           <Card.Title
             title={show.displayName}
-            subtitle={
-              isRushOpen && (
-                <View>
-                  <Text style={styles.subtitle}>{rushTicketPrice}</Text>
-                  <Text style={styles.subtitle}>
-                    {`${maxNumOfRushTickets} per person max`}
-                  </Text>
-                </View>
-              )
-            }
+            subtitle={CardSubtitle({
+              isRushUnlocked,
+              isRushOpen,
+              rushTicketPrice: rushTicketPrice ?? "",
+              maxNumOfRushTickets: maxNumOfRushTickets ?? 0
+            })}
             right={() => RushShowtimeInfo(showtimes)}
             titleStyle={styles.title}
           />
         </Card>
       </TouchableRipple>
-      {isRushOpen ? (
+      {isActive ? (
         <Chip compact style={styles.chip} textStyle={styles.chipText}>
           {`${rushStartTime} to ${rushEndTime}`}
         </Chip>

@@ -1,10 +1,10 @@
 import React, {useMemo} from "react";
 import {ScrollView, StyleSheet, View} from "react-native";
 
-import {ActivityIndicator} from "react-native-paper";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 import ShowCard from "../ShowCard";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 import useGrantRushAccessForAllShows from "../../hooks/useGrantRushAccessForAllShows";
 import {RootStackScreenProps} from "../../types/navigation";
@@ -40,15 +40,17 @@ const RushShowList = ({
     [sortedRushShows]
   );
 
-  const {isGrantingAccess} = useGrantRushAccessForAllShows(allRushShows);
+  const {isGrantingAccess, rushGrants} =
+    useGrantRushAccessForAllShows(allRushShows);
 
   if (isGrantingAccess)
     return (
       <View style={styles.loadingSpinnerContainer}>
-        <ActivityIndicator size="large" />
+        <LoadingSpinner size="large" />
       </View>
     );
 
+  const allUnlockedRushShowIds = rushGrants?.map(({showId}) => showId) ?? [];
   return (
     <View style={[styles.container]}>
       <ScrollView
@@ -63,6 +65,7 @@ const RushShowList = ({
             key={show.id}
             show={show}
             showtimes={showtimes}
+            isRushUnlocked={allUnlockedRushShowIds.includes(show.showId ?? NaN)}
             onCardPress={() =>
               navigation.navigate("ShowDetails", {
                 show,

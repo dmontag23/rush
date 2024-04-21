@@ -23,14 +23,15 @@ describe("Rush show list", () => {
       ["token-ttl", new Date("2024-01-01").getTime().toString()],
       ["customer-id", "customer-id"]
     ]);
+  });
+
+  it("sorts shows", async () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
       .get("/customers/me/rushGrants")
       .reply(200, {data: []});
-  });
 
-  it("sorts shows", async () => {
     // render
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getAllByLabelText} = render(
@@ -141,6 +142,12 @@ describe("Rush show list", () => {
   });
 
   it("navigates to the show details screen and back", async () => {
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .get("/customers/me/rushGrants")
+      .reply(200, {data: [{showId: 1, showName: "SIX the Musical"}]});
+
     // render
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByTestId, getByLabelText} = render(
@@ -159,7 +166,8 @@ describe("Rush show list", () => {
                   isRushActive: true,
                   images: {
                     productMedia: {appHeroImage: {file: {url: "test-url"}}}
-                  }
+                  },
+                  showId: 1
                 } as TodayTixShow,
                 showtimes: [
                   {
@@ -190,7 +198,7 @@ describe("Rush show list", () => {
 
     // load the header image
     await waitFor(() => {
-      const loadingSpinner = getByTestId("loadingHeaderImageSpinner");
+      const loadingSpinner = getByTestId("loadingSpinner");
       expect(loadingSpinner).toBeVisible();
       fireEvent(getByLabelText("Header image"), "onLoadEnd");
       expect(loadingSpinner).not.toBeOnTheScreen();
@@ -205,6 +213,12 @@ describe("Rush show list", () => {
   });
 
   it("maintains selected show state when navigating to other shows and back", async () => {
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .get("/customers/me/rushGrants")
+      .reply(200, {data: []});
+
     // render
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByLabelText} = render(
@@ -334,4 +348,184 @@ describe("Rush show list", () => {
       color: hadestownLightThemeColors.onPrimary
     });
   }, 10000);
+
+  it("shows a loading indicator if granting rush access to shows", async () => {
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .get("/customers/me/rushGrants")
+      .delay(5000)
+      .reply(200, {data: []});
+
+    const Stack = createStackNavigator<RootStackParamList>();
+    const {getByTestId} = render(
+      <Stack.Navigator>
+        <Stack.Screen
+          name="RushShowList"
+          component={RushShowList}
+          initialParams={{
+            showsAndTimes: [
+              {
+                show: {
+                  id: 1,
+                  displayName: "SIX the Musical",
+                  isRushActive: true,
+                  showId: 1
+                } as TodayTixShow,
+                showtimes: []
+              }
+            ]
+          }}
+        />
+      </Stack.Navigator>
+    );
+
+    expect(getByTestId("loadingSpinner")).toBeVisible();
+  });
+
+  it("shows not unlocked text for shows that have not been unlocked for rush", async () => {
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .get("/customers/me/rushGrants")
+      .reply(200, {
+        data: [{showId: 1, showName: "SIX the Musical"}]
+      })
+      .post("/customers/customer-id/rushGrants", {showId: 2})
+      .reply(401, {
+        code: 401,
+        error: "UnauthenticatedException",
+        title: "Error",
+        message:
+          "Sorry, something went wrong. Please try signing in again and contact TodayTix Support if the issue persists."
+      });
+
+    const Stack = createStackNavigator<RootStackParamList>();
+    const {getByText, getAllByLabelText, getByLabelText} = render(
+      <Stack.Navigator>
+        <Stack.Screen
+          name="RushShowList"
+          component={RushShowList}
+          initialParams={{
+            showsAndTimes: [
+              {
+                show: {
+                  id: 1,
+                  displayName: "SIX the Musical",
+                  isRushActive: true,
+                  showId: 1
+                } as TodayTixShow,
+                showtimes: [
+                  {
+                    id: 1,
+                    rushTickets: {
+                      quantityAvailable: 6,
+                      availableAfter: "2021-05-23T11:00:00.000+01:00",
+                      availableUntil: "2021-05-23T16:30:00.000+01:00"
+                    }
+                  } as TodayTixShowtime
+                ]
+              },
+              {
+                show: {
+                  id: 2,
+                  displayName: "Hamilton",
+                  isRushActive: true,
+                  showId: 2
+                } as TodayTixShow,
+                showtimes: [
+                  {
+                    id: 2,
+                    rushTickets: {
+                      quantityAvailable: 10,
+                      availableAfter: "2021-05-23T11:00:00.000+01:00",
+                      availableUntil: "2021-05-23T16:30:00.000+01:00"
+                    }
+                  } as TodayTixShowtime
+                ]
+              }
+            ]
+          }}
+        />
+      </Stack.Navigator>
+    );
+
+    await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
+    const showCards = getAllByLabelText("Show card");
+    const firstShow = showCards[0];
+    const secondShow = showCards[1];
+
+    expect(firstShow).toHaveTextContent("Hamilton", {exact: false});
+    expect(firstShow).toHaveTextContent("Tickets: 10", {exact: false});
+    expect(firstShow).toHaveTextContent("Rush is not unlocked for this show.", {
+      exact: false
+    });
+    expect(getByLabelText("Inactive card")).toBeVisible();
+
+    expect(secondShow).toHaveTextContent("SIX the Musical", {exact: false});
+    expect(secondShow).toHaveTextContent("Tickets: 6", {exact: false});
+    expect(secondShow).not.toHaveTextContent(
+      "Rush is not unlocked for this show.",
+      {exact: false}
+    );
+  });
+
+  it("unlocks all rush shows", async () => {
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .get("/customers/me/rushGrants")
+      .reply(200, {data: []})
+      .post("/customers/customer-id/rushGrants", {showId: 1})
+      .reply(201, {data: [{showId: 1, showName: "SIX the Musical"}]})
+      .get("/customers/me/rushGrants")
+      .reply(200, {
+        data: [{showId: 1, showName: "SIX the Musical"}]
+      });
+
+    const Stack = createStackNavigator<RootStackParamList>();
+    const {getByText, getByLabelText, queryByLabelText} = render(
+      <Stack.Navigator>
+        <Stack.Screen
+          name="RushShowList"
+          component={RushShowList}
+          initialParams={{
+            showsAndTimes: [
+              {
+                show: {
+                  id: 1,
+                  displayName: "SIX the Musical",
+                  isRushActive: true,
+                  showId: 1
+                } as TodayTixShow,
+                showtimes: [
+                  {
+                    id: 1,
+                    rushTickets: {
+                      quantityAvailable: 6,
+                      availableAfter: "2021-05-23T11:00:00.000+01:00",
+                      availableUntil: "2021-05-23T16:30:00.000+01:00"
+                    }
+                  } as TodayTixShowtime
+                ]
+              }
+            ]
+          }}
+        />
+      </Stack.Navigator>
+    );
+
+    await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
+    const showCard = getByLabelText("Show card");
+
+    expect(showCard).toHaveTextContent("SIX the Musical", {exact: false});
+    expect(showCard).toHaveTextContent("Tickets: 6", {exact: false});
+    await waitFor(() =>
+      expect(getByLabelText("Show card")).not.toHaveTextContent(
+        "Rush is not unlocked for this show.",
+        {exact: false}
+      )
+    );
+    expect(queryByLabelText("Inactive card")).toBeNull();
+  });
 });

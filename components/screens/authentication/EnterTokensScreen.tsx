@@ -10,15 +10,11 @@ import {
   SubmitHandler,
   useForm
 } from "react-hook-form";
-import {
-  ActivityIndicator,
-  Button,
-  Text,
-  TextInput,
-  useTheme
-} from "react-native-paper";
+import {Button, Text, TextInput, useTheme} from "react-native-paper";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {z} from "zod";
+
+import LoadingSpinner from "../../ui/LoadingSpinner";
 
 import useStoreAuthTokens from "../../../hooks/asyncStorageHooks/useStoreAuthTokens";
 
@@ -166,7 +162,7 @@ const EnterTokensScreen = () => {
         onPress={handleSubmit(onSubmit)}
         theme={{roundness: 1}}>
         {isStoreTokensPending ? (
-          <ActivityIndicator />
+          <LoadingSpinner />
         ) : (
           <Text variant="titleLarge" style={{color: colors.onPrimary}}>
             Login

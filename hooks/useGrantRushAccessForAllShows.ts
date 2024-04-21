@@ -1,6 +1,5 @@
 import {useEffect} from "react";
 
-import useGetAuthTokens from "./asyncStorageHooks/useGetAuthTokens";
 import useGetRushGrants from "./todayTixHooks/useGetRushGrants";
 import usePostRushGrants from "./todayTixHooks/usePostRushGrants";
 import useGetCustomerId from "./useGetCustomerId";
@@ -8,20 +7,20 @@ import useGetCustomerId from "./useGetCustomerId";
 import {TodayTixShow} from "../types/shows";
 
 const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
-  const {data: authTokens, isPending: isGetAuthTokensPending} =
-    useGetAuthTokens();
   const {customerId, isPending: isGetCustomerIdPending} = useGetCustomerId();
 
   const {
     data: rushGrants,
     isPending: isGetRushGrantsPending,
-    isSuccess: isGetRushGrantsSuccess
-  } = useGetRushGrants({
-    enabled: Boolean(authTokens?.accessToken && authTokens.refreshToken)
-  });
+    isSuccess: isGetRushGrantsSuccess,
+    refetch: refetchRushGrants
+  } = useGetRushGrants({enabled: Boolean(customerId)});
 
-  const {mutate: grantAccessToShow, isPending: isPostRushGrantsPending} =
-    usePostRushGrants();
+  const {
+    mutate: grantAccessToShow,
+    isPending: isPostRushGrantsPending,
+    isSuccess: isPostRushGrantsSuccess
+  } = usePostRushGrants();
 
   /* TODO: Note that there is a brief period where isPending for the whole hook will be false but the whole
   hook is technically still loading because it needs to grant access for the shows, but the mutation function 
@@ -44,12 +43,16 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
     grantAccessToShow
   ]);
 
+  useEffect(() => {
+    if (isPostRushGrantsSuccess) refetchRushGrants();
+  }, [isPostRushGrantsSuccess, refetchRushGrants]);
+
   return {
     isGrantingAccess:
-      isGetAuthTokensPending ||
       isGetCustomerIdPending ||
       isGetRushGrantsPending ||
-      isPostRushGrantsPending
+      isPostRushGrantsPending,
+    rushGrants
   };
 };
 

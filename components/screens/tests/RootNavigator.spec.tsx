@@ -160,6 +160,7 @@ describe("The root navigator", () => {
 
   it("renders the home screen with an access and refresh token", async () => {
     // setup
+    await AsyncStorage.setItem("customer-id", "customer-id");
     await AsyncStorage.setItem("access-token", "access-token");
     await AsyncStorage.setItem("refresh-token", "refresh-token");
     await AsyncStorage.setItem(
