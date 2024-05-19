@@ -24,7 +24,7 @@ const postRushGrantsRoute = (router: Router) =>
     TodayTixAPIRes<TodayTixRushGrant> | TodayTixAPIError,
     TodayTixRushGrantsReq
   >("/customers/:customerId/rushGrants", async (req, res) => {
-    if (req.headers["return-status"] === "401")
+    if (req.body.showId === 8547)
       return res.status(401).json(postRushGrants401Response);
 
     const newRushGrant: TodayTixRushGrant = {
@@ -34,34 +34,24 @@ const postRushGrantsRoute = (router: Router) =>
       showName: `Show for ${req.params.customerId}`
     };
 
-    try {
-      const rushGrantsStore = getStore({
-        name: "rush-grants",
-        siteID: process.env.NETLIFY_SITE_ID,
-        token: process.env.NETLIFY_API_KEY
-      });
+    const rushGrantsStore = getStore({
+      name: "rush-grants",
+      edgeURL: process.env.NETLIFY_SITE_URL,
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_API_KEY
+    });
 
-      const previousRushGrantForShowId: TodayTixRushGrant =
-        await rushGrantsStore.get(req.body.showId.toString(), {type: "json"});
+    const previousRushGrantForShowId: TodayTixRushGrant =
+      await rushGrantsStore.get(req.body.showId.toString(), {type: "json"});
 
-      if (!previousRushGrantForShowId) {
-        await rushGrantsStore.setJSON(req.body.showId.toString(), newRushGrant);
-      }
-
-      return res.status(201).json({
-        code: 201,
-        data: previousRushGrantForShowId ?? newRushGrant
-      });
-    } catch (error: unknown) {
-      console.log(
-        `Error with Netlify: ${error}. Could not store rush grant ${newRushGrant}`
-      );
-
-      return res.status(201).json({
-        code: 201,
-        data: newRushGrant
-      });
+    if (!previousRushGrantForShowId) {
+      await rushGrantsStore.setJSON(req.body.showId.toString(), newRushGrant);
     }
+
+    return res.status(201).json({
+      code: 201,
+      data: previousRushGrantForShowId ?? newRushGrant
+    });
   });
 
 export default postRushGrantsRoute;

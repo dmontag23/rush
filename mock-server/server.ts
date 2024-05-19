@@ -1,4 +1,3 @@
-import "dotenv/config";
 import express from "express";
 import {Server} from "http";
 import {AddressInfo} from "net";
@@ -16,7 +15,7 @@ app.use("/api/v2", v2Router);
 
 const port = process.env.PORT || 3000;
 
-export const listen = async () =>
+export const startMockServer = async () =>
   await new Promise<void>(
     resolve =>
       (server = app.listen(port, () => {
@@ -27,7 +26,7 @@ export const listen = async () =>
       }))
   );
 
-export const close = async () =>
+export const closeMockServer = async () =>
   await new Promise<void>(resolve =>
     server.close(() => {
       console.log("Closed mock server.");

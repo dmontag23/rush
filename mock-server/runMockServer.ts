@@ -1,3 +1,7 @@
-import {listen} from "./server";
+import "dotenv/config";
 
-listen();
+import {startBlobServer} from "./blobServer";
+import {startMockServer} from "./server";
+
+startBlobServer();
+startMockServer();
