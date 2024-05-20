@@ -378,6 +378,7 @@ const holdsRoute = (router: Router) =>
     try {
       const rushGrantsStore = getStore({
         name: "rush-grants",
+        edgeURL: process.env.NETLIFY_SITE_URL,
         siteID: process.env.NETLIFY_SITE_ID,
         token: process.env.NETLIFY_API_KEY
       });
