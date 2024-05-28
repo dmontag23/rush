@@ -146,6 +146,53 @@ const getShowtimesWithRushGuysNDolls200Response: TodayTixAPIRes<
   ]
 };
 
+const getShowtimesWithRushTina200Response: TodayTixAPIRes<TodayTixShowtime[]> =
+  {
+    code: 200,
+    data: [
+      {
+        _type: "Showtime",
+        id: 4,
+        admissionType: "TIMED",
+        endDatetime: null,
+        endDatetimeEpoch: null,
+        endLocalDate: null,
+        endLocalTime: null,
+        datetime: "2024-02-27T19:00:00.000",
+        datetimeEpoch: 1709060400,
+        daypart: Daypart.Evening,
+        dayOfWeek: DayOfWeek.Tuesday,
+        localDate: "2024-02-27",
+        localTime: "19:00",
+        lotteryTickets: null,
+        numDaysOut: 0,
+        partTwoDatetime: null,
+        partTwoDatetimeEpoch: null,
+        providerShowtimeId: null,
+        regularTickets: null,
+        rushTickets: {
+          _type: "RushTicketsInfo",
+          availableAfter: "2024-02-27T09:30:00.000",
+          availableAfterEpoch: 1709026200,
+          availableUntil: "2024-02-27T16:00:00.000",
+          availableUntilEpoch: 1709049600,
+          lowPrice: {
+            value: 25,
+            currency: "GBP",
+            display: "£25",
+            displayRounded: "£25"
+          },
+          maxContiguousSeats: 2,
+          maxTickets: 2,
+          minTickets: 1,
+          quantityAvailable: 7,
+          quantityHeld: 0,
+          rushBannerText: "£25 Rush tickets"
+        }
+      }
+    ]
+  };
+
 const getShowtimesWithRush400Response: TodayTixAPIError = {
   code: 400,
   error: "InvalidParameter",
@@ -173,6 +220,9 @@ const getShowtimesWithRushAvailabilityRoute = (router: Router) =>
 
     if (req.params.showId === "3")
       return res.status(200).json(getShowtimesWithRushGuysNDolls200Response);
+
+    if (req.params.showId === "4")
+      return res.status(200).json(getShowtimesWithRushTina200Response);
 
     return res.status(400).json(getShowtimesWithRush400Response);
   });

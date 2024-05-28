@@ -24,7 +24,7 @@ const postRushGrantsRoute = (router: Router) =>
     TodayTixAPIRes<TodayTixRushGrant> | TodayTixAPIError,
     TodayTixRushGrantsReq
   >("/customers/:customerId/rushGrants", async (req, res) => {
-    if (req.body.showId === 8547)
+    if (req.body.showId === 4)
       return res.status(401).json(postRushGrants401Response);
 
     const newRushGrant: TodayTixRushGrant = {

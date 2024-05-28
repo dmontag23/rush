@@ -1,4 +1,4 @@
-import {getStore} from "@netlify/blobs";
+import axios from "axios";
 
 /* TODO: Maybe find a better way to do this? Testing the login functionality
 for every test isn't great. Something like a deep link may work better, but
@@ -16,27 +16,6 @@ export const login = async () => {
   await element(by.text("Login")).tap();
 };
 
-const clearAllRushGrants = async () => {
-  try {
-    const rushGrantsStore = getStore({
-      name: "rush-grants",
-      siteID: process.env.NETLIFY_SITE_ID,
-      token: process.env.NETLIFY_API_KEY
-    });
-
-    const {blobs: rushGrantsInStore} = await rushGrantsStore.list();
-    await Promise.all(
-      rushGrantsInStore.map(
-        async grant => await rushGrantsStore.delete(grant.key)
-      )
-    );
-  } catch (error: unknown) {
-    console.log(
-      `There was an error clearing rush grants from Netlify: ${error}`
-    );
-  }
-};
-
-export const clearNetlifyData = async () => {
-  await clearAllRushGrants();
+export const clearAllMockServerData = async () => {
+  await axios.delete(`${process.env.TODAY_TIX_API_BASE_URL}/clearAllData`);
 };

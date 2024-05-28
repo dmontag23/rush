@@ -889,7 +889,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       hasPromotion: true,
       heroImageUrl:
         "https://images.ctfassets.net/6pezt69ih962/4UVgHm95bydvrhFYCvnugV/4070ae37d6405150df6f916cf8566bc1/Tina_-_The_Tina_Turner_Musical_-_Hero",
-      id: 8547,
+      id: 4,
       images: {
         productMedia: {
           imagesAndVideos: [],
@@ -921,8 +921,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
               url: "//images.ctfassets.net/6pezt69ih962/1HnacTo35egiFx0Qf2BUGd/1b9497bb544ba1563bd95e1d2e70bf62/TINA_1080x1080px.jpg"
             }
           },
-          entryTitle:
-            "Tina - The Tina Turner Musical [8547] - LON Product Media",
+          entryTitle: "Tina - The Tina Turner Musical [4] - LON Product Media",
           appHeroImage: {
             file: {
               fileName: "Tina - The Tina Turner Musical - Hero",
@@ -1010,7 +1009,7 @@ const getRushAndLotteryShows200Response: TodayTixAPIRes<TodayTixShow[]> = {
       salesMessage:
         "A jubilant celebration of the iconic and unstoppable Tina Turner",
       shouldShowPromotionsOnCards: true,
-      showId: 8547,
+      showId: 4,
       showName: "Tina",
       slug: "tina",
       startDate: "2021-08-05",

@@ -2,9 +2,10 @@ import express from "express";
 import {Server} from "http";
 import {AddressInfo} from "net";
 
+import clearAllDataRoute from "./clearAllDataRoute";
 import {oauthRouter, v2Router} from "./routers";
 
-// app needs to be exported for netlify
+// app needs to be exported for Netlify
 export const app = express();
 let server: Server;
 
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use("/oauth/v1", oauthRouter);
 app.use("/api/v2", v2Router);
+app.delete("/clearAllData", clearAllDataRoute);
 
 const port = process.env.PORT || 3000;
 

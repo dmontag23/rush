@@ -19,7 +19,8 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
   const {
     mutate: grantAccessToShow,
     isPending: isPostRushGrantsPending,
-    isSuccess: isPostRushGrantsSuccess
+    isSuccess: isPostRushGrantsSuccess,
+    isError: isPostRushGrantsError
   } = usePostRushGrants();
 
   /* TODO: Note that there is a brief period where isPending for the whole hook will be false but the whole
@@ -37,15 +38,15 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
     }
   }, [
     customerId,
+    grantAccessToShow,
     isGetRushGrantsSuccess,
     rushGrants,
-    shows,
-    grantAccessToShow
+    shows
   ]);
 
   useEffect(() => {
-    if (isPostRushGrantsSuccess) refetchRushGrants();
-  }, [isPostRushGrantsSuccess, refetchRushGrants]);
+    if (isPostRushGrantsSuccess || isPostRushGrantsError) refetchRushGrants();
+  }, [isPostRushGrantsError, isPostRushGrantsSuccess, refetchRushGrants]);
 
   return {
     isGrantingAccess:
