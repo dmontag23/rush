@@ -65,7 +65,7 @@ describe("The rush show ticket selection component", () => {
     expect(queryByText("Number of Tickets")).toBeNull();
 
     // select a time
-    userEvent.press(matineeButton);
+    await userEvent.press(matineeButton);
     await waitFor(() =>
       expect(matineeButton).toHaveStyle({
         color: hadestownLightThemeColors.onPrimary
@@ -85,7 +85,7 @@ describe("The rush show ticket selection component", () => {
 
     // select a ticket number
     const ticketNumberButton = getByText("3");
-    userEvent.press(ticketNumberButton);
+    await userEvent.press(ticketNumberButton);
 
     await waitFor(() =>
       expect(ticketNumberButton).toHaveStyle({
@@ -115,7 +115,7 @@ describe("The rush show ticket selection component", () => {
 
     // select the matinee show
     const matineeButton = getByText("14:30");
-    userEvent.press(matineeButton);
+    await userEvent.press(matineeButton);
     await waitFor(() =>
       expect(matineeButton).toHaveStyle({
         color: hadestownLightThemeColors.onPrimary
@@ -131,7 +131,7 @@ describe("The rush show ticket selection component", () => {
 
     // select the evening show
     const eveningButton = getByText("19:45");
-    userEvent.press(eveningButton);
+    await userEvent.press(eveningButton);
     await waitFor(() =>
       expect(eveningButton).toHaveStyle({
         color: hadestownLightThemeColors.onPrimary

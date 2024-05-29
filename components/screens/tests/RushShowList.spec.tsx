@@ -4,7 +4,13 @@ import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {createStackNavigator} from "@react-navigation/stack";
 import nock from "nock";
-import {fireEvent, render, userEvent, waitFor} from "testing-library/extension";
+import {
+  act,
+  fireEvent,
+  render,
+  userEvent,
+  waitFor
+} from "testing-library/extension";
 
 import RushShowList from "../RushShowList";
 
@@ -200,7 +206,7 @@ describe("Rush show list", () => {
     expect(getByText("10:00 to 15:30")).toBeVisible();
 
     // navigate to the show details screen
-    userEvent.press(showCard);
+    await userEvent.press(showCard);
 
     // load the header image
     await waitFor(() => {
@@ -213,7 +219,7 @@ describe("Rush show list", () => {
     expect(backButton).toBeVisible();
 
     // go back to the rush show list
-    userEvent.press(backButton);
+    await userEvent.press(backButton);
 
     await waitFor(() => expect(getByText("10:00 to 15:30")).toBeVisible());
   });
@@ -290,7 +296,7 @@ describe("Rush show list", () => {
 
     // navigate to the show details screen
     await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
-    userEvent.press(getByText("SIX the Musical"));
+    await userEvent.press(getByText("SIX the Musical"));
 
     // load the header image
     await waitFor(() => {
@@ -300,14 +306,14 @@ describe("Rush show list", () => {
 
     // select two tickets for the evening show
     const eveningShowtimeButton = getByText("19:00");
-    userEvent.press(eveningShowtimeButton);
+    await userEvent.press(eveningShowtimeButton);
     await waitFor(() =>
       expect(eveningShowtimeButton).toHaveStyle({
         color: hadestownLightThemeColors.onPrimary
       })
     );
     const ticketNumberButton = getByText("2");
-    userEvent.press(ticketNumberButton);
+    await userEvent.press(ticketNumberButton);
     await waitFor(() =>
       expect(ticketNumberButton).toHaveStyle({
         color: hadestownLightThemeColors.onPrimary
@@ -315,12 +321,12 @@ describe("Rush show list", () => {
     );
 
     // navigate to a different show
-    userEvent.press(getByLabelText("Back button"));
+    await userEvent.press(getByLabelText("Back button"));
     await waitFor(() => expect(getByText("Hamilton")).toBeVisible());
     /* TODO: Investigate why this is necessary to press the card after navigating
     back to the card list screen. Perhaps it's a limitation with the react navigation library */
-    jest.advanceTimersByTime(1000);
-    userEvent.press(getByText("Hamilton"));
+    act(() => jest.advanceTimersByTime(1000));
+    await userEvent.press(getByText("Hamilton"));
 
     // check that the show button is de-selected
     await waitFor(() => {
@@ -332,12 +338,12 @@ describe("Rush show list", () => {
     });
 
     // navigate back to the first show
-    userEvent.press(getByLabelText("Back button"));
+    await userEvent.press(getByLabelText("Back button"));
     await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
     /* TODO: Investigate why this is necessary to press the card after navigating
     back to the card list screen. Perhaps it's a limitation with the react navigation library */
-    jest.advanceTimersByTime(1000);
-    userEvent.press(getByText("SIX the Musical"));
+    act(() => jest.advanceTimersByTime(1000));
+    await userEvent.press(getByText("SIX the Musical"));
 
     // check that the show and tickets are still selected
     await waitFor(() => {

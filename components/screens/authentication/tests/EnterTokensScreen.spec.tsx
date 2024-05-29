@@ -49,7 +49,7 @@ describe("EnterTokensScreen", () => {
         );
 
         // enter an invalid link
-        userEvent.type(getByLabelText(`${tokenType} input`), "{Enter}");
+        await userEvent.type(getByLabelText(`${tokenType} input`), "{Enter}");
         await waitFor(() =>
           expect(getByText(`${validationPrefix} is required`)).toBeVisible()
         );
@@ -73,18 +73,18 @@ describe("EnterTokensScreen", () => {
       );
 
       // enter a valid access and refresh token
-      userEvent.type(
+      await userEvent.type(
         getByLabelText("Access token input"),
         "    access-token     "
       );
-      userEvent.type(
+      await userEvent.type(
         getByLabelText("Refresh token input"),
         "   refresh-token     "
       );
       const loginButton = getByRole("button", {name: "Login"});
 
       await waitFor(() => expect(loginButton).toBeEnabled());
-      userEvent.press(loginButton);
+      await userEvent.press(loginButton);
 
       await waitFor(() =>
         expect(
@@ -110,11 +110,17 @@ describe("EnterTokensScreen", () => {
       expect(await AsyncStorage.getItem("token-ttl")).toBeNull();
 
       // enter a valid access and refresh token
-      userEvent.type(getByLabelText("Access token input"), "access-token");
-      userEvent.type(getByLabelText("Refresh token input"), "refresh-token");
+      await userEvent.type(
+        getByLabelText("Access token input"),
+        "access-token"
+      );
+      await userEvent.type(
+        getByLabelText("Refresh token input"),
+        "refresh-token"
+      );
       const loginButton = getByRole("button", {name: "Login"});
       await waitFor(() => expect(loginButton).toBeEnabled());
-      userEvent.press(loginButton);
+      await userEvent.press(loginButton);
 
       // check that async storage contains the valid tokens
       await waitFor(async () =>

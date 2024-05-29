@@ -16,6 +16,7 @@ import ShowDetails from "../ShowDetails/ShowDetails";
 import HoldConfirmation from "../screens/HoldConfirmation";
 import RushShowList from "../screens/RushShowList";
 
+import {systemTime} from "../../tests/integration/setup";
 import {TodayTixHoldErrorCode, TodayTixHoldType} from "../../types/holds";
 import {RootStackParamList} from "../../types/navigation";
 import {TodayTixShow} from "../../types/shows";
@@ -64,9 +65,9 @@ describe("Holds", () => {
 
     // load the header image
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
-    userEvent.press(getByText("19:00"));
+    await userEvent.press(getByText("19:00"));
     await waitFor(() => expect(getByText("2")).toBeVisible());
-    userEvent.press(getByText("2"));
+    await userEvent.press(getByText("2"));
     await waitFor(() =>
       expect(getByText("You've won 2 ticket(s) to Hamilton!")).toBeVisible()
     );
@@ -120,9 +121,9 @@ describe("Holds", () => {
 
     // load the header image
     act(() => fireEvent(getByLabelText("Header image"), "onLoadEnd"));
-    userEvent.press(getByText("19:00"));
+    await userEvent.press(getByText("19:00"));
     await waitFor(() => expect(getByText("2")).toBeVisible());
-    userEvent.press(getByText("2"));
+    await userEvent.press(getByText("2"));
     const timeToTicketAvailability =
       ticketAvailabilityTime * 1000 - new Date().getTime();
     /* the - 1000 below is to ensure that requests are made to the holds endpoint
@@ -183,9 +184,9 @@ describe("Holds", () => {
     expect(await AsyncStorage.getItem("customer-id")).toBeNull();
     // load the header image
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
-    userEvent.press(getByText("19:00"));
+    await userEvent.press(getByText("19:00"));
     await waitFor(() => expect(getByText("2")).toBeVisible());
-    userEvent.press(getByText("2"));
+    await userEvent.press(getByText("2"));
     await waitFor(() =>
       expect(getByText("You've won 2 ticket(s) to Hamilton!")).toBeVisible()
     );
@@ -251,9 +252,9 @@ describe("Holds", () => {
 
     // load the header image
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
-    userEvent.press(getByText("19:00"));
+    await userEvent.press(getByText("19:00"));
     await waitFor(() => expect(getByText("2")).toBeVisible());
-    userEvent.press(getByText("2"));
+    await userEvent.press(getByText("2"));
     await waitFor(
       () =>
         expect(getByText("You've won 2 ticket(s) to Hamilton!")).toBeVisible(),
@@ -261,7 +262,7 @@ describe("Holds", () => {
     );
   });
 
-  it("cancels a hold for a show that is not open and gets tickets for a new show", async () => {
+  it("cancels a hold for a show that is yet not open and gets tickets for a new show", async () => {
     // setup
     await AsyncStorage.setItem("customer-id", "customer-id");
     await AsyncStorage.setItem("access-token", "access-token");
@@ -273,6 +274,13 @@ describe("Holds", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
+      .get("/customers/me/rushGrants")
+      .reply(200, {
+        data: [
+          {showId: 1, showName: "SIX the Musical"},
+          {showId: 2, showName: "Hamilton"}
+        ]
+      })
       .post("/holds", {
         customer: "customer-id",
         showtime: 2,
@@ -287,8 +295,7 @@ describe("Holds", () => {
       });
 
     const Stack = createStackNavigator<RootStackParamList>();
-    const show1TicketAvailabilityTime =
-      new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000;
+    const show1TicketAvailabilityDate = new Date(2021, 4, 23, 0, 1);
     const {getByText, getByLabelText} = render(
       <Stack.Navigator>
         <Stack.Screen
@@ -300,7 +307,8 @@ describe("Holds", () => {
                 show: {
                   id: 1,
                   displayName: "SIX the Musical",
-                  isRushActive: true
+                  isRushActive: true,
+                  showId: 1
                 } as TodayTixShow,
                 showtimes: [
                   {
@@ -309,7 +317,10 @@ describe("Holds", () => {
                     rushTickets: {
                       minTickets: 1,
                       maxTickets: 2,
-                      availableAfterEpoch: show1TicketAvailabilityTime
+                      availableAfter: show1TicketAvailabilityDate.toISOString(),
+                      availableAfterEpoch:
+                        show1TicketAvailabilityDate.getTime() / 1000,
+                      availableUntil: show1TicketAvailabilityDate.toISOString()
                     }
                   } as TodayTixShowtime
                 ]
@@ -318,7 +329,8 @@ describe("Holds", () => {
                 show: {
                   id: 2,
                   displayName: "Hamilton",
-                  isRushActive: true
+                  isRushActive: true,
+                  showId: 2
                 } as TodayTixShow,
                 showtimes: [
                   {
@@ -326,7 +338,10 @@ describe("Holds", () => {
                     localTime: "19:30",
                     rushTickets: {
                       minTickets: 1,
-                      maxTickets: 2
+                      maxTickets: 2,
+                      availableAfter: systemTime.toISOString(),
+                      availableAfterEpoch: systemTime.getTime() / 1000,
+                      availableUntil: systemTime.toISOString()
                     }
                   } as TodayTixShowtime
                 ]
@@ -341,25 +356,25 @@ describe("Holds", () => {
 
     // schedule a hold for the first show that is closed
     await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
-    userEvent.press(getByText("SIX the Musical"));
+    await userEvent.press(getByText("SIX the Musical"));
     await waitFor(() => expect(getByLabelText("Header image")).toBeVisible());
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
-    userEvent.press(getByText("19:00"));
+    await userEvent.press(getByText("19:00"));
     await waitFor(() => expect(getByText("2")).toBeVisible());
-    userEvent.press(getByText("2"));
+    await userEvent.press(getByText("2"));
 
     // get tickets for a second show that is already open
-    userEvent.press(getByLabelText("Back button"));
+    await userEvent.press(getByLabelText("Back button"));
     await waitFor(() => expect(getByText("Hamilton")).toBeVisible());
     /* TODO: Investigate why this is necessary to press the card after navigating
     back to the card list screen. Perhaps it's a limitation with the react navigation library */
-    jest.advanceTimersByTime(1000);
-    userEvent.press(getByText("Hamilton"));
+    act(() => jest.advanceTimersByTime(1000));
+    await userEvent.press(getByText("Hamilton"));
     await waitFor(() => expect(getByLabelText("Header image")).toBeVisible());
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
-    userEvent.press(getByText("19:30"));
+    await userEvent.press(getByText("19:30"));
     await waitFor(() => expect(getByText("2")).toBeVisible());
-    userEvent.press(getByText("2"));
+    await userEvent.press(getByText("2"));
     await waitFor(() =>
       expect(getByText("You've won 2 ticket(s) to Hamilton!")).toBeVisible()
     );
