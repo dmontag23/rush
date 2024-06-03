@@ -1,7 +1,7 @@
 import React from "react";
 
 import {describe, expect, it} from "@jest/globals";
-import {render, userEvent, waitFor} from "testing-library/extension";
+import {render, userEvent} from "testing-library/extension";
 
 import RushShowTicketSelection from "../RushShowTicketSelection";
 
@@ -66,11 +66,9 @@ describe("The rush show ticket selection component", () => {
 
     // select a time
     await userEvent.press(matineeButton);
-    await waitFor(() =>
-      expect(matineeButton).toHaveStyle({
-        color: hadestownLightThemeColors.onPrimary
-      })
-    );
+    expect(matineeButton).toHaveStyle({
+      color: hadestownLightThemeColors.onPrimary
+    });
     expect(eveningButton).toHaveStyle({
       color: hadestownLightThemeColors.primary
     });
@@ -87,11 +85,9 @@ describe("The rush show ticket selection component", () => {
     const ticketNumberButton = getByText("3");
     await userEvent.press(ticketNumberButton);
 
-    await waitFor(() =>
-      expect(ticketNumberButton).toHaveStyle({
-        color: hadestownLightThemeColors.onPrimary
-      })
-    );
+    expect(ticketNumberButton).toHaveStyle({
+      color: hadestownLightThemeColors.onPrimary
+    });
   });
 
   it("switches number of tickets available per show", async () => {
@@ -116,11 +112,9 @@ describe("The rush show ticket selection component", () => {
     // select the matinee show
     const matineeButton = getByText("14:30");
     await userEvent.press(matineeButton);
-    await waitFor(() =>
-      expect(matineeButton).toHaveStyle({
-        color: hadestownLightThemeColors.onPrimary
-      })
-    );
+    expect(matineeButton).toHaveStyle({
+      color: hadestownLightThemeColors.onPrimary
+    });
     ["1", "2", "3", "4"].forEach(number => {
       const ticketNumber = getByText(number);
       expect(ticketNumber).toBeVisible();
@@ -132,11 +126,9 @@ describe("The rush show ticket selection component", () => {
     // select the evening show
     const eveningButton = getByText("19:45");
     await userEvent.press(eveningButton);
-    await waitFor(() =>
-      expect(eveningButton).toHaveStyle({
-        color: hadestownLightThemeColors.onPrimary
-      })
-    );
+    expect(eveningButton).toHaveStyle({
+      color: hadestownLightThemeColors.onPrimary
+    });
     ["1", "2"].forEach(number => {
       const ticketNumber = getByText(number);
       expect(ticketNumber).toBeVisible();

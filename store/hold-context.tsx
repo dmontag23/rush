@@ -12,11 +12,23 @@ import SelectedShowtimeContext from "./selected-showtime-context";
 import usePostHolds from "../hooks/todayTixHooks/usePostHolds";
 import useGetCustomerId from "../hooks/useGetCustomerId";
 import useScheduleCallback from "../hooks/useScheduleCallback";
+import {TodayTixAPIError} from "../types/base";
 import {TodayTixHold} from "../types/holds";
 
 const HoldContext = createContext<{
+  isHoldScheduled: boolean;
+  isPlacingHold: boolean;
+  isHoldError: boolean;
+  holdError: TodayTixAPIError | null;
   hold?: TodayTixHold;
-}>({});
+  retry: () => void;
+}>({
+  isHoldScheduled: false,
+  isPlacingHold: false,
+  isHoldError: false,
+  holdError: null,
+  retry: () => {}
+});
 
 export const HoldContextProvider = ({children}: PropsWithChildren) => {
   const {navigate} = useNavigation();
@@ -27,16 +39,25 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
   const {
     mutate: placeHold,
     data: hold,
-    isPending: isPlacingHold
+    isPending: isPlacingHold,
+    isError: isHoldError,
+    error: holdError,
+    reset: resetHoldState
   } = usePostHolds();
 
   const {
     scheduleCallback: scheduleHold,
-    cancelScheduledExecution: cancelScheduledHold
+    cancelScheduledExecution: cancelScheduledHold,
+    isScheduled: isHoldScheduled
   } = useScheduleCallback(placeHold);
 
   useEffect(() => {
-    if (customerId && showtime && numberOfTickets && !(hold || isPlacingHold))
+    if (
+      customerId &&
+      showtime &&
+      numberOfTickets &&
+      !(hold || isPlacingHold || isHoldError)
+    )
       scheduleHold(
         // Start making requests 1 second before rush tickets are due to open
         (showtime?.rushTickets?.availableAfterEpoch ?? 0) - 1,
@@ -50,14 +71,31 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
     hold,
     isPlacingHold,
     scheduleHold,
-    cancelScheduledHold
+    cancelScheduledHold,
+    isHoldError
   ]);
 
   useEffect(() => {
     if (hold) navigate("HoldConfirmation");
   }, [hold, navigate]);
 
-  return <HoldContext.Provider value={{hold}}>{children}</HoldContext.Provider>;
+  useEffect(() => {
+    if (customerId && showtime && numberOfTickets && !hold) resetHoldState();
+  }, [customerId, hold, numberOfTickets, resetHoldState, showtime]);
+
+  return (
+    <HoldContext.Provider
+      value={{
+        isHoldScheduled,
+        isPlacingHold,
+        isHoldError,
+        holdError,
+        hold,
+        retry: resetHoldState
+      }}>
+      {children}
+    </HoldContext.Provider>
+  );
 };
 
 export default HoldContext;

@@ -6,6 +6,7 @@ import {
   DeliveryMethodEnum,
   ProviderPlatformEnum,
   TodayTixHold,
+  TodayTixHoldErrorCode,
   TodayTixHoldType,
   TodayTixHoldsReq
 } from "../types/holds";
@@ -350,20 +351,31 @@ const postHoldsGuysAndDolls201Response: TodayTixAPIRes<TodayTixHold> = {
 
 const postHolds401Response: TodayTixAPIError = {
   code: 401,
-  error: "UnauthenticatedException",
+  error: TodayTixHoldErrorCode.UNAUTHENTICATED,
   context: null,
   title: "Error",
   message:
     "Sorry, something went wrong. Please try signing in again and contact TodayTix Support if the issue persists."
 };
 
+const postHolds409SeatsTakenResponse: TodayTixAPIError = {
+  code: 409,
+  error: TodayTixHoldErrorCode.SEATS_TAKEN,
+  context: [
+    "Sorry, all remaining tickets are currently being held by other customers. Please try again later."
+  ],
+  title: "All seats are being held",
+  message:
+    "Sorry, all remaining tickets are currently being held by other customers. Please try again later."
+};
+
 const postHolds409Response: TodayTixAPIError = {
   code: 409,
-  error: "Conflict",
+  error: TodayTixHoldErrorCode.CONFLICT,
   context: ["You are not eligible to purchase Rush tickets."],
   title: "Not eligible",
   message:
-    "You are not eligible to make this purchase. Please unlock Rush and try again.Contact TodayTix Support if you feel you have received this message in error."
+    "You are not eligible to make this purchase. Please unlock Rush and try again. Contact TodayTix Support if you feel you have received this message in error."
 };
 
 const holdsRoute = (router: Router) =>
@@ -395,9 +407,11 @@ const holdsRoute = (router: Router) =>
       );
     }
 
-    if (req.body.showtime === 3 && isGuysAndDollsUnlocked) {
+    if (req.body.showtime === 3 && isGuysAndDollsUnlocked)
       return res.status(201).json(postHoldsGuysAndDolls201Response);
-    }
+
+    if (req.body.showtime === 1 && req.body.numTickets === 2)
+      return res.status(409).json(postHolds409SeatsTakenResponse);
 
     return res.status(401).json(postHolds401Response);
   });

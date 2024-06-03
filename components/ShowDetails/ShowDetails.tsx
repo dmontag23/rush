@@ -1,11 +1,12 @@
 import React, {useState} from "react";
-import {Image, StyleSheet, View} from "react-native";
+import {Image, ScrollView, StyleSheet, View} from "react-native";
 
 import {IconButton} from "react-native-paper";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 import RushShowTicketSelection from "./RushShowTicketSelection";
 
+import HoldBanner from "../HoldBanner";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 import {RootStackScreenProps} from "../../types/navigation";
@@ -44,9 +45,10 @@ const ShowDetails = ({
             onPress={navigation.goBack}
             style={[styles.backButton, {marginTop: top}]}
           />
-          <View style={styles.showDetailContainer}>
+          <HoldBanner />
+          <ScrollView style={styles.showDetailContainer}>
             <RushShowTicketSelection show={show} showtimes={showtimes} />
-          </View>
+          </ScrollView>
         </>
       )}
     </View>

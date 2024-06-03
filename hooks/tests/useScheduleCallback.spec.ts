@@ -1,5 +1,5 @@
 import {describe, expect, it, jest} from "@jest/globals";
-import {renderHook} from "testing-library/extension";
+import {act, renderHook} from "testing-library/extension";
 
 import useScheduleCallback from "../useScheduleCallback";
 
@@ -8,7 +8,7 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback();
+    act(() => result.current.scheduleCallback());
     expect(callbackFn).not.toBeCalled();
     jest.runOnlyPendingTimers();
     expect(callbackFn).toBeCalledTimes(1);
@@ -18,8 +18,10 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback(
-      new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
+    act(() =>
+      result.current.scheduleCallback(
+        new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
+      )
     );
     jest.advanceTimersByTime(4999);
     expect(callbackFn).not.toBeCalled();
@@ -31,10 +33,12 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback(
-      new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
+    act(() =>
+      result.current.scheduleCallback(
+        new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
+      )
     );
-    result.current.cancelScheduledExecution();
+    act(() => result.current.cancelScheduledExecution());
     jest.advanceTimersByTime(5000);
     expect(callbackFn).not.toBeCalled();
   });
@@ -43,10 +47,12 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback(
-      new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
+    act(() =>
+      result.current.scheduleCallback(
+        new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
+      )
     );
-    result.current.scheduleCallback();
+    act(() => result.current.scheduleCallback());
     jest.advanceTimersByTime(1000);
     expect(callbackFn).not.toBeCalled();
     jest.advanceTimersByTime(4000);
@@ -57,14 +63,18 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback(
-      new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
+    act(() =>
+      result.current.scheduleCallback(
+        new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
+      )
     );
     jest.advanceTimersByTime(4999);
     expect(callbackFn).not.toBeCalled();
-    result.current.cancelScheduledExecution();
-    result.current.scheduleCallback(
-      new Date(2021, 4, 23, 0, 0, 6).getTime() / 1000
+    act(() => result.current.cancelScheduledExecution());
+    act(() =>
+      result.current.scheduleCallback(
+        new Date(2021, 4, 23, 0, 0, 6).getTime() / 1000
+      )
     );
     jest.advanceTimersByTime(1);
     expect(callbackFn).not.toBeCalled();
@@ -76,11 +86,22 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result, unmount} = renderHook(() => useScheduleCallback(callbackFn));
 
-    result.current.scheduleCallback(
-      new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
+    act(() =>
+      result.current.scheduleCallback(
+        new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
+      )
     );
     unmount();
     jest.advanceTimersByTime(5000);
     expect(callbackFn).not.toHaveBeenCalled();
+  });
+
+  it("shows correct isScheduled status", () => {
+    const {result} = renderHook(() => useScheduleCallback(jest.fn()));
+
+    act(() => result.current.scheduleCallback());
+    expect(result.current.isScheduled).toBe(true);
+    act(() => result.current.cancelScheduledExecution());
+    expect(result.current.isScheduled).toBe(false);
   });
 });

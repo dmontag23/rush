@@ -66,10 +66,10 @@ describe("Holds", () => {
     // load the header image
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
     await userEvent.press(getByText("19:00"));
-    await waitFor(() => expect(getByText("2")).toBeVisible());
+    expect(getByText("2")).toBeVisible();
     await userEvent.press(getByText("2"));
     await waitFor(() =>
-      expect(getByText("You've won 2 ticket(s) to Hamilton!")).toBeVisible()
+      expect(getByText("You've won 2 tickets to Hamilton!")).toBeVisible()
     );
   });
 
@@ -122,15 +122,15 @@ describe("Holds", () => {
     // load the header image
     act(() => fireEvent(getByLabelText("Header image"), "onLoadEnd"));
     await userEvent.press(getByText("19:00"));
-    await waitFor(() => expect(getByText("2")).toBeVisible());
+    expect(getByText("2")).toBeVisible();
     await userEvent.press(getByText("2"));
-    const timeToTicketAvailability =
-      ticketAvailabilityTime * 1000 - new Date().getTime();
     /* the - 1000 below is to ensure that requests are made to the holds endpoint
     1 second before rush tickets open */
-    const wonTicketsText = "You've won 2 ticket(s) to Hamilton!";
+    const timeToTicketAvailability =
+      ticketAvailabilityTime * 1000 - new Date().getTime();
+    const wonTicketsText = "You've won 2 tickets to Hamilton!";
     expect(queryByText(wonTicketsText)).toBeNull();
-    jest.advanceTimersByTime(timeToTicketAvailability - 1000);
+    act(() => jest.advanceTimersByTime(timeToTicketAvailability - 1000));
     await waitFor(() => expect(getByText(wonTicketsText)).toBeVisible());
   });
 
@@ -185,10 +185,10 @@ describe("Holds", () => {
     // load the header image
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
     await userEvent.press(getByText("19:00"));
-    await waitFor(() => expect(getByText("2")).toBeVisible());
+    expect(getByText("2")).toBeVisible();
     await userEvent.press(getByText("2"));
     await waitFor(() =>
-      expect(getByText("You've won 2 ticket(s) to Hamilton!")).toBeVisible()
+      expect(getByText("You've won 2 tickets to Hamilton!")).toBeVisible()
     );
     expect(await AsyncStorage.getItem("customer-id")).toBe("customer-id");
   });
@@ -253,11 +253,11 @@ describe("Holds", () => {
     // load the header image
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
     await userEvent.press(getByText("19:00"));
-    await waitFor(() => expect(getByText("2")).toBeVisible());
+    expect(getByText("2")).toBeVisible();
     await userEvent.press(getByText("2"));
     await waitFor(
       () =>
-        expect(getByText("You've won 2 ticket(s) to Hamilton!")).toBeVisible(),
+        expect(getByText("You've won 2 tickets to Hamilton!")).toBeVisible(),
       {timeout: 10000}
     );
   });
@@ -357,26 +357,26 @@ describe("Holds", () => {
     // schedule a hold for the first show that is closed
     await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
     await userEvent.press(getByText("SIX the Musical"));
-    await waitFor(() => expect(getByLabelText("Header image")).toBeVisible());
+    expect(getByLabelText("Header image")).toBeVisible();
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
     await userEvent.press(getByText("19:00"));
-    await waitFor(() => expect(getByText("2")).toBeVisible());
+    expect(getByText("2")).toBeVisible();
     await userEvent.press(getByText("2"));
 
     // get tickets for a second show that is already open
     await userEvent.press(getByLabelText("Back button"));
-    await waitFor(() => expect(getByText("Hamilton")).toBeVisible());
+    expect(getByText("Hamilton")).toBeVisible();
     /* TODO: Investigate why this is necessary to press the card after navigating
     back to the card list screen. Perhaps it's a limitation with the react navigation library */
     act(() => jest.advanceTimersByTime(1000));
     await userEvent.press(getByText("Hamilton"));
-    await waitFor(() => expect(getByLabelText("Header image")).toBeVisible());
+    expect(getByLabelText("Header image")).toBeVisible();
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
     await userEvent.press(getByText("19:30"));
-    await waitFor(() => expect(getByText("2")).toBeVisible());
+    expect(getByText("2")).toBeVisible();
     await userEvent.press(getByText("2"));
     await waitFor(() =>
-      expect(getByText("You've won 2 ticket(s) to Hamilton!")).toBeVisible()
+      expect(getByText("You've won 2 tickets to Hamilton!")).toBeVisible()
     );
   });
 });

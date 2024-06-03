@@ -19,6 +19,7 @@ const RushShowTicketSelection = ({
   const {
     selectedShowtime,
     selectedNumberOfTickets,
+    setSelectedShow,
     setSelectedShowtime,
     setSelectedNumberOfTickets
   } = useContext(SelectedShowtimeContext);
@@ -53,6 +54,7 @@ const RushShowTicketSelection = ({
               <Button
                 key={showtime.id}
                 onPress={() => {
+                  setSelectedShow(show);
                   setSelectedShowtime(showtime);
                   setSelectedNumberOfTickets(NaN);
                 }}

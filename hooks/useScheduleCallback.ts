@@ -1,31 +1,43 @@
-import {useEffect, useRef} from "react";
+import {useCallback, useEffect, useState} from "react";
+
+type RunInfo<T> = {
+  callbackArgs: T;
+  runAtEpochTimeInSeconds: number;
+};
 
 const useScheduleCallback = <T extends any[]>(
   callback: (...args: T) => void
 ) => {
-  const timeout = useRef<NodeJS.Timeout>();
+  const [runInfo, setRunInfo] = useState<RunInfo<T>>();
 
-  const scheduleCallback = (runAtEpochTime = 0, ...args: T) => {
-    if (!timeout.current)
-      timeout.current = setTimeout(
-        () => callback(...args),
-        runAtEpochTime * 1000 - new Date().getTime()
+  const scheduleCallback = useCallback(
+    (runAtEpochTimeInSeconds = 0, ...args: T) =>
+      setRunInfo(
+        prevInfo =>
+          prevInfo ?? {
+            callbackArgs: args,
+            runAtEpochTimeInSeconds
+          }
+      ),
+    []
+  );
+
+  const cancelScheduledExecution = useCallback(() => setRunInfo(undefined), []);
+
+  useEffect(() => {
+    if (runInfo) {
+      const timeoutId = setTimeout(
+        () => callback(...runInfo.callbackArgs),
+        runInfo.runAtEpochTimeInSeconds * 1000 - new Date().getTime()
       );
-  };
-
-  const cancelScheduledExecution = () => {
-    clearTimeout(timeout.current);
-    timeout.current = undefined;
-  };
-
-  /* ensure all scheduled processes are stopped when any component
-  that uses this hook is unmounted */
-  useEffect(() => cancelScheduledExecution, []);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [callback, runInfo]);
 
   return {
     scheduleCallback,
     cancelScheduledExecution,
-    isScheduled: Boolean(timeout)
+    isScheduled: Boolean(runInfo)
   };
 };
 

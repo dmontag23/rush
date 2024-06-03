@@ -50,9 +50,7 @@ describe("EnterTokensScreen", () => {
 
         // enter an invalid link
         await userEvent.type(getByLabelText(`${tokenType} input`), "{Enter}");
-        await waitFor(() =>
-          expect(getByText(`${validationPrefix} is required`)).toBeVisible()
-        );
+        expect(getByText(`${validationPrefix} is required`)).toBeVisible();
         expect(getByRole("button", {name: "Login"})).toBeDisabled();
       }
     );
@@ -83,16 +81,14 @@ describe("EnterTokensScreen", () => {
       );
       const loginButton = getByRole("button", {name: "Login"});
 
-      await waitFor(() => expect(loginButton).toBeEnabled());
+      expect(loginButton).toBeEnabled();
       await userEvent.press(loginButton);
 
-      await waitFor(() =>
-        expect(
-          getByText(
-            'An error occurred when trying to store the access token access-token, refresh token refresh-token, and ttl 0: "Error with AsyncStorage multiSet". Please try submitting the tokens again.'
-          )
-        ).toBeVisible()
-      );
+      expect(
+        getByText(
+          'An error occurred when trying to store the access token access-token, refresh token refresh-token, and ttl 0: "Error with AsyncStorage multiSet". Please try submitting the tokens again.'
+        )
+      ).toBeVisible();
       expect(loginButton).toBeEnabled();
     });
 
@@ -119,13 +115,11 @@ describe("EnterTokensScreen", () => {
         "refresh-token"
       );
       const loginButton = getByRole("button", {name: "Login"});
-      await waitFor(() => expect(loginButton).toBeEnabled());
+      expect(loginButton).toBeEnabled();
       await userEvent.press(loginButton);
 
       // check that async storage contains the valid tokens
-      await waitFor(async () =>
-        expect(await AsyncStorage.getItem("access-token")).toBe("access-token")
-      );
+      expect(await AsyncStorage.getItem("access-token")).toBe("access-token");
       expect(await AsyncStorage.getItem("refresh-token")).toBe("refresh-token");
       expect(await AsyncStorage.getItem("token-ttl")).toBe("0");
     });

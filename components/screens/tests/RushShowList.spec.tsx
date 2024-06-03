@@ -209,9 +209,9 @@ describe("Rush show list", () => {
     await userEvent.press(showCard);
 
     // load the header image
+    const loadingSpinner = getByTestId("loadingSpinner");
+    expect(loadingSpinner).toBeVisible();
     await waitFor(() => {
-      const loadingSpinner = getByTestId("loadingSpinner");
-      expect(loadingSpinner).toBeVisible();
       fireEvent(getByLabelText("Header image"), "onLoadEnd");
       expect(loadingSpinner).not.toBeOnTheScreen();
     });
@@ -221,7 +221,7 @@ describe("Rush show list", () => {
     // go back to the rush show list
     await userEvent.press(backButton);
 
-    await waitFor(() => expect(getByText("10:00 to 15:30")).toBeVisible());
+    expect(getByText("10:00 to 15:30")).toBeVisible();
   });
 
   it("maintains selected show state when navigating to other shows and back", async () => {
@@ -307,22 +307,18 @@ describe("Rush show list", () => {
     // select two tickets for the evening show
     const eveningShowtimeButton = getByText("19:00");
     await userEvent.press(eveningShowtimeButton);
-    await waitFor(() =>
-      expect(eveningShowtimeButton).toHaveStyle({
-        color: hadestownLightThemeColors.onPrimary
-      })
-    );
+    expect(eveningShowtimeButton).toHaveStyle({
+      color: hadestownLightThemeColors.onPrimary
+    });
     const ticketNumberButton = getByText("2");
     await userEvent.press(ticketNumberButton);
-    await waitFor(() =>
-      expect(ticketNumberButton).toHaveStyle({
-        color: hadestownLightThemeColors.onPrimary
-      })
-    );
+    expect(ticketNumberButton).toHaveStyle({
+      color: hadestownLightThemeColors.onPrimary
+    });
 
     // navigate to a different show
     await userEvent.press(getByLabelText("Back button"));
-    await waitFor(() => expect(getByText("Hamilton")).toBeVisible());
+    expect(getByText("Hamilton")).toBeVisible();
     /* TODO: Investigate why this is necessary to press the card after navigating
     back to the card list screen. Perhaps it's a limitation with the react navigation library */
     act(() => jest.advanceTimersByTime(1000));
@@ -339,7 +335,7 @@ describe("Rush show list", () => {
 
     // navigate back to the first show
     await userEvent.press(getByLabelText("Back button"));
-    await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
+    expect(getByText("SIX the Musical")).toBeVisible();
     /* TODO: Investigate why this is necessary to press the card after navigating
     back to the card list screen. Perhaps it's a limitation with the react navigation library */
     act(() => jest.advanceTimersByTime(1000));
