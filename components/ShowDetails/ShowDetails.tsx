@@ -16,7 +16,7 @@ const ShowDetails = ({
   navigation
 }: RootStackScreenProps<"ShowDetails">) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
-  const {top} = useSafeAreaInsets();
+  const {top, bottom} = useSafeAreaInsets();
   const {show, showtimes} = route.params;
 
   const headerImage = show.images?.productMedia.headerImage;
@@ -46,7 +46,9 @@ const ShowDetails = ({
             style={[styles.backButton, {marginTop: top}]}
           />
           <HoldBanner />
-          <ScrollView style={styles.showDetailContainer}>
+          <ScrollView
+            contentContainerStyle={{paddingBottom: bottom}}
+            style={[styles.showDetailContainer, {marginBottom: bottom}]}>
             <RushShowTicketSelection show={show} showtimes={showtimes} />
           </ScrollView>
         </>
