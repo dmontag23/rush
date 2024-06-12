@@ -48,7 +48,8 @@ describe("Holds", () => {
   it("can attempt to get tickets again if all tickets are currently reserved", async () => {
     // select a showtime that has all tickets currently reserved
     await element(by.text("SIX the Musical")).tap();
-    await element(by.text("19:00")).tap();
+    const showtime = element(by.text("19:00"));
+    await showtime.tap();
     await element(by.text("2")).tap();
 
     // retry the request for tickets
@@ -62,6 +63,8 @@ describe("Holds", () => {
     await expect(retryButton).toBeVisible();
     await retryButton.tap();
     await expect(errorMessage).toBeVisible();
+    await showtime.tap();
+    await expect(errorMessage).not.toBeVisible();
   });
 
   it("can cancel hold", async () => {

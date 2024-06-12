@@ -80,7 +80,7 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
   }, [hold, navigate]);
 
   useEffect(() => {
-    if (customerId && showtime && numberOfTickets && !hold) resetHoldState();
+    if (customerId && showtime && !hold) resetHoldState();
   }, [customerId, hold, numberOfTickets, resetHoldState, showtime]);
 
   return (

@@ -379,4 +379,68 @@ describe("Holds", () => {
       expect(getByText("You've won 2 tickets to Hamilton!")).toBeVisible()
     );
   });
+
+  it("cancels a hold when selecting a new showtime", async () => {
+    // setup
+    await AsyncStorage.setItem("customer-id", "customer-id");
+    await AsyncStorage.setItem("access-token", "access-token");
+    await AsyncStorage.setItem("refresh-token", "refresh-token");
+    await AsyncStorage.setItem(
+      "token-ttl",
+      new Date("01-01-2024").getTime().toString()
+    );
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .post("/holds", {
+        customer: "customer-id",
+        showtime: 1,
+        numTickets: 1,
+        holdType: TodayTixHoldType.Rush
+      })
+      .reply(401, {
+        code: 401,
+        error: TodayTixHoldErrorCode.UNAUTHENTICATED,
+        message:
+          "Sorry, something went wrong. Please try signing in again and contact TodayTix Support if the issue persists."
+      });
+
+    const Stack = createStackNavigator<RootStackParamList>();
+    const {getByText, getByLabelText, queryByText} = render(
+      <Stack.Navigator>
+        <Stack.Screen
+          name="ShowDetails"
+          component={ShowDetails}
+          initialParams={{
+            show: {
+              id: 1,
+              displayName: "SIX the Musical"
+            } as TodayTixShow,
+            showtimes: [
+              {
+                id: 1,
+                localTime: "19:00",
+                rushTickets: {
+                  minTickets: 1,
+                  maxTickets: 2
+                }
+              } as TodayTixShowtime
+            ]
+          }}
+        />
+      </Stack.Navigator>
+    );
+
+    // see an error when clicking on the first showtime
+    fireEvent(getByLabelText("Header image"), "onLoadEnd");
+    await userEvent.press(getByText("19:00"));
+    expect(getByText("1")).toBeVisible();
+    await userEvent.press(getByText("1"));
+    const errorText = `Oh no! There was an error getting tickets to SIX the Musical:\nSorry, something went wrong. Please try signing in again and contact TodayTix Support if the issue persists.`;
+    await waitFor(() => expect(getByText(errorText)).toBeVisible());
+
+    // clear the error by clicking on the showtime
+    await userEvent.press(getByText("19:00"));
+    expect(queryByText(errorText)).toBeNull();
+  });
 });
