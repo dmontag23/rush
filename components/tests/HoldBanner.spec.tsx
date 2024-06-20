@@ -243,7 +243,7 @@ describe("Hold banner", () => {
     );
     await userEvent.press(getByText("Retry"));
     await waitFor(() =>
-      expect(getByText("You've won 2 tickets to Hamilton!")).toBeVisible()
+      expect(getByText("You've won 2 tickets to Hamilton.")).toBeVisible()
     );
   });
 
@@ -295,7 +295,7 @@ describe("Hold banner", () => {
     expect(getByText("Hamilton")).toBeVisible();
     await userEvent.press(getByText("19:00"));
     await userEvent.press(getByText("2"));
-    const holdPageText = "You've won 2 tickets to Hamilton!";
+    const holdPageText = "You've won 2 tickets to Hamilton.";
     await waitFor(() => expect(getByText(holdPageText)).toBeVisible());
 
     // ensure the banner now contains information on the current hold

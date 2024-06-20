@@ -11,12 +11,26 @@ describe("Holds", () => {
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("19:30")).tap();
     await element(by.text("1")).tap();
-    const holdConfirmationPageText = element(
-      by.text("You've won 1 ticket to Guys & Dolls!")
-    );
+    const holdConfirmationPageText = element(by.text("🎉"));
     await expect(holdConfirmationPageText).toBeVisible();
-
-    // TODO: Expand this section once the hold confirmation page is more fully built out
+    await expect(element(by.text("Congratulations!"))).toBeVisible();
+    await expect(
+      element(by.text("You've won 1 ticket to Guys & Dolls."))
+    ).toBeVisible();
+    await expect(element(by.text("Seats"))).toBeVisible();
+    await expect(element(by.text("Dress Circle"))).toBeVisible();
+    await expect(element(by.text("Row J, Seat 28"))).toBeVisible();
+    await expect(element(by.text("Order Total"))).toBeVisible();
+    await expect(element(by.text("£29.50"))).toBeVisible();
+    await expect(
+      element(
+        by.text(
+          "IMPORTANT: Hard-close the TodayTix app before pressing the Purchase button!"
+        )
+      )
+    ).toBeVisible();
+    await expect(element(by.text("Purchase on TodayTix"))).toBeVisible();
+    await expect(element(by.text("Release tickets"))).toBeVisible();
 
     // check that the hold banner contains the correct text
     const backButton = element(by.label("Back button")).atIndex(1);
@@ -43,6 +57,18 @@ describe("Holds", () => {
     await expect(holdConfirmationPageText).toBeVisible();
     await backButton.tap();
     await expect(chipText).toBeVisible();
+  });
+
+  it("can purchase tickets on TodayTix", async () => {
+    // select a showtime that is already open
+    await element(by.text("Guys & Dolls")).tap();
+    await element(by.text("19:30")).tap();
+    await element(by.text("1")).tap();
+    await expect(element(by.text("🎉"))).toBeVisible();
+    const purchaseTicketsButton = element(by.text("Purchase on TodayTix"));
+    await expect(purchaseTicketsButton).toBeVisible();
+    await purchaseTicketsButton.tap();
+    // TODO: maybe mock the Linking module here and test that openURL was called?
   });
 
   it("can attempt to get tickets again if all tickets are currently reserved", async () => {
