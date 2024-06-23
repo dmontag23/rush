@@ -1,5 +1,5 @@
-<!-- This file is needed for Detox, see https://wix.github.io/Detox/docs/introduction/project-setup -->
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This file is needed for Detox, see https://wix.github.io/Detox/docs/introduction/project-setup -->
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">10.0.2.2</domain>
