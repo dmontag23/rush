@@ -1,5 +1,6 @@
-import {getStore} from "@netlify/blobs";
 import {Router} from "express";
+
+import {getItemsFromStore} from "./netlifyUtils";
 
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
 import {TodayTixRushGrant} from "../types/rushGrants";
@@ -22,19 +23,8 @@ const getRushGrantsRoute = (router: Router) =>
     if (req.headers["return-status"] === "401")
       return res.status(401).json(getRushGrants401Response);
 
-    const rushGrantsStore = getStore({
-      name: "rush-grants",
-      edgeURL: process.env.NETLIFY_SITE_URL,
-      siteID: process.env.NETLIFY_SITE_ID,
-      token: process.env.NETLIFY_API_KEY
-    });
-
-    const {blobs: rushGrantsInStore} = await rushGrantsStore.list();
-    const rushGrants = await Promise.all<TodayTixRushGrant>(
-      rushGrantsInStore.map(
-        async grant => await rushGrantsStore.get(grant.key, {type: "json"})
-      )
-    );
+    const rushGrants =
+      await getItemsFromStore<TodayTixRushGrant>("rush-grants");
 
     return res
       .status(200)

@@ -1,5 +1,6 @@
-import {getStore} from "@netlify/blobs";
 import {Router} from "express";
+
+import {writeItemToStore} from "./netlifyUtils";
 
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
 import {TodayTixRushGrant, TodayTixRushGrantsReq} from "../types/rushGrants";
@@ -34,23 +35,15 @@ const postRushGrantsRoute = (router: Router) =>
       showName: `Show for ${req.params.customerId}`
     };
 
-    const rushGrantsStore = getStore({
-      name: "rush-grants",
-      edgeURL: process.env.NETLIFY_SITE_URL,
-      siteID: process.env.NETLIFY_SITE_ID,
-      token: process.env.NETLIFY_API_KEY
-    });
-
-    const previousRushGrantForShowId: TodayTixRushGrant =
-      await rushGrantsStore.get(req.body.showId.toString(), {type: "json"});
-
-    if (!previousRushGrantForShowId) {
-      await rushGrantsStore.setJSON(req.body.showId.toString(), newRushGrant);
-    }
+    const rushGrantToReturn = await writeItemToStore(
+      "rush-grants",
+      req.body.showId.toString(),
+      newRushGrant
+    );
 
     return res.status(201).json({
       code: 201,
-      data: previousRushGrantForShowId ?? newRushGrant
+      data: rushGrantToReturn
     });
   });
 
