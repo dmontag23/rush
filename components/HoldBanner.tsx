@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {StyleSheet, View} from "react-native";
 
 import {useNavigation} from "@react-navigation/native";
@@ -7,7 +7,9 @@ import {Banner, BannerProps, Text} from "react-native-paper";
 import LoadingSpinner from "./ui/LoadingSpinner";
 import {pluralize} from "./utils";
 
+import useDeleteHold from "../hooks/todayTixHooks/useDeleteHold";
 import useCountdown from "../hooks/useCountdown";
+import useGetCustomerId from "../hooks/useGetCustomerId";
 import HoldContext from "../store/hold-context";
 import SelectedShowtimeContext from "../store/selected-showtime-context";
 
@@ -16,6 +18,7 @@ type HoldBannerProps = {
 };
 
 const HoldBanner = ({style}: HoldBannerProps) => {
+  const {customerId} = useGetCustomerId();
   const {navigate} = useNavigation();
 
   const {
@@ -28,17 +31,42 @@ const HoldBanner = ({style}: HoldBannerProps) => {
   } = useContext(SelectedShowtimeContext);
 
   const {
+    isCreatingHold,
+    createHoldError,
     isHoldScheduled,
-    isPlacingHold,
-    isHoldError,
-    holdError,
-    hold,
-    retry: retryPlacingHold
+    scheduleHold,
+    cancelHold,
+    hold
   } = useContext(HoldContext);
+
+  const {mutate: deleteHold, isSuccess: isDeleteHoldSuccess} = useDeleteHold();
+
+  useEffect(() => {
+    if (isDeleteHoldSuccess) {
+      setSelectedShow(undefined);
+      setSelectedShowtime(undefined);
+      setSelectedNumberOfTickets(NaN);
+    }
+  }, [
+    isDeleteHoldSuccess,
+    setSelectedNumberOfTickets,
+    setSelectedShow,
+    setSelectedShowtime
+  ]);
 
   const {countdown: countdownToRushOpening} = useCountdown(
     showtime?.rushTickets?.availableAfterEpoch
   );
+
+  const retryPlacingHold = () => {
+    cancelHold();
+    if (customerId && showtime && numberOfTickets && !hold)
+      scheduleHold(0, {
+        customerId,
+        showtimeId: showtime.id,
+        numTickets: numberOfTickets
+      });
+  };
 
   const getBannerInfo = (): {
     actions?: BannerProps["actions"];
@@ -47,7 +75,10 @@ const HoldBanner = ({style}: HoldBannerProps) => {
     if (hold)
       return {
         actions: [
-          {label: "Release tickets"},
+          {
+            label: "Release tickets",
+            onPress: () => deleteHold(hold.id)
+          },
           {
             label: "See tickets",
             onPress: () => navigate("HoldConfirmation")
@@ -55,7 +86,7 @@ const HoldBanner = ({style}: HoldBannerProps) => {
         ],
         children: `You have ${hold.numSeats} ticket${pluralize(hold.numSeats)} to ${hold.showtime.show?.displayName}!`
       };
-    if (isPlacingHold)
+    if (isCreatingHold)
       return {
         children: (
           <View style={styles.placingHoldContainer}>
@@ -64,33 +95,39 @@ const HoldBanner = ({style}: HoldBannerProps) => {
           </View>
         )
       };
-    if (isHoldError)
+    if (createHoldError)
       return {
         actions: [{label: "Retry", onPress: retryPlacingHold}],
-        children: `Oh no! There was an error getting tickets to ${show?.displayName}:\n${holdError?.message ?? holdError?.error}`
+        children: `Oh no! There was an error getting tickets to ${show?.displayName}:\n${createHoldError.message ?? createHoldError.error}`
       };
-    return {
-      actions: [
-        {
-          label: "Cancel",
-          onPress: () => {
-            setSelectedShow(undefined);
-            setSelectedShowtime(undefined);
-            setSelectedNumberOfTickets(NaN);
+    if (isHoldScheduled)
+      return {
+        actions: [
+          {
+            label: "Cancel",
+            onPress: () => {
+              cancelHold();
+              setSelectedShow(undefined);
+              setSelectedShowtime(undefined);
+              setSelectedNumberOfTickets(NaN);
+            }
           }
-        }
-      ],
-      children: `Attempting to get ${numberOfTickets} ticket${pluralize(numberOfTickets)} for ${show?.displayName} in ${countdownToRushOpening}`
-    };
+        ],
+        children: `Attempting to get ${numberOfTickets} ticket${pluralize(numberOfTickets)} for ${show?.displayName} in ${countdownToRushOpening}`
+      };
+    return {children: ""};
   };
 
   const {actions, children} = getBannerInfo();
 
+  const isBannerVisible =
+    Boolean(hold) ||
+    isCreatingHold ||
+    Boolean(createHoldError) ||
+    isHoldScheduled;
+
   return (
-    <Banner
-      visible={Boolean(hold) || isPlacingHold || isHoldError || isHoldScheduled}
-      actions={actions}
-      style={style}>
+    <Banner visible={isBannerVisible} actions={actions} style={style}>
       {children}
     </Banner>
   );

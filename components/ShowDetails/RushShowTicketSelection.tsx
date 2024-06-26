@@ -3,6 +3,8 @@ import {StyleSheet, View} from "react-native";
 
 import {Button, Text} from "react-native-paper";
 
+import useGetCustomerId from "../../hooks/useGetCustomerId";
+import HoldContext from "../../store/hold-context";
 import SelectedShowtimeContext from "../../store/selected-showtime-context";
 import {TodayTixShow} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";
@@ -16,6 +18,7 @@ const RushShowTicketSelection = ({
   show,
   showtimes
 }: RushShowTicketSelectionProps) => {
+  const {customerId} = useGetCustomerId();
   const {
     selectedShowtime,
     selectedNumberOfTickets,
@@ -23,16 +26,13 @@ const RushShowTicketSelection = ({
     setSelectedShowtime,
     setSelectedNumberOfTickets
   } = useContext(SelectedShowtimeContext);
+  const {scheduleHold, cancelHold, hold} = useContext(HoldContext);
 
-  const locallySelectedShowtime =
-    selectedShowtime &&
-    showtimes.find(showtime => showtime.id === selectedShowtime.id);
-
-  const minNumberOfTickets =
-    locallySelectedShowtime?.rushTickets?.minTickets ?? 0;
-  const maxNumberOfTickets =
-    locallySelectedShowtime?.rushTickets?.maxTickets ?? 0;
-
+  /* The numberOfTickets array only shows if a showtime is the same as the
+  selectedShowtime (this is checked below), and so it is okay to use the
+  selectedShowtime here instead of the showtime from the showtimes prop. */
+  const minNumberOfTickets = selectedShowtime?.rushTickets?.minTickets ?? 0;
+  const maxNumberOfTickets = selectedShowtime?.rushTickets?.maxTickets ?? 0;
   const numberOfTickets = Array.from(
     {length: maxNumberOfTickets - minNumberOfTickets + 1},
     (_, x) => x + minNumberOfTickets
@@ -54,6 +54,7 @@ const RushShowTicketSelection = ({
               <Button
                 key={showtime.id}
                 onPress={() => {
+                  cancelHold();
                   setSelectedShow(show);
                   setSelectedShowtime(showtime);
                   setSelectedNumberOfTickets(NaN);
@@ -66,25 +67,42 @@ const RushShowTicketSelection = ({
           })}
         </View>
       </View>
-      {Boolean(numberOfTickets.length) && (
-        <View style={styles.selectionContainer}>
-          <Text variant="titleLarge">Number of Tickets</Text>
-          <View style={styles.selectionButtonsContainer}>
-            {numberOfTickets.map(number => {
-              const isSelected = number === selectedNumberOfTickets;
-              return (
-                <Button
-                  key={number}
-                  onPress={() => setSelectedNumberOfTickets(number)}
-                  mode={isSelected ? "contained" : "outlined"}
-                  contentStyle={styles.selectionButton}>
-                  {number}
-                </Button>
-              );
-            })}
+      {customerId &&
+        selectedShowtime &&
+        showtimes.some(({id}) => id === selectedShowtime.id) && (
+          <View style={styles.selectionContainer}>
+            <Text variant="titleLarge">Number of Tickets</Text>
+            <View style={styles.selectionButtonsContainer}>
+              {numberOfTickets.map(number => {
+                const isSelected = number === selectedNumberOfTickets;
+                return (
+                  <Button
+                    key={number}
+                    onPress={() => {
+                      cancelHold();
+                      setSelectedNumberOfTickets(number);
+                      /* TODO: Disable buttons if you already have a hold and
+                      remove the condition below */
+                      if (!hold)
+                        scheduleHold(
+                          (selectedShowtime.rushTickets?.availableAfterEpoch ??
+                            0) - 1,
+                          {
+                            customerId,
+                            showtimeId: selectedShowtime.id,
+                            numTickets: number
+                          }
+                        );
+                    }}
+                    mode={isSelected ? "contained" : "outlined"}
+                    contentStyle={styles.selectionButton}>
+                    {number}
+                  </Button>
+                );
+              })}
+            </View>
           </View>
-        </View>
-      )}
+        )}
     </View>
   );
 };

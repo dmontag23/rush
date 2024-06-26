@@ -1,97 +1,76 @@
-import React, {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect
-} from "react";
+import React, {PropsWithChildren, createContext, useEffect} from "react";
 
 import {useNavigation} from "@react-navigation/native";
+import {MutateOptions} from "@tanstack/react-query";
 
-import SelectedShowtimeContext from "./selected-showtime-context";
-
-import usePostHolds from "../hooks/todayTixHooks/usePostHolds";
-import useGetCustomerId from "../hooks/useGetCustomerId";
+import useGetHold from "../hooks/todayTixHooks/useGetHold";
+import usePostHolds, {
+  PostHoldsVariables
+} from "../hooks/todayTixHooks/usePostHolds";
 import useScheduleCallback from "../hooks/useScheduleCallback";
 import {TodayTixAPIError} from "../types/base";
 import {TodayTixHold} from "../types/holds";
 
 const HoldContext = createContext<{
+  isCreatingHold: boolean;
+  createHoldError: TodayTixAPIError | null;
   isHoldScheduled: boolean;
-  isPlacingHold: boolean;
-  isHoldError: boolean;
-  holdError: TodayTixAPIError | null;
+  scheduleHold: (
+    runAtEpochTimeInSeconds: number,
+    variables: PostHoldsVariables,
+    options?:
+      | MutateOptions<TodayTixHold, TodayTixAPIError, PostHoldsVariables>
+      | undefined
+  ) => void;
+  cancelHold: () => void;
   hold?: TodayTixHold;
-  retry: () => void;
 }>({
+  isCreatingHold: false,
+  createHoldError: null,
   isHoldScheduled: false,
-  isPlacingHold: false,
-  isHoldError: false,
-  holdError: null,
-  retry: () => {}
+  scheduleHold: () => {},
+  cancelHold: () => {}
 });
 
 export const HoldContextProvider = ({children}: PropsWithChildren) => {
   const {navigate} = useNavigation();
-  const {selectedShowtime: showtime, selectedNumberOfTickets: numberOfTickets} =
-    useContext(SelectedShowtimeContext);
-  // TODO: get the initial holds from the TodayTix API to populate here
-  const {customerId} = useGetCustomerId();
+
+  const {data: hold} = useGetHold();
+
   const {
-    mutate: placeHold,
-    data: hold,
-    isPending: isPlacingHold,
-    isError: isHoldError,
-    error: holdError,
-    reset: resetHoldState
+    mutate: createHold,
+    isPending: isCreatingHold,
+    error: createHoldError,
+    reset: resetCreateHold
   } = usePostHolds();
 
   const {
     scheduleCallback: scheduleHold,
     cancelScheduledExecution: cancelScheduledHold,
     isScheduled: isHoldScheduled
-  } = useScheduleCallback(placeHold);
+  } = useScheduleCallback(createHold);
+
+  const cancelHold = () => {
+    cancelScheduledHold();
+    /* resetCreateHold is executed here so that, if the hold previously 
+    errored and a new showtime is clicked, the request is reset. */
+    resetCreateHold();
+  };
 
   useEffect(() => {
-    if (
-      customerId &&
-      showtime &&
-      numberOfTickets &&
-      !(hold || isPlacingHold || isHoldError)
-    )
-      scheduleHold(
-        // Start making requests 1 second before rush tickets are due to open
-        (showtime?.rushTickets?.availableAfterEpoch ?? 0) - 1,
-        {customerId, showtimeId: showtime.id, numTickets: numberOfTickets}
-      );
-    return cancelScheduledHold;
-  }, [
-    customerId,
-    showtime,
-    numberOfTickets,
-    hold,
-    isPlacingHold,
-    scheduleHold,
-    cancelScheduledHold,
-    isHoldError
-  ]);
-
-  useEffect(() => {
+    // TODO: Check if navigator is initialized
     if (hold) navigate("HoldConfirmation");
   }, [hold, navigate]);
-
-  useEffect(() => {
-    if (customerId && showtime && !hold) resetHoldState();
-  }, [customerId, hold, numberOfTickets, resetHoldState, showtime]);
 
   return (
     <HoldContext.Provider
       value={{
+        isCreatingHold,
+        createHoldError,
         isHoldScheduled,
-        isPlacingHold,
-        isHoldError,
-        holdError,
-        hold,
-        retry: resetHoldState
+        scheduleHold,
+        cancelHold,
+        hold
       }}>
       {children}
     </HoldContext.Provider>

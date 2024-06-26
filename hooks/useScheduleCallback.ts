@@ -11,7 +11,7 @@ const useScheduleCallback = <T extends any[]>(
   const [runInfo, setRunInfo] = useState<RunInfo<T>>();
 
   const scheduleCallback = useCallback(
-    (runAtEpochTimeInSeconds = 0, ...args: T) =>
+    (runAtEpochTimeInSeconds: number, ...args: T) =>
       setRunInfo(
         prevInfo =>
           prevInfo ?? {
@@ -27,7 +27,10 @@ const useScheduleCallback = <T extends any[]>(
   useEffect(() => {
     if (runInfo) {
       const timeoutId = setTimeout(
-        () => callback(...runInfo.callbackArgs),
+        () => {
+          callback(...runInfo.callbackArgs);
+          setRunInfo(undefined);
+        },
         runInfo.runAtEpochTimeInSeconds * 1000 - new Date().getTime()
       );
       return () => clearTimeout(timeoutId);

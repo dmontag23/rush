@@ -8,7 +8,7 @@ describe("useScheduleCallback hook", () => {
     const callbackFn = jest.fn();
     const {result} = renderHook(() => useScheduleCallback(callbackFn));
 
-    act(() => result.current.scheduleCallback());
+    act(() => result.current.scheduleCallback(0));
     expect(callbackFn).not.toBeCalled();
     jest.runOnlyPendingTimers();
     expect(callbackFn).toBeCalledTimes(1);
@@ -52,7 +52,7 @@ describe("useScheduleCallback hook", () => {
         new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000
       )
     );
-    act(() => result.current.scheduleCallback());
+    act(() => result.current.scheduleCallback(0));
     jest.advanceTimersByTime(1000);
     expect(callbackFn).not.toBeCalled();
     jest.advanceTimersByTime(4000);
@@ -96,12 +96,21 @@ describe("useScheduleCallback hook", () => {
     expect(callbackFn).not.toHaveBeenCalled();
   });
 
-  it("shows correct isScheduled status", () => {
+  it("shows correct isScheduled status after cancelling a schedule", () => {
     const {result} = renderHook(() => useScheduleCallback(jest.fn()));
 
-    act(() => result.current.scheduleCallback());
+    act(() => result.current.scheduleCallback(0));
     expect(result.current.isScheduled).toBe(true);
     act(() => result.current.cancelScheduledExecution());
+    expect(result.current.isScheduled).toBe(false);
+  });
+
+  it("shows correct isScheduled status after executing the callback", async () => {
+    const {result} = renderHook(() => useScheduleCallback(jest.fn()));
+
+    act(() => result.current.scheduleCallback(0));
+    expect(result.current.isScheduled).toBe(true);
+    act(() => jest.runOnlyPendingTimers());
     expect(result.current.isScheduled).toBe(false);
   });
 });
