@@ -48,6 +48,7 @@ const refreshAndStoreNewAccessToken = async (
 export const handleTodayTixApiRequest = async (
   request: InternalAxiosRequestConfig
 ) => {
+  console.log("REQUEST!!!!: ", request.baseURL, request.url, request.data);
   const [accessTokenPair, refreshTokenPair, tokenTTLPair] = await getTokens();
   const currentAccessToken = accessTokenPair[1] ?? "";
   const refreshToken = refreshTokenPair[1] ?? "";
