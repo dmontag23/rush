@@ -34,7 +34,7 @@ describe("Hold banner", () => {
 
     const Stack = createStackNavigator<RootStackParamList>();
     const ticketAvailabilityTime = new Date(2021, 4, 23, 10).getTime() / 1000;
-    const {getByText, getByLabelText} = render(
+    const {getByText, getByLabelText, getByTestId} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="RushShowList"
@@ -69,11 +69,9 @@ describe("Hold banner", () => {
     );
 
     await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
-    /* check that the banner text is rendered on the rush show list page
+    /* check that the banner is rendered on the rush show list page
     but not visible */
-    expect(
-      getByText("Attempting to get NaN ticket for undefined in 23:59:59")
-    ).not.toBeVisible();
+    expect(getByTestId("rushBanner")).not.toBeVisible();
 
     await userEvent.press(getByText("SIX the Musical"));
     // load the header image
@@ -159,6 +157,8 @@ describe("Hold banner", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
+      .get("/holds")
+      .reply(200)
       .post("/holds", {
         customer: "customer-id",
         showtime: 1,
@@ -185,11 +185,10 @@ describe("Hold banner", () => {
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .reply(201, {
-        data: {
-          numSeats: 2,
-          showtime: {show: {displayName: "Hamilton"}}
-        }
+      .reply(201)
+      .get("/holds")
+      .reply(200, {
+        data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
       });
 
     const Stack = createStackNavigator<RootStackParamList>();
@@ -253,17 +252,18 @@ describe("Hold banner", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
+      .get("/holds")
+      .reply(200)
       .post("/holds", {
         customer: "customer-id",
         showtime: 1,
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .reply(201, {
-        data: {
-          numSeats: 2,
-          showtime: {show: {displayName: "Hamilton"}}
-        }
+      .reply(201)
+      .get("/holds")
+      .reply(200, {
+        data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
       });
 
     const Stack = createStackNavigator<RootStackParamList>();

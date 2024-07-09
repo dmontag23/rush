@@ -31,10 +31,10 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
   const showIdsToGrantRushAccessTo = useMemo(
     () =>
       isGetRushGrantsSuccess
-        ? shows.reduce<number[]>((acc, {showId}) => {
+        ? shows.reduce<number[]>((rushShowIds, {showId}) => {
             return showId && !allGrantedRushShowIds?.includes(showId)
-              ? [...acc, showId]
-              : acc;
+              ? [...rushShowIds, showId]
+              : rushShowIds;
           }, [])
         : [],
     [allGrantedRushShowIds, isGetRushGrantsSuccess, shows]

@@ -30,17 +30,23 @@ describe("Holds", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
+      .get("/holds")
+      .reply(200)
       .post("/holds", {
         customer: "customer-id",
         showtime: 1,
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .reply(201, {
-        data: {
-          numSeats: 2,
-          showtime: {show: {displayName: "Hamilton"}}
-        }
+      .reply(201)
+      .get("/holds")
+      .reply(200, {
+        data: [
+          {
+            numSeats: 2,
+            showtime: {show: {displayName: "Hamilton"}}
+          }
+        ]
       });
 
     const Stack = createStackNavigator<RootStackParamList>();
@@ -80,17 +86,23 @@ describe("Holds", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
+      .get("/holds")
+      .reply(200)
       .post("/holds", {
         customer: "customer-id",
         showtime: 1,
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .reply(201, {
-        data: {
-          numSeats: 2,
-          showtime: {show: {displayName: "Hamilton"}}
-        }
+      .reply(201)
+      .get("/holds")
+      .reply(200, {
+        data: [
+          {
+            numSeats: 2,
+            showtime: {show: {displayName: "Hamilton"}}
+          }
+        ]
       });
 
     const Stack = createStackNavigator<RootStackParamList>();
@@ -148,17 +160,23 @@ describe("Holds", () => {
     )
       .get("/customers/me")
       .reply(200, {data: {id: "customer-id"}})
+      .get("/holds")
+      .reply(200)
       .post("/holds", {
         customer: "customer-id",
         showtime: 1,
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .reply(201, {
-        data: {
-          numSeats: 2,
-          showtime: {show: {displayName: "Hamilton"}}
-        }
+      .reply(201)
+      .get("/holds")
+      .reply(200, {
+        data: [
+          {
+            numSeats: 2,
+            showtime: {show: {displayName: "Hamilton"}}
+          }
+        ]
       });
 
     const Stack = createStackNavigator<RootStackParamList>();
@@ -186,7 +204,7 @@ describe("Holds", () => {
     // load the header image
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
     await userEvent.press(getByText("19:00"));
-    expect(getByText("2")).toBeVisible();
+    await waitFor(() => expect(getByText("2")).toBeVisible());
     await userEvent.press(getByText("2"));
     await waitFor(() =>
       expect(getByText("You've won 2 tickets to Hamilton.")).toBeVisible()
@@ -194,19 +212,21 @@ describe("Holds", () => {
     expect(await AsyncStorage.getItem("customer-id")).toBe("customer-id");
   });
 
-  it("attempts to place a hold 30 times if all seats are taken before succeeding on the final attempt", async () => {
+  it("attempts to place a hold 60 times if all seats are taken before succeeding on the final attempt", async () => {
     // setup
     await AsyncStorage.setItem("customer-id", "customer-id");
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
+      .get("/holds")
+      .reply(200)
       .post("/holds", {
         customer: "customer-id",
         showtime: 1,
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .times(29)
+      .times(59)
       .reply(409, {
         code: 409,
         error: TodayTixHoldErrorCode.SEATS_TAKEN,
@@ -223,11 +243,10 @@ describe("Holds", () => {
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .reply(201, {
-        data: {
-          numSeats: 2,
-          showtime: {show: {displayName: "Hamilton"}}
-        }
+      .reply(201)
+      .get("/holds")
+      .reply(200, {
+        data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
       });
 
     const Stack = createStackNavigator<RootStackParamList>();
@@ -259,7 +278,7 @@ describe("Holds", () => {
     await waitFor(
       () =>
         expect(getByText("You've won 2 tickets to Hamilton.")).toBeVisible(),
-      {timeout: 10000}
+      {timeout: 20000}
     );
   });
 
@@ -276,17 +295,18 @@ describe("Holds", () => {
           {showId: 2, showName: "Hamilton"}
         ]
       })
+      .get("/holds")
+      .reply(200)
       .post("/holds", {
         customer: "customer-id",
         showtime: 2,
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .reply(201, {
-        data: {
-          numSeats: 2,
-          showtime: {show: {displayName: "Hamilton"}}
-        }
+      .reply(201)
+      .get("/holds")
+      .reply(200, {
+        data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
       });
 
     const Stack = createStackNavigator<RootStackParamList>();
@@ -440,19 +460,25 @@ describe("Holds", () => {
       nock(
         `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
       )
+        .get("/holds")
+        .reply(200)
         .post("/holds", {
           customer: "customer-id",
           showtime: 1,
           numTickets: 2,
           holdType: TodayTixHoldType.Rush
         })
-        .reply(201, {
-          data: {
-            configurableTexts: {amountDisplayForWeb: "£25.00"},
-            numSeats: 2,
-            seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
-            showtime: {show: {displayName: "SIX the Musical"}}
-          }
+        .reply(201)
+        .get("/holds")
+        .reply(200, {
+          data: [
+            {
+              configurableTexts: {amountDisplayForWeb: "£25.00"},
+              numSeats: 2,
+              seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
+              showtime: {show: {displayName: "SIX the Musical"}}
+            }
+          ]
         });
 
       const Stack = createStackNavigator<RootStackParamList>();
@@ -515,19 +541,25 @@ describe("Holds", () => {
       nock(
         `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
       )
+        .get("/holds")
+        .reply(200)
         .post("/holds", {
           customer: "customer-id",
           showtime: 1,
           numTickets: 2,
           holdType: TodayTixHoldType.Rush
         })
-        .reply(201, {
-          data: {
-            configurableTexts: {amountDisplayForWeb: "£25.00"},
-            numSeats: 2,
-            seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
-            showtime: {show: {displayName: "SIX the Musical"}}
-          }
+        .reply(201)
+        .get("/holds")
+        .reply(200, {
+          data: [
+            {
+              configurableTexts: {amountDisplayForWeb: "£25.00"},
+              numSeats: 2,
+              seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
+              showtime: {show: {displayName: "SIX the Musical"}}
+            }
+          ]
         });
 
       const Stack = createStackNavigator<RootStackParamList>();
@@ -578,19 +610,25 @@ describe("Holds", () => {
         .reply(200, {
           data: [{showId: 1, showName: "Hamilton"}]
         })
+        .get("/holds")
+        .reply(200)
         .post("/holds", {
           customer: "customer-id",
           showtime: 1,
           numTickets: 2,
           holdType: TodayTixHoldType.Rush
         })
-        .reply(201, {
-          data: {
-            configurableTexts: {amountDisplayForWeb: "£25.00"},
-            numSeats: 2,
-            seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
-            showtime: {show: {displayName: "Hamilton"}}
-          }
+        .reply(201)
+        .get("/holds")
+        .reply(200, {
+          data: [
+            {
+              configurableTexts: {amountDisplayForWeb: "£25.00"},
+              numSeats: 2,
+              seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
+              showtime: {show: {displayName: "Hamilton"}}
+            }
+          ]
         });
 
       const Stack = createStackNavigator<RootStackParamList>();
@@ -655,67 +693,73 @@ describe("Holds", () => {
       await userEvent.press(getByLabelText("Back button"));
       expect(getByText("2 per person max")).toBeVisible();
     });
-  });
 
-  it("can purchase tickets on the TodayTix app", async () => {
-    // setup
-    // mock the deep linking mechanism in order to test it
-    jest.mock("react-native/Libraries/Linking/Linking");
-    await AsyncStorage.setItem("customer-id", "customer-id");
-    nock(
-      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
-    )
-      .post("/holds", {
-        customer: "customer-id",
-        showtime: 1,
-        numTickets: 2,
-        holdType: TodayTixHoldType.Rush
-      })
-      .reply(201, {
-        data: {
-          configurableTexts: {amountDisplayForWeb: "£25.00"},
-          numSeats: 2,
-          seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
-          showtime: {show: {displayName: "SIX the Musical"}}
-        }
-      });
+    it("can purchase tickets on the TodayTix app", async () => {
+      // setup
+      // mock the deep linking mechanism in order to test it
+      jest.mock("react-native/Libraries/Linking/Linking");
+      await AsyncStorage.setItem("customer-id", "customer-id");
+      nock(
+        `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+      )
+        .get("/holds")
+        .reply(200)
+        .post("/holds", {
+          customer: "customer-id",
+          showtime: 1,
+          numTickets: 2,
+          holdType: TodayTixHoldType.Rush
+        })
+        .reply(201)
+        .get("/holds")
+        .reply(200, {
+          data: [
+            {
+              configurableTexts: {amountDisplayForWeb: "£25.00"},
+              numSeats: 2,
+              seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
+              showtime: {show: {displayName: "SIX the Musical"}}
+            }
+          ]
+        });
 
-    const Stack = createStackNavigator<RootStackParamList>();
-    const {getByText, getByLabelText} = render(
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ShowDetails"
-          component={ShowDetails}
-          initialParams={{
-            show: {
-              id: 1,
-              displayName: "SIX the Musical"
-            } as TodayTixShow,
-            showtimes: [
-              {
+      const Stack = createStackNavigator<RootStackParamList>();
+      const {getByText, getByLabelText} = render(
+        <Stack.Navigator>
+          <Stack.Screen
+            name="ShowDetails"
+            component={ShowDetails}
+            initialParams={{
+              show: {
                 id: 1,
-                localTime: "19:00",
-                rushTickets: {
-                  minTickets: 1,
-                  maxTickets: 2
-                }
-              } as TodayTixShowtime
-            ]
-          }}
-        />
-        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-      </Stack.Navigator>
-    );
+                displayName: "SIX the Musical"
+              } as TodayTixShow,
+              showtimes: [
+                {
+                  id: 1,
+                  localTime: "19:00",
+                  rushTickets: {
+                    minTickets: 1,
+                    maxTickets: 2
+                  }
+                } as TodayTixShowtime
+              ]
+            }}
+          />
+          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
+        </Stack.Navigator>
+      );
 
-    // navigate to the hold confirmation page
-    fireEvent(getByLabelText("Header image"), "onLoadEnd");
-    await userEvent.press(getByText("19:00"));
-    await userEvent.press(getByText("2"));
-    await waitFor(() => expect(getByText("🎉")).toBeVisible());
+      // navigate to the hold confirmation page
+      fireEvent(getByLabelText("Header image"), "onLoadEnd");
+      await userEvent.press(getByText("19:00"));
+      await userEvent.press(getByText("2"));
+      await waitFor(() => expect(getByText("🎉")).toBeVisible());
 
-    // check navigation to the TodayTix app to purchase tickets is possible
-    await userEvent.press(getByText("Purchase on TodayTix"));
-    expect(Linking.openURL).toBeCalled();
-    expect(Linking.openURL).toBeCalledWith(process.env.TODAY_TIX_APP_URL);
+      // check navigation to the TodayTix app to purchase tickets is possible
+      await userEvent.press(getByText("Purchase on TodayTix"));
+      expect(Linking.openURL).toBeCalled();
+      expect(Linking.openURL).toBeCalledWith(process.env.TODAY_TIX_APP_URL);
+    });
   });
 });

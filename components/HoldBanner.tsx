@@ -127,7 +127,11 @@ const HoldBanner = ({style}: HoldBannerProps) => {
     isHoldScheduled;
 
   return (
-    <Banner visible={isBannerVisible} actions={actions} style={style}>
+    <Banner
+      visible={isBannerVisible}
+      actions={actions}
+      style={style}
+      testID="rushBanner">
       {children}
     </Banner>
   );
