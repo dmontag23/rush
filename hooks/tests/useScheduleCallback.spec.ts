@@ -10,7 +10,7 @@ describe("useScheduleCallback hook", () => {
 
     act(() => result.current.scheduleCallback(0));
     expect(callbackFn).not.toBeCalled();
-    jest.runOnlyPendingTimers();
+    act(() => jest.runOnlyPendingTimers());
     expect(callbackFn).toBeCalledTimes(1);
   });
 
@@ -25,7 +25,7 @@ describe("useScheduleCallback hook", () => {
     );
     jest.advanceTimersByTime(4999);
     expect(callbackFn).not.toBeCalled();
-    jest.advanceTimersByTime(1);
+    act(() => jest.advanceTimersByTime(1));
     expect(callbackFn).toBeCalledTimes(1);
   });
 
@@ -55,7 +55,7 @@ describe("useScheduleCallback hook", () => {
     act(() => result.current.scheduleCallback(0));
     jest.advanceTimersByTime(1000);
     expect(callbackFn).not.toBeCalled();
-    jest.advanceTimersByTime(4000);
+    act(() => jest.advanceTimersByTime(4000));
     expect(callbackFn).toBeCalledTimes(1);
   });
 
@@ -78,7 +78,7 @@ describe("useScheduleCallback hook", () => {
     );
     jest.advanceTimersByTime(1);
     expect(callbackFn).not.toBeCalled();
-    jest.advanceTimersByTime(1000);
+    act(() => jest.advanceTimersByTime(1000));
     expect(callbackFn).toBeCalledTimes(1);
   });
 
