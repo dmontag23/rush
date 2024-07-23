@@ -29,6 +29,7 @@ beforeEach(() => {
 afterEach(() => {
   act(jest.runOnlyPendingTimers);
   jest.useRealTimers();
+  jest.clearAllMocks();
   nock.abortPendingRequests();
   nock.cleanAll();
   MockAsyncStorage.clear();

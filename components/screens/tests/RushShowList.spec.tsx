@@ -479,9 +479,12 @@ describe("Rush show list", () => {
   });
 
   it("unlocks all rush shows", async () => {
+    await AsyncStorage.removeItem("customer-id");
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
+      .get("/customers/me")
+      .reply(200, {data: {id: "customer-id"}})
       .get("/customers/me/rushGrants")
       .reply(200, {data: []})
       .post("/customers/customer-id/rushGrants", {showId: 1})

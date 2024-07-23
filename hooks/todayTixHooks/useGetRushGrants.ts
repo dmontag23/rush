@@ -7,15 +7,10 @@ import {TodayTixRushGrant} from "../../types/rushGrants";
 const getRushGrants = () =>
   todayTixAPIv2.get<TodayTixRushGrant[]>("customers/me/rushGrants");
 
-type UseGetRushGrantsProps = {
-  enabled?: boolean;
-};
-
-const useGetRushGrants = ({enabled}: UseGetRushGrantsProps = {}) =>
+const useGetRushGrants = () =>
   useQuery<TodayTixRushGrant[], TodayTixAPIError>({
     queryKey: ["rushGrants"],
-    queryFn: getRushGrants,
-    enabled
+    queryFn: getRushGrants
   });
 
 export default useGetRushGrants;

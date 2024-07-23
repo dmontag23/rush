@@ -18,6 +18,7 @@ import HoldConfirmation from "../screens/HoldConfirmation";
 import RushShowList from "../screens/RushShowList";
 
 import {systemTime} from "../../tests/integration/setup";
+import {hadestownLightThemeColors} from "../../themes";
 import {TodayTixHoldErrorCode, TodayTixHoldType} from "../../types/holds";
 import {RootStackParamList} from "../../types/navigation";
 import {TodayTixShow} from "../../types/shows";
@@ -454,6 +455,21 @@ describe("Holds", () => {
   });
 
   describe("Hold confirmation page", () => {
+    it("shows no ticket text if no hold exists", async () => {
+      const Stack = createStackNavigator<RootStackParamList>();
+      const {getByText} = render(
+        <Stack.Navigator>
+          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
+        </Stack.Navigator>
+      );
+
+      await waitFor(() =>
+        expect(
+          getByText("No tickets found. Please try to get a new set of tickets.")
+        ).toBeVisible()
+      );
+    });
+
     it("contains all the correct elements", async () => {
       // setup
       await AsyncStorage.setItem("customer-id", "customer-id");
@@ -760,6 +776,77 @@ describe("Holds", () => {
       await userEvent.press(getByText("Purchase on TodayTix"));
       expect(Linking.openURL).toBeCalled();
       expect(Linking.openURL).toBeCalledWith(process.env.TODAY_TIX_APP_URL);
+    });
+
+    it("can release tickets", async () => {
+      // setup
+      await AsyncStorage.setItem("customer-id", "customer-id");
+      nock(
+        `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+      )
+        .get("/holds")
+        .reply(200)
+        .post("/holds", {
+          customer: "customer-id",
+          showtime: 1,
+          numTickets: 2,
+          holdType: TodayTixHoldType.Rush
+        })
+        .reply(201)
+        .get("/holds")
+        .reply(200, {
+          data: [{id: 1, showtime: {show: {displayName: "SIX the Musical"}}}]
+        })
+        .delete("/holds/1")
+        .reply(200)
+        .get("/holds")
+        .reply(200, {data: []});
+
+      const Stack = createStackNavigator<RootStackParamList>();
+      const {getByText, getByLabelText, queryByText} = render(
+        <Stack.Navigator>
+          <Stack.Screen
+            name="ShowDetails"
+            component={ShowDetails}
+            initialParams={{
+              show: {
+                id: 1,
+                displayName: "SIX the Musical"
+              } as TodayTixShow,
+              showtimes: [
+                {
+                  id: 1,
+                  localTime: "19:00",
+                  rushTickets: {
+                    minTickets: 1,
+                    maxTickets: 2
+                  }
+                } as TodayTixShowtime
+              ]
+            }}
+          />
+          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
+        </Stack.Navigator>
+      );
+
+      // navigate to the hold confirmation page
+      fireEvent(getByLabelText("Header image"), "onLoadEnd");
+      await userEvent.press(getByText("19:00"));
+      await userEvent.press(getByText("2"));
+      await waitFor(() => expect(getByText("🎉")).toBeVisible());
+
+      // release the tickets
+      await userEvent.press(getByText("Release tickets"));
+      await waitFor(() => expect(getByText("Select a Time")).toBeVisible());
+      await waitFor(() =>
+        expect(
+          queryByText("You have 2 tickets to SIX the Musical!")
+        ).not.toBeOnTheScreen()
+      );
+      expect(getByText("19:00")).toHaveStyle({
+        color: hadestownLightThemeColors.primary
+      });
+      expect(queryByText("Number of Tickets")).not.toBeOnTheScreen();
     });
   });
 });

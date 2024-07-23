@@ -60,7 +60,7 @@ const HoldBanner = ({style}: HoldBannerProps) => {
 
   const retryPlacingHold = () => {
     cancelHold();
-    if (customerId && showtime && numberOfTickets && !hold)
+    if (customerId && showtime && numberOfTickets)
       scheduleHold(0, {
         customerId,
         showtimeId: showtime.id,

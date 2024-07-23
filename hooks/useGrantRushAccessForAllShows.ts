@@ -14,7 +14,7 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
     isPending: isGetRushGrantsPending,
     isSuccess: isGetRushGrantsSuccess,
     refetch: refetchRushGrants
-  } = useGetRushGrants({enabled: Boolean(customerId)});
+  } = useGetRushGrants();
 
   const {
     mutate: grantAccessToShow,
@@ -31,11 +31,13 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
   const showIdsToGrantRushAccessTo = useMemo(
     () =>
       isGetRushGrantsSuccess
-        ? shows.reduce<number[]>((rushShowIds, {showId}) => {
-            return showId && !allGrantedRushShowIds?.includes(showId)
-              ? [...rushShowIds, showId]
-              : rushShowIds;
-          }, [])
+        ? shows.reduce<number[]>(
+            (rushShowIds, {showId}) =>
+              showId && !allGrantedRushShowIds?.includes(showId)
+                ? [...rushShowIds, showId]
+                : rushShowIds,
+            []
+          )
         : [],
     [allGrantedRushShowIds, isGetRushGrantsSuccess, shows]
   );
@@ -43,7 +45,7 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
   useEffect(() => {
     // grant access to all remaining shows
     showIdsToGrantRushAccessTo.forEach(showId => {
-      if (customerId && showId) grantAccessToShow({customerId, showId});
+      if (customerId) grantAccessToShow({customerId, showId});
     });
   }, [
     customerId,
