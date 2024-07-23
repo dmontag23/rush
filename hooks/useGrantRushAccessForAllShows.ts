@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 
 import useGetRushGrants from "./todayTixHooks/useGetRushGrants";
 import usePostRushGrants from "./todayTixHooks/usePostRushGrants";
@@ -14,7 +14,7 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
     isPending: isGetRushGrantsPending,
     isSuccess: isGetRushGrantsSuccess,
     refetch: refetchRushGrants
-  } = useGetRushGrants({enabled: Boolean(customerId)});
+  } = useGetRushGrants();
 
   const {
     mutate: grantAccessToShow,
@@ -23,25 +23,35 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
     isError: isPostRushGrantsError
   } = usePostRushGrants();
 
-  /* TODO: Note that there is a brief period where isPending for the whole hook will be false but the whole
-  hook is technically still loading because it needs to grant access for the shows, but the mutation function 
-  in this useEffect call hasn't been triggered yet. Come back to handle this in a clever way so the hook always 
-  returns the right pending state */
+  const allGrantedRushShowIds = useMemo(
+    () => rushGrants?.map(grant => grant.showId),
+    [rushGrants]
+  );
+
+  const showIdsToGrantRushAccessTo = useMemo(
+    () =>
+      isGetRushGrantsSuccess
+        ? shows.reduce<number[]>(
+            (rushShowIds, {showId}) =>
+              showId && !allGrantedRushShowIds?.includes(showId)
+                ? [...rushShowIds, showId]
+                : rushShowIds,
+            []
+          )
+        : [],
+    [allGrantedRushShowIds, isGetRushGrantsSuccess, shows]
+  );
+
   useEffect(() => {
     // grant access to all remaining shows
-    if (customerId && isGetRushGrantsSuccess) {
-      const allGrantedRushShowIds = rushGrants.map(grant => grant.showId);
-      shows.forEach(({showId}) => {
-        if (showId && !allGrantedRushShowIds.includes(showId))
-          grantAccessToShow({customerId, showId});
-      });
-    }
+    showIdsToGrantRushAccessTo.forEach(showId => {
+      if (customerId) grantAccessToShow({customerId, showId});
+    });
   }, [
     customerId,
     grantAccessToShow,
     isGetRushGrantsSuccess,
-    rushGrants,
-    shows
+    showIdsToGrantRushAccessTo
   ]);
 
   useEffect(() => {
@@ -52,7 +62,12 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
     isGrantingAccess:
       isGetCustomerIdPending ||
       isGetRushGrantsPending ||
-      isPostRushGrantsPending,
+      isPostRushGrantsPending ||
+      /* The condition below ensures that isGrantingAccess is still true between the
+      time the current rush grants are received and the post request(s) needed to unlock
+      the remaining shows */
+      (showIdsToGrantRushAccessTo.length &&
+        !(isPostRushGrantsSuccess || isPostRushGrantsError)),
     rushGrants
   };
 };

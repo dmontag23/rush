@@ -71,6 +71,34 @@ describe("Holds", () => {
     // TODO: maybe mock the Linking module here and test that openURL was called?
   });
 
+  it("can release tickets", async () => {
+    // select a showtime that is already open
+    await element(by.text("Guys & Dolls")).tap();
+    await element(by.text("19:30")).tap();
+    await element(by.text("1")).tap();
+    await expect(element(by.text("🎉"))).toBeVisible();
+
+    // release tickets via the hold confirmation screen
+    const releaseTicketsButton = element(by.text("Release tickets"));
+    await expect(releaseTicketsButton).toBeVisible();
+    await releaseTicketsButton.tap();
+    await expect(element(by.text("Select a Time"))).toBeVisible();
+
+    // re-reserve the tickets
+    await element(by.text("19:30")).tap();
+    await element(by.text("1")).tap();
+    await expect(element(by.text("🎉"))).toBeVisible();
+
+    // release the tickets via the hold banner
+    await element(by.label("Back button")).atIndex(1).tap();
+    const holdBannerText = element(
+      by.text("You have 1 ticket to Guys & Dolls!")
+    );
+    await expect(holdBannerText).toBeVisible();
+    await element(by.text("Release tickets")).tap();
+    await expect(holdBannerText).not.toBeVisible();
+  });
+
   it("can attempt to get tickets again if all tickets are currently reserved", async () => {
     // select a showtime that has all tickets currently reserved
     await element(by.text("SIX the Musical")).tap();

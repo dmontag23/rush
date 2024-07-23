@@ -16,6 +16,7 @@ import ShowDetails from "../ShowDetails/ShowDetails";
 import HoldConfirmation from "../screens/HoldConfirmation";
 import RushShowList from "../screens/RushShowList";
 
+import HoldContext from "../../store/hold-context";
 import {hadestownLightThemeColors} from "../../themes";
 import {TodayTixHoldErrorCode, TodayTixHoldType} from "../../types/holds";
 import {RootStackParamList} from "../../types/navigation";
@@ -34,7 +35,7 @@ describe("Hold banner", () => {
 
     const Stack = createStackNavigator<RootStackParamList>();
     const ticketAvailabilityTime = new Date(2021, 4, 23, 10).getTime() / 1000;
-    const {getByText, getByLabelText} = render(
+    const {getByText, getByLabelText, getByTestId} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="RushShowList"
@@ -69,11 +70,9 @@ describe("Hold banner", () => {
     );
 
     await waitFor(() => expect(getByText("SIX the Musical")).toBeVisible());
-    /* check that the banner text is rendered on the rush show list page
+    /* check that the banner is rendered on the rush show list page
     but not visible */
-    expect(
-      getByText("Attempting to get NaN ticket for undefined in 23:59:59")
-    ).not.toBeVisible();
+    expect(getByTestId("rushBanner")).not.toBeVisible();
 
     await userEvent.press(getByText("SIX the Musical"));
     // load the header image
@@ -159,6 +158,8 @@ describe("Hold banner", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
+      .get("/holds")
+      .reply(200)
       .post("/holds", {
         customer: "customer-id",
         showtime: 1,
@@ -185,11 +186,10 @@ describe("Hold banner", () => {
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .reply(201, {
-        data: {
-          numSeats: 2,
-          showtime: {show: {displayName: "Hamilton"}}
-        }
+      .reply(201)
+      .get("/holds")
+      .reply(200, {
+        data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
       });
 
     const Stack = createStackNavigator<RootStackParamList>();
@@ -247,23 +247,58 @@ describe("Hold banner", () => {
     );
   });
 
+  it("does not retry hold if no customer id, show, or showtime are available", async () => {
+    const scheduleHold = jest.fn();
+    const Stack = createStackNavigator<RootStackParamList>();
+    const {getByText, getByLabelText} = render(
+      /* There is no way to access the retry function without a customer id via user interaction, and hence
+      a dummy context needs to be provided. */
+      <HoldContext.Provider
+        value={{
+          isCreatingHold: false,
+          createHoldError: {error: TodayTixHoldErrorCode.CONFLICT},
+          isHoldScheduled: false,
+          scheduleHold,
+          cancelHold: () => {}
+        }}>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="ShowDetails"
+            component={ShowDetails}
+            initialParams={{
+              show: {} as TodayTixShow,
+              showtimes: []
+            }}
+          />
+        </Stack.Navigator>
+      </HoldContext.Provider>
+    );
+
+    await waitFor(() => fireEvent(getByLabelText("Header image"), "onLoadEnd"));
+    const retryButton = getByText("Retry");
+    expect(retryButton).toBeVisible();
+    await userEvent.press(retryButton);
+    expect(scheduleHold).not.toBeCalled();
+  });
+
   it("shows the current tickets on hold", async () => {
     // setup
     await AsyncStorage.setItem("customer-id", "customer-id");
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
+      .get("/holds")
+      .reply(200)
       .post("/holds", {
         customer: "customer-id",
         showtime: 1,
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .reply(201, {
-        data: {
-          numSeats: 2,
-          showtime: {show: {displayName: "Hamilton"}}
-        }
+      .reply(201)
+      .get("/holds")
+      .reply(200, {
+        data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
       });
 
     const Stack = createStackNavigator<RootStackParamList>();
@@ -311,5 +346,50 @@ describe("Hold banner", () => {
     act(() => jest.advanceTimersByTime(1000));
     await userEvent.press(seeTicketsButton);
     expect(getByText(holdPageText)).toBeVisible();
+  });
+
+  it("removes tickets on hold", async () => {
+    // setup
+    await AsyncStorage.setItem("customer-id", "customer-id");
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .get("/holds")
+      .reply(200, {
+        data: [
+          {id: 1, numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}
+        ]
+      })
+      .delete("/holds/1")
+      .reply(200, {data: {}})
+      .get("/holds")
+      .reply(200, {data: []});
+
+    const Stack = createStackNavigator<RootStackParamList>();
+    const {getByText, getByLabelText} = render(
+      <Stack.Navigator>
+        <Stack.Screen
+          name="RushShowList"
+          component={RushShowList}
+          initialParams={{showsAndTimes: []}}
+        />
+        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
+      </Stack.Navigator>
+    );
+
+    await waitFor(() =>
+      expect(getByText("You've won 2 tickets to Hamilton.")).toBeVisible()
+    );
+    await userEvent.press(getByLabelText("Back button"));
+    const bannerText = getByText("You have 2 tickets to Hamilton!");
+    expect(bannerText).toBeVisible();
+    const releaseTicketsButton = getByText("Release tickets");
+    expect(releaseTicketsButton).toBeVisible();
+
+    /* TODO: Investigate why it is necessary to wait after navigating
+    back to the rush show list screen. Perhaps it's a limitation with the react navigation library */
+    act(() => jest.advanceTimersByTime(1000));
+    await userEvent.press(releaseTicketsButton);
+    await waitFor(() => expect(bannerText).not.toBeVisible());
   });
 });

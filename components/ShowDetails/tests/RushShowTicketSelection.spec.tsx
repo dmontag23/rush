@@ -1,6 +1,7 @@
 import React from "react";
 
 import {describe, expect, it} from "@jest/globals";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {render, userEvent} from "testing-library/extension";
 
 import RushShowTicketSelection from "../RushShowTicketSelection";
@@ -28,6 +29,8 @@ describe("The rush show ticket selection component", () => {
   });
 
   it("can select a time and ticket amount", async () => {
+    await AsyncStorage.setItem("customer-id", "customer-id");
+
     const {getByText, queryByText} = render(
       <RushShowTicketSelection
         show={{id: 1, displayName: "SIX the Musical"} as TodayTixShow}
@@ -91,6 +94,8 @@ describe("The rush show ticket selection component", () => {
   });
 
   it("switches number of tickets available per show", async () => {
+    await AsyncStorage.setItem("customer-id", "customer-id");
+
     const {getByText} = render(
       <RushShowTicketSelection
         show={{id: 1, displayName: "SIX the Musical"} as TodayTixShow}
