@@ -167,9 +167,9 @@ describe("Hold banner", () => {
         holdType: TodayTixHoldType.Rush
       })
       .reply(409, {
-        error: TodayTixHoldErrorCode.CONFLICT,
+        error: TodayTixHoldErrorCode.UNAUTHENTICATED,
         message:
-          "You are not eligible to make this purchase. Please unlock Rush and try again. Contact TodayTix Support if you feel you have received this message in error."
+          "Sorry, something went wrong. Please try again and contact TodayTix Support if the issue persists."
       })
       .post("/holds", {
         customer: "customer-id",
@@ -228,7 +228,7 @@ describe("Hold banner", () => {
     await waitFor(() =>
       expect(
         getByText(
-          "Oh no! There was an error getting tickets to Hamilton:\nYou are not eligible to make this purchase. Please unlock Rush and try again. Contact TodayTix Support if you feel you have received this message in error."
+          "Oh no! There was an error getting tickets to Hamilton:\nSorry, something went wrong. Please try again and contact TodayTix Support if the issue persists."
         )
       ).toBeVisible()
     );

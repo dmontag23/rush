@@ -227,7 +227,7 @@ describe("Holds", () => {
         numTickets: 2,
         holdType: TodayTixHoldType.Rush
       })
-      .times(59)
+      .times(58)
       .reply(409, {
         code: 409,
         error: TodayTixHoldErrorCode.SEATS_TAKEN,
@@ -237,6 +237,20 @@ describe("Holds", () => {
         title: "All seats are being held",
         message:
           "Sorry, all remaining tickets are currently being held by other customers. Please try again later."
+      })
+      .post("/holds", {
+        customer: "customer-id",
+        showtime: 1,
+        numTickets: 2,
+        holdType: TodayTixHoldType.Rush
+      })
+      .reply(409, {
+        code: 409,
+        error: TodayTixHoldErrorCode.CONFLICT,
+        context: ["Sorry, rush ticket sales for this showtime are not open."],
+        title: "Sales closed",
+        message:
+          "Sorry, sales have just closed for this performance. Please check back later."
       })
       .post("/holds", {
         customer: "customer-id",
