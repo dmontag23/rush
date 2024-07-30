@@ -1,6 +1,5 @@
-import React, {PropsWithChildren, createContext, useEffect} from "react";
+import React, {PropsWithChildren, createContext} from "react";
 
-import {useNavigation} from "@react-navigation/native";
 import {MutateOptions} from "@tanstack/react-query";
 
 import useGetHold from "../hooks/todayTixHooks/useGetHold";
@@ -33,8 +32,6 @@ const HoldContext = createContext<{
 });
 
 export const HoldContextProvider = ({children}: PropsWithChildren) => {
-  const {navigate} = useNavigation();
-
   const {data: hold} = useGetHold();
 
   const {
@@ -56,11 +53,6 @@ export const HoldContextProvider = ({children}: PropsWithChildren) => {
     errored and a new showtime is clicked, the request is reset. */
     resetCreateHold();
   };
-
-  useEffect(() => {
-    // TODO: Check if navigator is initialized
-    if (hold) navigate("HoldConfirmation");
-  }, [hold, navigate]);
 
   return (
     <HoldContext.Provider

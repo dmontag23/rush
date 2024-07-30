@@ -9,15 +9,16 @@ describe("Holds", () => {
   it("can place a hold for a show where tickets are already open", async () => {
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
-    await element(by.text("19:30")).tap();
-    await element(by.text("1")).tap();
-    const holdConfirmationPageText = element(by.text("🎉"));
-    await expect(holdConfirmationPageText).toBeVisible();
-    await expect(element(by.text("Congratulations!"))).toBeVisible();
-    await expect(
-      element(by.text("You've won 1 ticket to Guys & Dolls."))
-    ).toBeVisible();
-    await expect(element(by.text("Seats"))).toBeVisible();
+    const showtime = element(by.text("19:30"));
+    const ticketNumber = element(by.text("1"));
+    await showtime.tap();
+    await ticketNumber.tap();
+    const holdConfirmationText = element(
+      by.text("You've won 1 ticket to Guys & Dolls 🎉")
+    );
+    const detailsText = element(by.text("Seats"));
+    await expect(holdConfirmationText).toBeVisible();
+    await expect(detailsText).toBeVisible();
     await expect(element(by.text("Dress Circle"))).toBeVisible();
     await expect(element(by.text("Row J, Seat 28"))).toBeVisible();
     await expect(element(by.text("Order Total"))).toBeVisible();
@@ -32,31 +33,38 @@ describe("Holds", () => {
     await expect(element(by.text("Purchase on TodayTix"))).toBeVisible();
     await expect(element(by.text("Release tickets"))).toBeVisible();
 
-    // check that the hold banner contains the correct text
-    const backButton = element(by.label("Back button")).atIndex(1);
-    await backButton.tap();
-    const holdBannerText = element(
-      by.text("You have 1 ticket to Guys & Dolls!")
-    );
-    const releaseTicketsButton = element(by.text("Release tickets"));
-    const seeTicketsButton = element(by.text("See tickets"));
-    await expect(holdBannerText).toBeVisible();
-    await expect(releaseTicketsButton).toBeVisible();
-    await expect(seeTicketsButton).toBeVisible();
+    // check that you can close the modal
+    await holdConfirmationText.swipe("down");
+    await expect(holdConfirmationText).toBeVisible();
+    await expect(detailsText).not.toBeVisible();
 
-    // check that the hold banner can be used to navigate back to the hold page
-    await seeTicketsButton.tap();
-    await expect(holdConfirmationPageText).toBeVisible();
-    await backButton.tap();
-    await expect(element(by.text("Select a Time"))).toBeVisible();
-    await backButton.tap();
-    const chipText = element(by.text("11:59 to 23:59"));
-    await expect(chipText).toBeVisible();
-    await expect(holdBannerText).toBeVisible();
-    await seeTicketsButton.tap();
-    await expect(holdConfirmationPageText).toBeVisible();
-    await backButton.tap();
-    await expect(chipText).toBeVisible();
+    // check that the buttons to select a show are disabled
+    for (const buttonText of ["23:59", "19:30", "1", "2"]) {
+      await expect(
+        element(
+          by.text(buttonText).withAncestor(by.traits(["button", "notEnabled"]))
+        )
+      ).toExist();
+    }
+
+    // ensure the modal stays minimized when navigating between screens
+    await element(by.label("Back button")).atIndex(1).tap();
+    await expect(holdConfirmationText).toBeVisible();
+    await expect(detailsText).not.toBeVisible();
+
+    // navigate to a new show and check the modal is still minimized and buttons disabled
+    await element(by.label("SIX the Musical")).tap();
+    await expect(holdConfirmationText).toBeVisible();
+    await expect(detailsText).not.toBeVisible();
+    await expect(
+      element(
+        by.text("19:00").withAncestor(by.traits(["button", "notEnabled"]))
+      )
+    ).toExist();
+
+    // re-enlarge the modal
+    await holdConfirmationText.swipe("up");
+    await expect(detailsText).toBeVisible();
   });
 
   it("can purchase tickets on TodayTix", async () => {
@@ -64,7 +72,9 @@ describe("Holds", () => {
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("19:30")).tap();
     await element(by.text("1")).tap();
-    await expect(element(by.text("🎉"))).toBeVisible();
+    await expect(
+      element(by.text("You've won 1 ticket to Guys & Dolls 🎉"))
+    ).toBeVisible();
     const purchaseTicketsButton = element(by.text("Purchase on TodayTix"));
     await expect(purchaseTicketsButton).toBeVisible();
     await purchaseTicketsButton.tap();
@@ -76,27 +86,21 @@ describe("Holds", () => {
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("19:30")).tap();
     await element(by.text("1")).tap();
-    await expect(element(by.text("🎉"))).toBeVisible();
+    const headerText = element(
+      by.text("You've won 1 ticket to Guys & Dolls 🎉")
+    );
+    await expect(headerText).toBeVisible();
 
-    // release tickets via the hold confirmation screen
+    // release tickets via the hold confirmation modal
     const releaseTicketsButton = element(by.text("Release tickets"));
     await expect(releaseTicketsButton).toBeVisible();
     await releaseTicketsButton.tap();
-    await expect(element(by.text("Select a Time"))).toBeVisible();
+    await expect(headerText).not.toBeVisible();
 
     // re-reserve the tickets
     await element(by.text("19:30")).tap();
     await element(by.text("1")).tap();
-    await expect(element(by.text("🎉"))).toBeVisible();
-
-    // release the tickets via the hold banner
-    await element(by.label("Back button")).atIndex(1).tap();
-    const holdBannerText = element(
-      by.text("You have 1 ticket to Guys & Dolls!")
-    );
-    await expect(holdBannerText).toBeVisible();
-    await element(by.text("Release tickets")).tap();
-    await expect(holdBannerText).not.toBeVisible();
+    await expect(headerText).toBeVisible();
   });
 
   it("can attempt to get tickets again if all tickets are currently reserved", async () => {

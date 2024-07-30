@@ -14,7 +14,6 @@ export type RootStackParamList = {
     showsAndTimes: ShowAndShowtimes[];
   };
   ShowDetails: ShowAndShowtimes;
-  HoldConfirmation: undefined;
   EnterTokens: undefined;
 };
 

@@ -14,7 +14,7 @@ import {
 } from "testing-library/extension";
 
 import ShowDetails from "../ShowDetails/ShowDetails";
-import HoldConfirmation from "../screens/HoldConfirmation";
+import HoldConfirmationModal from "../screens/HoldConfirmationModal";
 import RushShowList from "../screens/RushShowList";
 
 import {systemTime} from "../../tests/integration/setup";
@@ -52,23 +52,25 @@ describe("Holds", () => {
 
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByLabelText} = render(
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ShowDetails"
-          component={ShowDetails}
-          initialParams={{
-            show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
-            showtimes: [
-              {
-                id: 1,
-                localTime: "19:00",
-                rushTickets: {minTickets: 1, maxTickets: 2}
-              } as TodayTixShowtime
-            ]
-          }}
-        />
-        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-      </Stack.Navigator>
+      <>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="ShowDetails"
+            component={ShowDetails}
+            initialParams={{
+              show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
+              showtimes: [
+                {
+                  id: 1,
+                  localTime: "19:00",
+                  rushTickets: {minTickets: 1, maxTickets: 2}
+                } as TodayTixShowtime
+              ]
+            }}
+          />
+        </Stack.Navigator>
+        <HoldConfirmationModal />
+      </>
     );
 
     // load the header image
@@ -77,7 +79,7 @@ describe("Holds", () => {
     expect(getByText("2")).toBeVisible();
     await userEvent.press(getByText("2"));
     await waitFor(() =>
-      expect(getByText("You've won 2 tickets to Hamilton.")).toBeVisible()
+      expect(getByText("You've won 2 tickets to Hamilton 🎉")).toBeVisible()
     );
   });
 
@@ -110,27 +112,29 @@ describe("Holds", () => {
     const ticketAvailabilityTime =
       new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000;
     const {getByText, queryByText, getByLabelText} = render(
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ShowDetails"
-          component={ShowDetails}
-          initialParams={{
-            show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
-            showtimes: [
-              {
-                id: 1,
-                localTime: "19:00",
-                rushTickets: {
-                  minTickets: 1,
-                  maxTickets: 2,
-                  availableAfterEpoch: ticketAvailabilityTime
-                }
-              } as TodayTixShowtime
-            ]
-          }}
-        />
-        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-      </Stack.Navigator>
+      <>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="ShowDetails"
+            component={ShowDetails}
+            initialParams={{
+              show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
+              showtimes: [
+                {
+                  id: 1,
+                  localTime: "19:00",
+                  rushTickets: {
+                    minTickets: 1,
+                    maxTickets: 2,
+                    availableAfterEpoch: ticketAvailabilityTime
+                  }
+                } as TodayTixShowtime
+              ]
+            }}
+          />
+        </Stack.Navigator>
+        <HoldConfirmationModal />
+      </>
     );
 
     // load the header image
@@ -142,7 +146,7 @@ describe("Holds", () => {
     1 second before rush tickets open */
     const timeToTicketAvailability =
       ticketAvailabilityTime * 1000 - new Date().getTime();
-    const wonTicketsText = "You've won 2 tickets to Hamilton.";
+    const wonTicketsText = "You've won 2 tickets to Hamilton 🎉";
     expect(queryByText(wonTicketsText)).toBeNull();
     act(() => jest.advanceTimersByTime(timeToTicketAvailability - 1000));
     await waitFor(() => expect(getByText(wonTicketsText)).toBeVisible());
@@ -182,23 +186,25 @@ describe("Holds", () => {
 
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByLabelText} = render(
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ShowDetails"
-          component={ShowDetails}
-          initialParams={{
-            show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
-            showtimes: [
-              {
-                id: 1,
-                localTime: "19:00",
-                rushTickets: {minTickets: 1, maxTickets: 2}
-              } as TodayTixShowtime
-            ]
-          }}
-        />
-        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-      </Stack.Navigator>
+      <>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="ShowDetails"
+            component={ShowDetails}
+            initialParams={{
+              show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
+              showtimes: [
+                {
+                  id: 1,
+                  localTime: "19:00",
+                  rushTickets: {minTickets: 1, maxTickets: 2}
+                } as TodayTixShowtime
+              ]
+            }}
+          />
+        </Stack.Navigator>
+        <HoldConfirmationModal />
+      </>
     );
 
     expect(await AsyncStorage.getItem("customer-id")).toBeNull();
@@ -208,7 +214,7 @@ describe("Holds", () => {
     await waitFor(() => expect(getByText("2")).toBeVisible());
     await userEvent.press(getByText("2"));
     await waitFor(() =>
-      expect(getByText("You've won 2 tickets to Hamilton.")).toBeVisible()
+      expect(getByText("You've won 2 tickets to Hamilton 🎉")).toBeVisible()
     );
     expect(await AsyncStorage.getItem("customer-id")).toBe("customer-id");
   });
@@ -266,23 +272,25 @@ describe("Holds", () => {
 
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByLabelText} = render(
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ShowDetails"
-          component={ShowDetails}
-          initialParams={{
-            show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
-            showtimes: [
-              {
-                id: 1,
-                localTime: "19:00",
-                rushTickets: {minTickets: 1, maxTickets: 2}
-              } as TodayTixShowtime
-            ]
-          }}
-        />
-        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-      </Stack.Navigator>
+      <>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="ShowDetails"
+            component={ShowDetails}
+            initialParams={{
+              show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
+              showtimes: [
+                {
+                  id: 1,
+                  localTime: "19:00",
+                  rushTickets: {minTickets: 1, maxTickets: 2}
+                } as TodayTixShowtime
+              ]
+            }}
+          />
+        </Stack.Navigator>
+        <HoldConfirmationModal />
+      </>
     );
 
     // load the header image
@@ -292,7 +300,7 @@ describe("Holds", () => {
     await userEvent.press(getByText("2"));
     await waitFor(
       () =>
-        expect(getByText("You've won 2 tickets to Hamilton.")).toBeVisible(),
+        expect(getByText("You've won 2 tickets to Hamilton 🎉")).toBeVisible(),
       {timeout: 20000}
     );
   });
@@ -327,61 +335,65 @@ describe("Holds", () => {
     const Stack = createStackNavigator<RootStackParamList>();
     const show1TicketAvailabilityDate = new Date(2021, 4, 23, 0, 1);
     const {getByText, getByLabelText} = render(
-      <Stack.Navigator>
-        <Stack.Screen
-          name="RushShowList"
-          component={RushShowList}
-          initialParams={{
-            showsAndTimes: [
-              {
-                show: {
-                  id: 1,
-                  displayName: "SIX the Musical",
-                  isRushActive: true,
-                  showId: 1
-                } as TodayTixShow,
-                showtimes: [
-                  {
+      <>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="RushShowList"
+            component={RushShowList}
+            initialParams={{
+              showsAndTimes: [
+                {
+                  show: {
                     id: 1,
-                    localTime: "19:00",
-                    rushTickets: {
-                      minTickets: 1,
-                      maxTickets: 2,
-                      availableAfter: show1TicketAvailabilityDate.toISOString(),
-                      availableAfterEpoch:
-                        show1TicketAvailabilityDate.getTime() / 1000,
-                      availableUntil: show1TicketAvailabilityDate.toISOString()
-                    }
-                  } as TodayTixShowtime
-                ]
-              },
-              {
-                show: {
-                  id: 2,
-                  displayName: "Hamilton",
-                  isRushActive: true,
-                  showId: 2
-                } as TodayTixShow,
-                showtimes: [
-                  {
+                    displayName: "SIX the Musical",
+                    isRushActive: true,
+                    showId: 1
+                  } as TodayTixShow,
+                  showtimes: [
+                    {
+                      id: 1,
+                      localTime: "19:00",
+                      rushTickets: {
+                        minTickets: 1,
+                        maxTickets: 2,
+                        availableAfter:
+                          show1TicketAvailabilityDate.toISOString(),
+                        availableAfterEpoch:
+                          show1TicketAvailabilityDate.getTime() / 1000,
+                        availableUntil:
+                          show1TicketAvailabilityDate.toISOString()
+                      }
+                    } as TodayTixShowtime
+                  ]
+                },
+                {
+                  show: {
                     id: 2,
-                    localTime: "19:30",
-                    rushTickets: {
-                      minTickets: 1,
-                      maxTickets: 2,
-                      availableAfter: systemTime.toISOString(),
-                      availableAfterEpoch: systemTime.getTime() / 1000,
-                      availableUntil: systemTime.toISOString()
-                    }
-                  } as TodayTixShowtime
-                ]
-              }
-            ]
-          }}
-        />
-        <Stack.Screen name="ShowDetails" component={ShowDetails} />
-        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-      </Stack.Navigator>
+                    displayName: "Hamilton",
+                    isRushActive: true,
+                    showId: 2
+                  } as TodayTixShow,
+                  showtimes: [
+                    {
+                      id: 2,
+                      localTime: "19:30",
+                      rushTickets: {
+                        minTickets: 1,
+                        maxTickets: 2,
+                        availableAfter: systemTime.toISOString(),
+                        availableAfterEpoch: systemTime.getTime() / 1000,
+                        availableUntil: systemTime.toISOString()
+                      }
+                    } as TodayTixShowtime
+                  ]
+                }
+              ]
+            }}
+          />
+          <Stack.Screen name="ShowDetails" component={ShowDetails} />
+        </Stack.Navigator>
+        <HoldConfirmationModal />
+      </>
     );
 
     // schedule a hold for the first show that is closed
@@ -406,7 +418,7 @@ describe("Holds", () => {
     expect(getByText("2")).toBeVisible();
     await userEvent.press(getByText("2"));
     await waitFor(() =>
-      expect(getByText("You've won 2 tickets to Hamilton.")).toBeVisible()
+      expect(getByText("You've won 2 tickets to Hamilton 🎉")).toBeVisible()
     );
   });
 
@@ -468,37 +480,11 @@ describe("Holds", () => {
     expect(queryByText(errorText)).toBeNull();
   });
 
-  describe("Hold confirmation page", () => {
-    it("shows no ticket text if no hold exists", async () => {
-      const Stack = createStackNavigator<RootStackParamList>();
-      const {getByText} = render(
-        <Stack.Navigator>
-          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-        </Stack.Navigator>
-      );
-
-      await waitFor(() =>
-        expect(
-          getByText("No tickets found. Please try to get a new set of tickets.")
-        ).toBeVisible()
-      );
-    });
-
+  describe("Hold confirmation bottom sheet", () => {
     it("contains all the correct elements", async () => {
-      // setup
-      await AsyncStorage.setItem("customer-id", "customer-id");
       nock(
         `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
       )
-        .get("/holds")
-        .reply(200)
-        .post("/holds", {
-          customer: "customer-id",
-          showtime: 1,
-          numTickets: 2,
-          holdType: TodayTixHoldType.Rush
-        })
-        .reply(201)
         .get("/holds")
         .reply(200, {
           data: [
@@ -511,45 +497,17 @@ describe("Holds", () => {
           ]
         });
 
-      const Stack = createStackNavigator<RootStackParamList>();
-      const {getByText, getByLabelText} = render(
-        <Stack.Navigator>
-          <Stack.Screen
-            name="ShowDetails"
-            component={ShowDetails}
-            initialParams={{
-              show: {
-                id: 1,
-                displayName: "SIX the Musical"
-              } as TodayTixShow,
-              showtimes: [
-                {
-                  id: 1,
-                  localTime: "19:00",
-                  rushTickets: {
-                    minTickets: 1,
-                    maxTickets: 2
-                  }
-                } as TodayTixShowtime
-              ]
-            }}
-          />
-          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-        </Stack.Navigator>
+      const {getByText} = render(<HoldConfirmationModal />);
+
+      await waitFor(
+        () =>
+          expect(
+            getByText("You've won 2 tickets to SIX the Musical 🎉")
+          ).toBeVisible(),
+        {timeout: 3000}
       );
 
-      // navigate to the hold confirmation page
-      fireEvent(getByLabelText("Header image"), "onLoadEnd");
-      await userEvent.press(getByText("19:00"));
-      await userEvent.press(getByText("2"));
-      await waitFor(() => expect(getByText("🎉")).toBeVisible());
-
-      // check the page contains all of the elements
-      expect(getByLabelText("Back button")).toBeVisible();
-      expect(getByText("Congratulations!")).toBeVisible();
-      expect(
-        getByText("You've won 2 tickets to SIX the Musical.")
-      ).toBeVisible();
+      // check the bottom sheet contains all of the page elements
       expect(getByText("Seats")).toBeVisible();
       expect(getByText("Stalls")).toBeVisible();
       expect(getByText("Row D, Seats 5 and 6")).toBeVisible();
@@ -564,10 +522,37 @@ describe("Holds", () => {
       expect(getByText("Release tickets")).toBeVisible();
     });
 
-    it("can navigate back to the show details page", async () => {
-      // setup
-      await AsyncStorage.setItem("customer-id", "customer-id");
+    it("can purchase tickets on the TodayTix app", async () => {
+      // mock the deep linking mechanism in order to test it
+      jest.mock("react-native/Libraries/Linking/Linking");
+      nock(
+        `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+      )
+        .get("/holds")
+        .reply(200, {
+          data: [
+            {numSeats: 2, showtime: {show: {displayName: "SIX the Musical"}}}
+          ]
+        });
 
+      const {getByText} = render(<HoldConfirmationModal />);
+
+      await waitFor(
+        () =>
+          expect(
+            getByText("You've won 2 tickets to SIX the Musical 🎉")
+          ).toBeVisible(),
+        {timeout: 3000}
+      );
+
+      // check navigation to the TodayTix app to purchase tickets is possible
+      await userEvent.press(getByText("Purchase on TodayTix"));
+      expect(Linking.openURL).toBeCalled();
+      expect(Linking.openURL).toBeCalledWith(process.env.TODAY_TIX_APP_URL);
+    });
+
+    it("can release tickets", async () => {
+      await AsyncStorage.setItem("customer-id", "customer-id");
       nock(
         `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
       )
@@ -584,85 +569,74 @@ describe("Holds", () => {
         .reply(200, {
           data: [
             {
-              configurableTexts: {amountDisplayForWeb: "£25.00"},
+              id: 1,
               numSeats: 2,
-              seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
               showtime: {show: {displayName: "SIX the Musical"}}
             }
           ]
-        });
+        })
+        .delete("/holds/1")
+        .reply(200)
+        .get("/holds")
+        .reply(200, {data: []});
 
       const Stack = createStackNavigator<RootStackParamList>();
-      const {getByText, getByLabelText} = render(
-        <Stack.Navigator>
-          <Stack.Screen
-            name="ShowDetails"
-            component={ShowDetails}
-            initialParams={{
-              show: {
-                id: 1,
-                displayName: "SIX the Musical"
-              } as TodayTixShow,
-              showtimes: [
-                {
-                  id: 1,
-                  localTime: "19:00",
-                  rushTickets: {
-                    minTickets: 1,
-                    maxTickets: 2
-                  }
-                } as TodayTixShowtime
-              ]
-            }}
-          />
-          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-        </Stack.Navigator>
+      const {getByText, queryByText, getByLabelText} = render(
+        <>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="ShowDetails"
+              component={ShowDetails}
+              initialParams={{
+                show: {} as TodayTixShow,
+                showtimes: [
+                  {
+                    id: 1,
+                    localTime: "19:00",
+                    rushTickets: {minTickets: 1, maxTickets: 2}
+                  } as TodayTixShowtime
+                ]
+              }}
+            />
+          </Stack.Navigator>
+          <HoldConfirmationModal />
+        </>
       );
 
-      // navigate to the hold confirmation page
       fireEvent(getByLabelText("Header image"), "onLoadEnd");
-      await userEvent.press(getByText("19:00"));
+      const timeButton = getByText("19:00");
+      await userEvent.press(timeButton);
       await userEvent.press(getByText("2"));
-      await waitFor(() => expect(getByText("🎉")).toBeVisible());
+      const headerText = "You've won 2 tickets to SIX the Musical 🎉";
+      await waitFor(() => expect(getByText(headerText)).toBeVisible());
+      expect(timeButton).toHaveStyle({
+        color: hadestownLightThemeColors.onSurfaceDisabled
+      });
 
-      // navigate back to the show detail page
-      await userEvent.press(getByLabelText("Back button"));
-      expect(getByText("Select a Time")).toBeVisible();
-    });
+      // release the tickets
+      await userEvent.press(getByText("Release tickets"));
+      await waitFor(() => expect(queryByText(headerText)).toBeNull());
+      expect(timeButton).toHaveStyle({
+        color: hadestownLightThemeColors.primary
+      });
+      expect(queryByText("Number of Tickets")).toBeNull();
+    }, 6000);
+  });
 
-    it("can navigate back to the rush show list page", async () => {
-      // setup
-      await AsyncStorage.setItem("customer-id", "customer-id");
-      nock(
-        `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
-      )
-        .get("/customers/me/rushGrants")
-        .reply(200, {
-          data: [{showId: 1, showName: "Hamilton"}]
-        })
-        .get("/holds")
-        .reply(200)
-        .post("/holds", {
-          customer: "customer-id",
-          showtime: 1,
-          numTickets: 2,
-          holdType: TodayTixHoldType.Rush
-        })
-        .reply(201)
-        .get("/holds")
-        .reply(200, {
-          data: [
-            {
-              configurableTexts: {amountDisplayForWeb: "£25.00"},
-              numSeats: 2,
-              seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
-              showtime: {show: {displayName: "Hamilton"}}
-            }
-          ]
-        });
+  it("persists modal across screens", async () => {
+    nock(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
+    )
+      .get("/holds")
+      .reply(200, {
+        data: [
+          {numSeats: 2, showtime: {show: {displayName: "SIX the Musical"}}}
+        ]
+      });
 
-      const Stack = createStackNavigator<RootStackParamList>();
-      const {getByText, getByLabelText} = render(
+    const Stack = createStackNavigator<RootStackParamList>();
+    const {getByText, getByLabelText} = render(
+      <>
         <Stack.Navigator>
           <Stack.Screen
             name="RushShowList"
@@ -672,195 +646,29 @@ describe("Holds", () => {
                 {
                   show: {
                     id: 1,
-                    displayName: "Hamilton",
-                    isRushActive: true,
-                    showId: 1
+                    displayName: "SIX the Musical"
                   } as TodayTixShow,
-                  showtimes: [
-                    {
-                      id: 1,
-                      localTime: "19:30",
-                      rushTickets: {
-                        minTickets: 1,
-                        maxTickets: 2,
-                        availableAfter: systemTime.toISOString(),
-                        availableUntil: systemTime.toISOString()
-                      }
-                    } as TodayTixShowtime
-                  ]
+                  showtimes: [{id: 1} as TodayTixShowtime]
                 }
               ]
             }}
           />
           <Stack.Screen name="ShowDetails" component={ShowDetails} />
-          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
         </Stack.Navigator>
-      );
+        <HoldConfirmationModal />
+      </>
+    );
 
-      // navigate to the hold confirmation page
-      await waitFor(() => expect(getByText("Hamilton")).toBeVisible());
-      await userEvent.press(getByText("Hamilton"));
-      fireEvent(getByLabelText("Header image"), "onLoadEnd");
-      await userEvent.press(getByText("19:30"));
-      await userEvent.press(getByText("2"));
-      await waitFor(() => expect(getByText("🎉")).toBeVisible());
+    const headerText = "You've won 2 tickets to SIX the Musical 🎉";
+    await waitFor(() => expect(getByText(headerText)).toBeVisible());
+    const showCard = getByText("SIX the Musical");
+    expect(showCard).toBeVisible();
 
-      // navigate back to the rush show list page
-      await userEvent.press(getByLabelText("Back button"));
-      expect(getByText("Select a Time")).toBeVisible();
-      /* TODO: Investigate why this is necessary to press the card after navigating
-      back to the show details screen. Perhaps it's a limitation with the react navigation library */
-      act(() => jest.advanceTimersByTime(1000));
-      await userEvent.press(getByLabelText("Back button"));
-      expect(getByText("2 per person max")).toBeVisible();
-
-      // navigate to the hold confirmation screen and back again to the rush show list
-      /* TODO: Investigate why this is necessary to press the button after navigating
-      back to the rush show list screen. Perhaps it's a limitation with the react navigation library */
-      act(() => jest.advanceTimersByTime(1000));
-      await userEvent.press(getByText("See tickets"));
-      expect(getByText("🎉")).toBeVisible();
-      await userEvent.press(getByLabelText("Back button"));
-      expect(getByText("2 per person max")).toBeVisible();
-    });
-
-    it("can purchase tickets on the TodayTix app", async () => {
-      // setup
-      // mock the deep linking mechanism in order to test it
-      jest.mock("react-native/Libraries/Linking/Linking");
-      await AsyncStorage.setItem("customer-id", "customer-id");
-      nock(
-        `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
-      )
-        .get("/holds")
-        .reply(200)
-        .post("/holds", {
-          customer: "customer-id",
-          showtime: 1,
-          numTickets: 2,
-          holdType: TodayTixHoldType.Rush
-        })
-        .reply(201)
-        .get("/holds")
-        .reply(200, {
-          data: [
-            {
-              configurableTexts: {amountDisplayForWeb: "£25.00"},
-              numSeats: 2,
-              seatsInfo: {row: "D", seats: ["5", "6"], sectionName: "Stalls"},
-              showtime: {show: {displayName: "SIX the Musical"}}
-            }
-          ]
-        });
-
-      const Stack = createStackNavigator<RootStackParamList>();
-      const {getByText, getByLabelText} = render(
-        <Stack.Navigator>
-          <Stack.Screen
-            name="ShowDetails"
-            component={ShowDetails}
-            initialParams={{
-              show: {
-                id: 1,
-                displayName: "SIX the Musical"
-              } as TodayTixShow,
-              showtimes: [
-                {
-                  id: 1,
-                  localTime: "19:00",
-                  rushTickets: {
-                    minTickets: 1,
-                    maxTickets: 2
-                  }
-                } as TodayTixShowtime
-              ]
-            }}
-          />
-          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-        </Stack.Navigator>
-      );
-
-      // navigate to the hold confirmation page
-      fireEvent(getByLabelText("Header image"), "onLoadEnd");
-      await userEvent.press(getByText("19:00"));
-      await userEvent.press(getByText("2"));
-      await waitFor(() => expect(getByText("🎉")).toBeVisible());
-
-      // check navigation to the TodayTix app to purchase tickets is possible
-      await userEvent.press(getByText("Purchase on TodayTix"));
-      expect(Linking.openURL).toBeCalled();
-      expect(Linking.openURL).toBeCalledWith(process.env.TODAY_TIX_APP_URL);
-    });
-
-    it("can release tickets", async () => {
-      // setup
-      await AsyncStorage.setItem("customer-id", "customer-id");
-      nock(
-        `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
-      )
-        .get("/holds")
-        .reply(200)
-        .post("/holds", {
-          customer: "customer-id",
-          showtime: 1,
-          numTickets: 2,
-          holdType: TodayTixHoldType.Rush
-        })
-        .reply(201)
-        .get("/holds")
-        .reply(200, {
-          data: [{id: 1, showtime: {show: {displayName: "SIX the Musical"}}}]
-        })
-        .delete("/holds/1")
-        .reply(200)
-        .get("/holds")
-        .reply(200, {data: []});
-
-      const Stack = createStackNavigator<RootStackParamList>();
-      const {getByText, getByLabelText, queryByText} = render(
-        <Stack.Navigator>
-          <Stack.Screen
-            name="ShowDetails"
-            component={ShowDetails}
-            initialParams={{
-              show: {
-                id: 1,
-                displayName: "SIX the Musical"
-              } as TodayTixShow,
-              showtimes: [
-                {
-                  id: 1,
-                  localTime: "19:00",
-                  rushTickets: {
-                    minTickets: 1,
-                    maxTickets: 2
-                  }
-                } as TodayTixShowtime
-              ]
-            }}
-          />
-          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-        </Stack.Navigator>
-      );
-
-      // navigate to the hold confirmation page
-      fireEvent(getByLabelText("Header image"), "onLoadEnd");
-      await userEvent.press(getByText("19:00"));
-      await userEvent.press(getByText("2"));
-      await waitFor(() => expect(getByText("🎉")).toBeVisible());
-
-      // release the tickets
-      await userEvent.press(getByText("Release tickets"));
-      await waitFor(() => expect(getByText("Select a Time")).toBeVisible());
-      await waitFor(() =>
-        expect(
-          queryByText("You have 2 tickets to SIX the Musical!")
-        ).not.toBeOnTheScreen()
-      );
-      expect(getByText("19:00")).toHaveStyle({
-        color: hadestownLightThemeColors.primary
-      });
-      expect(queryByText("Number of Tickets")).not.toBeOnTheScreen();
-    });
+    // navigate between screens
+    await userEvent.press(showCard);
+    fireEvent(getByLabelText("Header image"), "onLoadEnd");
+    expect(getByText(headerText)).toBeVisible();
+    await waitFor(() => expect(getByText("Select a Time")).toBeVisible());
+    expect(getByText(headerText)).toBeVisible();
   });
 });

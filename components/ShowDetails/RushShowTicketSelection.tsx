@@ -53,6 +53,7 @@ const RushShowTicketSelection = ({
             return (
               <Button
                 key={showtime.id}
+                disabled={Boolean(hold)}
                 onPress={() => {
                   cancelHold();
                   setSelectedShow(show);
@@ -78,21 +79,19 @@ const RushShowTicketSelection = ({
                 return (
                   <Button
                     key={number}
+                    disabled={Boolean(hold)}
                     onPress={() => {
                       cancelHold();
                       setSelectedNumberOfTickets(number);
-                      /* TODO: Disable buttons if you already have a hold and
-                      remove the condition below */
-                      if (!hold)
-                        scheduleHold(
-                          (selectedShowtime.rushTickets?.availableAfterEpoch ??
-                            0) - 1,
-                          {
-                            customerId,
-                            showtimeId: selectedShowtime.id,
-                            numTickets: number
-                          }
-                        );
+                      scheduleHold(
+                        (selectedShowtime.rushTickets?.availableAfterEpoch ??
+                          0) - 1,
+                        {
+                          customerId,
+                          showtimeId: selectedShowtime.id,
+                          numTickets: number
+                        }
+                      );
                     }}
                     mode={isSelected ? "contained" : "outlined"}
                     contentStyle={styles.selectionButton}>

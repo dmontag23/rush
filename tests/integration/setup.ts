@@ -12,6 +12,17 @@ import {act} from "testing-library/extension";
 
 jest.mock("@react-native-async-storage/async-storage", () => MockAsyncStorage);
 
+// The following is needed to test reanimated, see https://reactnavigation.org/docs/testing/#mocking-native-modules
+jest.mock("react-native-reanimated", () => {
+  const Reanimated = require("react-native-reanimated/mock");
+
+  // The mock for `call` immediately calls the callback which is incorrect
+  // So we override it with a no-op
+  Reanimated.default.call = () => {};
+
+  return Reanimated;
+});
+
 export const systemTime = new Date(2021, 4, 23);
 
 beforeEach(() => {

@@ -4,16 +4,10 @@ import {describe, expect, it, jest} from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {createStackNavigator} from "@react-navigation/stack";
 import nock from "nock";
-import {
-  act,
-  fireEvent,
-  render,
-  userEvent,
-  waitFor
-} from "testing-library/extension";
+import {fireEvent, render, userEvent, waitFor} from "testing-library/extension";
 
 import ShowDetails from "../ShowDetails/ShowDetails";
-import HoldConfirmation from "../screens/HoldConfirmation";
+import HoldConfirmationModal from "../screens/HoldConfirmationModal";
 import RushShowList from "../screens/RushShowList";
 
 import HoldContext from "../../store/hold-context";
@@ -194,26 +188,28 @@ describe("Hold banner", () => {
 
     const Stack = createStackNavigator<RootStackParamList>();
     const {getByText, getByLabelText, getByTestId} = render(
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ShowDetails"
-          component={ShowDetails}
-          initialParams={{
-            show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
-            showtimes: [
-              {
-                id: 1,
-                localTime: "19:00",
-                rushTickets: {
-                  minTickets: 1,
-                  maxTickets: 2
-                }
-              } as TodayTixShowtime
-            ]
-          }}
-        />
-        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-      </Stack.Navigator>
+      <>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="ShowDetails"
+            component={ShowDetails}
+            initialParams={{
+              show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
+              showtimes: [
+                {
+                  id: 1,
+                  localTime: "19:00",
+                  rushTickets: {
+                    minTickets: 1,
+                    maxTickets: 2
+                  }
+                } as TodayTixShowtime
+              ]
+            }}
+          />
+        </Stack.Navigator>
+        <HoldConfirmationModal />
+      </>
     );
 
     // load the header image
@@ -243,7 +239,7 @@ describe("Hold banner", () => {
     );
     await userEvent.press(getByText("Retry"));
     await waitFor(() =>
-      expect(getByText("You've won 2 tickets to Hamilton.")).toBeVisible()
+      expect(getByText("You've won 2 tickets to Hamilton 🎉")).toBeVisible()
     );
   });
 
@@ -279,117 +275,5 @@ describe("Hold banner", () => {
     expect(retryButton).toBeVisible();
     await userEvent.press(retryButton);
     expect(scheduleHold).not.toBeCalled();
-  });
-
-  it("shows the current tickets on hold", async () => {
-    // setup
-    await AsyncStorage.setItem("customer-id", "customer-id");
-    nock(
-      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
-    )
-      .get("/holds")
-      .reply(200)
-      .post("/holds", {
-        customer: "customer-id",
-        showtime: 1,
-        numTickets: 2,
-        holdType: TodayTixHoldType.Rush
-      })
-      .reply(201)
-      .get("/holds")
-      .reply(200, {
-        data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
-      });
-
-    const Stack = createStackNavigator<RootStackParamList>();
-    const {getByText, getByLabelText} = render(
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ShowDetails"
-          component={ShowDetails}
-          initialParams={{
-            show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
-            showtimes: [
-              {
-                id: 1,
-                localTime: "19:00",
-                rushTickets: {
-                  minTickets: 1,
-                  maxTickets: 2
-                }
-              } as TodayTixShowtime
-            ]
-          }}
-        />
-        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-      </Stack.Navigator>
-    );
-
-    // load the header image
-    await waitFor(() => fireEvent(getByLabelText("Header image"), "onLoadEnd"));
-    expect(getByText("Hamilton")).toBeVisible();
-    await userEvent.press(getByText("19:00"));
-    await userEvent.press(getByText("2"));
-    const holdPageText = "You've won 2 tickets to Hamilton.";
-    await waitFor(() => expect(getByText(holdPageText)).toBeVisible());
-
-    // ensure the banner now contains information on the current hold
-    await userEvent.press(getByLabelText("Back button"));
-    expect(getByText("You have 2 tickets to Hamilton!")).toBeVisible();
-    expect(getByText("Release tickets")).toBeVisible();
-    const seeTicketsButton = getByText("See tickets");
-    expect(seeTicketsButton).toBeVisible();
-
-    // navigate back to the hold page
-    /* TODO: Investigate why this is necessary to wait after navigating
-    back to the details screen. Perhaps it's a limitation with the react navigation library */
-    act(() => jest.advanceTimersByTime(1000));
-    await userEvent.press(seeTicketsButton);
-    expect(getByText(holdPageText)).toBeVisible();
-  });
-
-  it("removes tickets on hold", async () => {
-    // setup
-    await AsyncStorage.setItem("customer-id", "customer-id");
-    nock(
-      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
-    )
-      .get("/holds")
-      .reply(200, {
-        data: [
-          {id: 1, numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}
-        ]
-      })
-      .delete("/holds/1")
-      .reply(200, {data: {}})
-      .get("/holds")
-      .reply(200, {data: []});
-
-    const Stack = createStackNavigator<RootStackParamList>();
-    const {getByText, getByLabelText} = render(
-      <Stack.Navigator>
-        <Stack.Screen
-          name="RushShowList"
-          component={RushShowList}
-          initialParams={{showsAndTimes: []}}
-        />
-        <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-      </Stack.Navigator>
-    );
-
-    await waitFor(() =>
-      expect(getByText("You've won 2 tickets to Hamilton.")).toBeVisible()
-    );
-    await userEvent.press(getByLabelText("Back button"));
-    const bannerText = getByText("You have 2 tickets to Hamilton!");
-    expect(bannerText).toBeVisible();
-    const releaseTicketsButton = getByText("Release tickets");
-    expect(releaseTicketsButton).toBeVisible();
-
-    /* TODO: Investigate why it is necessary to wait after navigating
-    back to the rush show list screen. Perhaps it's a limitation with the react navigation library */
-    act(() => jest.advanceTimersByTime(1000));
-    await userEvent.press(releaseTicketsButton);
-    await waitFor(() => expect(bannerText).not.toBeVisible());
   });
 });

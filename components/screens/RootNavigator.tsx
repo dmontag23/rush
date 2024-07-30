@@ -2,7 +2,7 @@ import React from "react";
 
 import {createStackNavigator} from "@react-navigation/stack";
 
-import HoldConfirmation from "./HoldConfirmation";
+import HoldConfirmationModal from "./HoldConfirmationModal";
 import RushShowList from "./RushShowList";
 import EnterTokensScreen from "./authentication/EnterTokensScreen";
 
@@ -43,26 +43,31 @@ const RootNavigator = () => {
     return <LogoOnBackground />;
 
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      {accessToken && refreshToken ? (
-        <>
-          <Stack.Screen
-            name="RushShowList"
-            component={RushShowList}
-            initialParams={{
-              showsAndTimes: rushShows.map((show, i) => ({
-                show,
-                showtimes: rushShowtimes[i] ?? []
-              }))
-            }}
-          />
-          <Stack.Screen name="ShowDetails" component={ShowDetails} />
-          <Stack.Screen name="HoldConfirmation" component={HoldConfirmation} />
-        </>
-      ) : (
-        <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
-      )}
-    </Stack.Navigator>
+    <>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        {accessToken && refreshToken ? (
+          <>
+            <Stack.Screen
+              name="RushShowList"
+              component={RushShowList}
+              initialParams={{
+                showsAndTimes: rushShows.map((show, i) => ({
+                  show,
+                  showtimes: rushShowtimes[i] ?? []
+                }))
+              }}
+            />
+            <Stack.Screen name="ShowDetails" component={ShowDetails} />
+          </>
+        ) : (
+          <Stack.Screen name="EnterTokens" component={EnterTokensScreen} />
+        )}
+      </Stack.Navigator>
+      {/* TODO: Ensure this modal is only rendered when you have an access and refresh token,
+      but does not re-render across other screens. Perhaps move it once the bottom nav bar is
+      implemented. */}
+      <HoldConfirmationModal />
+    </>
   );
 };
 

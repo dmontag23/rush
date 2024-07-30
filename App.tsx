@@ -1,7 +1,9 @@
 import React from "react";
 
+import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {PaperProvider, adaptNavigationTheme} from "react-native-paper";
 
 import RootNavigator from "./components/screens/RootNavigator";
@@ -17,19 +19,24 @@ const {LightTheme: NAV_LIGHT_THEME} = adaptNavigationTheme({
 });
 
 const App = () => (
-  <QueryClientProvider client={QUERY_CLIENT}>
-    <NavigationContainer theme={NAV_LIGHT_THEME}>
-      <SelectedShowtimeContextProvider>
-        <HoldContextProvider>
-          {/* PaperProvider should be the innermost provider for the app. See
+  <GestureHandlerRootView>
+    <QueryClientProvider client={QUERY_CLIENT}>
+      <NavigationContainer theme={NAV_LIGHT_THEME}>
+        <SelectedShowtimeContextProvider>
+          <HoldContextProvider>
+            {/* PaperProvider should be the innermost provider for the app (except 
+            for the bottom sheet, which needs access to the theme for styling). See
        https://callstack.github.io/react-native-paper/docs/guides/getting-started */}
-          <PaperProvider theme={LIGHT_THEME}>
-            <RootNavigator />
-          </PaperProvider>
-        </HoldContextProvider>
-      </SelectedShowtimeContextProvider>
-    </NavigationContainer>
-  </QueryClientProvider>
+            <PaperProvider theme={LIGHT_THEME}>
+              <BottomSheetModalProvider>
+                <RootNavigator />
+              </BottomSheetModalProvider>
+            </PaperProvider>
+          </HoldContextProvider>
+        </SelectedShowtimeContextProvider>
+      </NavigationContainer>
+    </QueryClientProvider>
+  </GestureHandlerRootView>
 );
 
 export default App;

@@ -1,8 +1,8 @@
-import React, {useContext, useEffect} from "react";
-import {Linking, SafeAreaView, StyleSheet, View} from "react-native";
+import React, {useContext, useEffect, useMemo, useRef} from "react";
+import {Linking, StyleSheet, View} from "react-native";
 
-import {useNavigation} from "@react-navigation/native";
-import {Button, Card, IconButton, Text} from "react-native-paper";
+import {BottomSheetModal, BottomSheetView} from "@gorhom/bottom-sheet";
+import {Button, Card, Text, useTheme} from "react-native-paper";
 
 import {pluralize} from "../utils";
 
@@ -10,8 +10,15 @@ import useDeleteHold from "../../hooks/todayTixHooks/useDeleteHold";
 import HoldContext from "../../store/hold-context";
 import SelectedShowtimeContext from "../../store/selected-showtime-context";
 
-const HoldConfirmation = () => {
-  const {goBack} = useNavigation();
+const MIN_HEIGHT = 10;
+const MAX_HEIGHT = "47%";
+
+const HoldConfirmationModal = () => {
+  const {colors} = useTheme();
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const snapPoints = useMemo(() => [`${MIN_HEIGHT}%`, MAX_HEIGHT], []);
+
   const {setSelectedShow, setSelectedShowtime, setSelectedNumberOfTickets} =
     useContext(SelectedShowtimeContext);
   const {hold} = useContext(HoldContext);
@@ -19,44 +26,44 @@ const HoldConfirmation = () => {
   // TODO: Add an error here on the page if deleting the hold fails?
   const {mutate: deleteHold, isSuccess: isDeleteHoldSuccess} = useDeleteHold();
 
+  useEffect(
+    () =>
+      hold
+        ? bottomSheetRef.current?.present()
+        : bottomSheetRef.current?.close(),
+    [hold]
+  );
+
   useEffect(() => {
     if (isDeleteHoldSuccess) {
       setSelectedShow(undefined);
       setSelectedShowtime(undefined);
       setSelectedNumberOfTickets(NaN);
-      goBack();
     }
   }, [
     isDeleteHoldSuccess,
     setSelectedNumberOfTickets,
     setSelectedShow,
-    setSelectedShowtime,
-    goBack
+    setSelectedShowtime
   ]);
 
   const todayTixURL = process.env.TODAY_TIX_APP_URL;
 
   return (
-    <SafeAreaView style={styles.pageContainer}>
-      {/* TODO: Maybe refactor back button into UI component? */}
-      <IconButton
-        accessibilityLabel="Back button"
-        icon="arrow-left"
-        mode="contained-tonal"
-        size={30}
-        onPress={goBack}
-      />
-      {!hold ? (
-        <Text variant="displayLarge">
-          No tickets found. Please try to get a new set of tickets.
-        </Text>
-      ) : (
-        <View style={styles.contentContainer}>
-          <View style={styles.headerContainer}>
-            <Text variant="displayLarge">🎉</Text>
-            <Text variant="headlineLarge">Congratulations!</Text>
-            <Text variant="titleMedium">{`You've won ${hold.numSeats} ticket${pluralize(hold.numSeats)} to ${hold.showtime.show?.displayName}.`}</Text>
-          </View>
+    <BottomSheetModal
+      ref={bottomSheetRef}
+      snapPoints={snapPoints}
+      enableOverDrag={false}
+      enablePanDownToClose={false}
+      index={hold ? 1 : -1}
+      style={[styles.modalContainer, {borderColor: colors.primary}]}>
+      {hold && (
+        <BottomSheetView style={styles.contentContainer}>
+          <Text
+            variant="titleMedium"
+            style={
+              styles.headerText
+            }>{`You've won ${hold.numSeats} ticket${pluralize(hold.numSeats)} to ${hold.showtime.show?.displayName} 🎉`}</Text>
           <Card>
             <Card.Content style={styles.cardContainer}>
               <View>
@@ -77,26 +84,32 @@ const HoldConfirmation = () => {
           {todayTixURL && (
             <Button
               mode="contained"
-              onPress={() => Linking.openURL(todayTixURL)}>
+              onPress={() => Linking.openURL(todayTixURL)}
+              style={styles.button}>
               Purchase on TodayTix
             </Button>
           )}
-          <Button mode="outlined" onPress={() => deleteHold(hold.id)}>
+          <Button
+            mode="outlined"
+            onPress={() => deleteHold(hold.id)}
+            style={styles.button}>
             Release tickets
           </Button>
-        </View>
+        </BottomSheetView>
       )}
-    </SafeAreaView>
+    </BottomSheetModal>
   );
 };
-
-export default HoldConfirmation;
+export default HoldConfirmationModal;
 
 const styles = StyleSheet.create({
+  /* To work around a bug, the height on the button is set so the text doesn't get cutoff, see 
+  https://github.com/gorhom/react-native-bottom-sheet/issues/1867 */
+  button: {height: 40},
   cardContainer: {flexDirection: "row", justifyContent: "space-between"},
-  contentContainer: {rowGap: 20},
-  headerContainer: {alignItems: "center", rowGap: 10},
-  pageContainer: {marginHorizontal: 15},
+  contentContainer: {marginHorizontal: 15, rowGap: 20},
+  headerText: {height: `${MIN_HEIGHT + 1}%`, textAlign: "center"},
+  modalContainer: {borderTopWidth: 3},
   rightCardContent: {alignItems: "flex-end"},
   warningText: {fontWeight: "bold"}
 });

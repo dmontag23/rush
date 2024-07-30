@@ -1,13 +1,11 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import {StyleSheet, View} from "react-native";
 
-import {useNavigation} from "@react-navigation/native";
 import {Banner, BannerProps, Text} from "react-native-paper";
 
 import LoadingSpinner from "./ui/LoadingSpinner";
 import {pluralize} from "./utils";
 
-import useDeleteHold from "../hooks/todayTixHooks/useDeleteHold";
 import useCountdown from "../hooks/useCountdown";
 import useGetCustomerId from "../hooks/useGetCustomerId";
 import HoldContext from "../store/hold-context";
@@ -19,7 +17,6 @@ type HoldBannerProps = {
 
 const HoldBanner = ({style}: HoldBannerProps) => {
   const {customerId} = useGetCustomerId();
-  const {navigate} = useNavigation();
 
   const {
     selectedShow: show,
@@ -35,24 +32,8 @@ const HoldBanner = ({style}: HoldBannerProps) => {
     createHoldError,
     isHoldScheduled,
     scheduleHold,
-    cancelHold,
-    hold
+    cancelHold
   } = useContext(HoldContext);
-
-  const {mutate: deleteHold, isSuccess: isDeleteHoldSuccess} = useDeleteHold();
-
-  useEffect(() => {
-    if (isDeleteHoldSuccess) {
-      setSelectedShow(undefined);
-      setSelectedShowtime(undefined);
-      setSelectedNumberOfTickets(NaN);
-    }
-  }, [
-    isDeleteHoldSuccess,
-    setSelectedNumberOfTickets,
-    setSelectedShow,
-    setSelectedShowtime
-  ]);
 
   const {countdown: countdownToRushOpening} = useCountdown(
     showtime?.rushTickets?.availableAfterEpoch
@@ -72,20 +53,6 @@ const HoldBanner = ({style}: HoldBannerProps) => {
     actions?: BannerProps["actions"];
     children: BannerProps["children"];
   } => {
-    if (hold)
-      return {
-        actions: [
-          {
-            label: "Release tickets",
-            onPress: () => deleteHold(hold.id)
-          },
-          {
-            label: "See tickets",
-            onPress: () => navigate("HoldConfirmation")
-          }
-        ],
-        children: `You have ${hold.numSeats} ticket${pluralize(hold.numSeats)} to ${hold.showtime.show?.displayName}!`
-      };
     if (isCreatingHold)
       return {
         children: (
@@ -121,10 +88,7 @@ const HoldBanner = ({style}: HoldBannerProps) => {
   const {actions, children} = getBannerInfo();
 
   const isBannerVisible =
-    Boolean(hold) ||
-    isCreatingHold ||
-    Boolean(createHoldError) ||
-    isHoldScheduled;
+    isCreatingHold || Boolean(createHoldError) || isHoldScheduled;
 
   return (
     <Banner
