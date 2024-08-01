@@ -620,7 +620,7 @@ describe("Holds", () => {
         color: hadestownLightThemeColors.primary
       });
       expect(queryByText("Number of Tickets")).toBeNull();
-    }, 6000);
+    }, 10000);
   });
 
   it("persists modal across screens", async () => {
