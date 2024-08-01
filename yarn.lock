@@ -3182,9 +3182,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-native@npm:^12.4.3":
-  version: 12.5.1
-  resolution: "@testing-library/react-native@npm:12.5.1"
+"@testing-library/react-native@npm:^12.5.2":
+  version: 12.5.2
+  resolution: "@testing-library/react-native@npm:12.5.2"
   dependencies:
     jest-matcher-utils: ^29.7.0
     pretty-format: ^29.7.0
@@ -3197,7 +3197,7 @@ __metadata:
   peerDependenciesMeta:
     jest:
       optional: true
-  checksum: 5fa582184ae99244d0175f72d7804659393d6952510b7ff2a85c43ea0dd043bb1c8ab79fe52d73ceca3c2dddbc0df7c3b1fb2915a2aff1ac98f4423b202c6146
+  checksum: f0bdd9ee51dc38b52f468d4c9efc5394f0cfc37d3d65e3b95170ab04fc52d43b58dfa9d0176003096d279d1274738b7b18ebb1c439026dd881a496a80dcd44c8
   languageName: node
   linkType: hard
 
@@ -9912,7 +9912,7 @@ __metadata:
     "@react-navigation/native": ^6.1.10
     "@react-navigation/stack": ^6.3.21
     "@tanstack/react-query": ^5.20.2
-    "@testing-library/react-native": ^12.4.3
+    "@testing-library/react-native": ^12.5.2
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
     "@types/react": ^18.2.6
     "@types/react-test-renderer": ^18.0.0
