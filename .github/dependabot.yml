@@ -12,3 +12,7 @@ updates:
       all-dependencies:
         patterns:
           - "*"
+    # Ignore react native updates
+    ignore:
+      - dependency-name: "react-native"
+      - dependency-name: "@react-native*"
