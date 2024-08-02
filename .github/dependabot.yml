@@ -12,7 +12,16 @@ updates:
       all-dependencies:
         patterns:
           - "*"
-    # Ignore react native updates
+    # Ignore all react native dependencies
     ignore:
+      - dependency-name: "react"
       - dependency-name: "react-native"
+      - dependency-name: "@babel*"
       - dependency-name: "@react-native*"
+      - dependency-name: "@types*"
+      - dependency-name: "babel-jest"
+      - dependency-name: "eslint"
+      - dependency-name: "jest"
+      - dependency-name: "prettier"
+      - dependency-name: "react-test-renderer"
+      - dependency-name: "typescript"
