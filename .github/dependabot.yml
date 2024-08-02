@@ -7,3 +7,8 @@ updates:
     # Check the yarn registry for updates every day (weekdays)
     schedule:
       interval: "daily"
+    # Group all updates into 1 PR
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
