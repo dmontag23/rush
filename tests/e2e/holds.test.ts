@@ -1,4 +1,5 @@
 import {beforeEach, describe, it} from "@jest/globals";
+import axios from "axios";
 import {expect} from "detox";
 
 import {login} from "./utils/utils";
@@ -151,5 +152,27 @@ describe("Holds", () => {
     await expect(guysAndDolls2Tickets).toBeVisible();
     await element(by.text("23:59")).tap();
     await expect(guysAndDolls2Tickets).not.toBeVisible();
+  });
+
+  it("re-fetches holds when the app is brought into the foreground", async () => {
+    // select a showtime that is already open
+    await element(by.text("Guys & Dolls")).tap();
+    await element(by.text("19:30")).tap();
+    await element(by.text("1")).tap();
+    const headerText = element(
+      by.text("You've won 1 ticket to Guys & Dolls 🎉")
+    );
+    await expect(headerText).toBeVisible();
+
+    // send the app to the background and release the tickets via the API
+    await device.sendToHome();
+    await axios.delete(
+      `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}/holds/75088671`
+    );
+
+    // check that, when bringing the app to the foreground, the hold is no longer visible
+    await device.launchApp();
+    await expect(element(by.text("Select a Time"))).toBeVisible();
+    await expect(headerText).not.toBeVisible();
   });
 });
