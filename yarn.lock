@@ -9334,12 +9334,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.52.1":
-  version: 7.52.1
-  resolution: "react-hook-form@npm:7.52.1"
+"react-hook-form@npm:^7.52.2":
+  version: 7.52.2
+  resolution: "react-hook-form@npm:7.52.2"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 224fec214c5c7093b6949bc0a4fce3cf9b7a567a2f36dc3c7feeb1e721c5cccbd21f0f0ab19aa1f5f912014264f9c2224181370007609693b6c5ef6778f59ca5
+  checksum: 8621a21cf674f46507776741b2507d5357564af62bfc9dae8d1d7fb9076538352a48f16485885d3379d685d2d50537b28285322ad5a8c33d0ea5ddff21080543
   languageName: node
   linkType: hard
 
@@ -9436,16 +9436,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:^3.33.0":
-  version: 3.33.0
-  resolution: "react-native-screens@npm:3.33.0"
+"react-native-screens@npm:^3.34.0":
+  version: 3.34.0
+  resolution: "react-native-screens@npm:3.34.0"
   dependencies:
     react-freeze: ^1.0.0
     warn-once: ^0.1.0
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 01b8ee9246a54b10298ecb4c269958d9b2b90c52f1e5151e310dbfe80017990c45ab1d18abcf3dacbc6d0458d1afa82bb52f2e645423ac0e42857460b15d32eb
+  checksum: 28c1f6e556c318ffcbd79d153b9612cc8a0b8d8b70f909d3cde2fd6d0586a7c151a449e57400d8996f4ee6c3b5140c5c4f643a427e974f6dc573b2bcd8eb7356
   languageName: node
   linkType: hard
 
@@ -9926,14 +9926,14 @@ __metadata:
     nock: ^13.5.3
     prettier: 3.2.5
     react: 18.2.0
-    react-hook-form: ^7.52.1
+    react-hook-form: ^7.52.2
     react-native: 0.74.4
     react-native-dotenv: ^3.4.10
     react-native-gesture-handler: ^2.18.1
     react-native-paper: ^5.12.5
     react-native-reanimated: ^3.14.0
     react-native-safe-area-context: ^4.10.8
-    react-native-screens: ^3.33.0
+    react-native-screens: ^3.34.0
     react-native-svg: ^15.4.0
     react-native-vector-icons: ^10.0.3
     react-test-renderer: 18.2.0
