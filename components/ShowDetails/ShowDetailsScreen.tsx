@@ -9,12 +9,12 @@ import RushShowTicketSelection from "./RushShowTicketSelection";
 import HoldBanner from "../HoldBanner";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
-import {RootStackScreenProps} from "../../types/navigation";
+import {RushShowsStackScreenProps} from "../../types/navigation";
 
-const ShowDetails = ({
+const ShowDetailsScreen = ({
   route,
   navigation
-}: RootStackScreenProps<"ShowDetails">) => {
+}: RushShowsStackScreenProps<"ShowDetails">) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const {top, bottom} = useSafeAreaInsets();
   const {show, showtimes} = route.params;
@@ -47,8 +47,8 @@ const ShowDetails = ({
           />
           <HoldBanner />
           <ScrollView
-            contentContainerStyle={{paddingBottom: bottom}}
-            style={[styles.showDetailContainer, {marginBottom: bottom}]}>
+            contentContainerStyle={{paddingBottom: bottom + 15}}
+            style={styles.showDetailContainer}>
             <RushShowTicketSelection show={show} showtimes={showtimes} />
           </ScrollView>
         </>
@@ -57,7 +57,7 @@ const ShowDetails = ({
   );
 };
 
-export default ShowDetails;
+export default ShowDetailsScreen;
 
 const styles = StyleSheet.create({
   backButton: {position: "absolute", marginLeft: 15},

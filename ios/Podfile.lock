@@ -1189,7 +1189,30 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (3.14.0):
+  - RNReanimated (3.15.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - RNReanimated/reanimated (= 3.15.0)
+    - RNReanimated/worklets (= 3.15.0)
+    - Yoga
+  - RNReanimated/reanimated (3.15.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1210,7 +1233,28 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.33.0):
+  - RNReanimated/worklets (3.15.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - RNScreens (3.34.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1232,7 +1276,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.4.0):
+  - RNSVG (15.5.0):
     - React-Core
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
@@ -1485,9 +1529,9 @@ SPEC CHECKSUMS:
   ReactCommon: eebffb37a90138c6db6eb8b2d952e7e5c6bc083c
   RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
   RNGestureHandler: efed690b8493a00b99654043daeb1335276ac4a2
-  RNReanimated: f4ff116e33e0afc3d127f70efe928847c7c66355
-  RNScreens: d2a12528d1abe4922e7ee5c9a00dd40c827c2ab5
-  RNSVG: cb24fb322de8c1ebf59904e7aca0447bb8dbed5a
+  RNReanimated: 45553a3ae29a75a76269595f8554d07d4090e392
+  RNScreens: aa943ad421c3ced3ef5a47ede02b0cbfc43a012e
+  RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 0efb3e1bd40ba59b009f01badea863281101de78
 

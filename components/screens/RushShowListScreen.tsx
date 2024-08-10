@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React from "react";
 import {ScrollView, StyleSheet, View} from "react-native";
 
 import {useSafeAreaInsets} from "react-native-safe-area-context";
@@ -7,8 +7,9 @@ import HoldBanner from "../HoldBanner";
 import ShowCard, {isShowActive} from "../ShowCard";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
+import useGetShowtimesWithRushAvailability from "../../hooks/todayTixHooks/useGetShowtimesWithRushAvailability";
 import useGrantRushAccessForAllShows from "../../hooks/useGrantRushAccessForAllShows";
-import {RootStackScreenProps} from "../../types/navigation";
+import {RushShowsStackScreenProps} from "../../types/navigation";
 import {TodayTixShow} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";
 
@@ -22,22 +23,23 @@ const addTickets = (showtimes: TodayTixShowtime[]) =>
     0
   );
 
-const RushShowList = ({
+const RushShowListScreen = ({
   route,
   navigation
-}: RootStackScreenProps<"RushShowList">) => {
+}: RushShowsStackScreenProps<"RushShowList">) => {
   const {top, bottom} = useSafeAreaInsets();
-  const {showsAndTimes} = route.params;
 
-  const allRushShows = useMemo(
-    () => showsAndTimes.map(({show}) => show),
-    [showsAndTimes]
-  );
+  const {rushShows} = route.params;
 
   const {isGrantingAccess, rushGrants} =
-    useGrantRushAccessForAllShows(allRushShows);
+    useGrantRushAccessForAllShows(rushShows);
 
-  if (isGrantingAccess)
+  const {data: rushShowtimes, isPending: isLoadingRushShowtimes} =
+    useGetShowtimesWithRushAvailability({
+      showIds: rushShows.map(show => show.id)
+    });
+
+  if (isGrantingAccess || isLoadingRushShowtimes)
     return (
       <View style={styles.loadingSpinnerContainer}>
         <LoadingSpinner size="large" />
@@ -45,6 +47,10 @@ const RushShowList = ({
     );
 
   const allUnlockedRushShowIds = rushGrants?.map(({showId}) => showId) ?? [];
+  const showsAndTimes = rushShows.map((show, i) => ({
+    show,
+    showtimes: rushShowtimes[i] ?? []
+  }));
 
   const sortedRushShows = showsAndTimes.sort((a, b) => {
     const firstShowActiveNumber = isShowActive(
@@ -94,7 +100,7 @@ const RushShowList = ({
   );
 };
 
-export default RushShowList;
+export default RushShowListScreen;
 
 const styles = StyleSheet.create({
   container: {flex: 1},

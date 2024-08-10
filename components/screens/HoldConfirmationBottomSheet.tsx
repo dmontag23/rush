@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useMemo, useRef} from "react";
 import {Linking, StyleSheet, View} from "react-native";
 
-import {BottomSheetModal, BottomSheetView} from "@gorhom/bottom-sheet";
+import BottomSheet, {BottomSheetView} from "@gorhom/bottom-sheet";
 import {Button, Card, Text, useTheme} from "react-native-paper";
 
 import {pluralize} from "../utils";
@@ -11,11 +11,17 @@ import HoldContext from "../../store/hold-context";
 import SelectedShowtimeContext from "../../store/selected-showtime-context";
 
 const MIN_HEIGHT = 10;
-const MAX_HEIGHT = "47%";
+const MAX_HEIGHT = "53%";
 
-const HoldConfirmationModal = () => {
+type HoldConfirmationBottomSheetProps = {
+  bottomInset?: number;
+};
+
+const HoldConfirmationBottomSheet = ({
+  bottomInset = 0
+}: HoldConfirmationBottomSheetProps) => {
   const {colors} = useTheme();
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
   const snapPoints = useMemo(() => [`${MIN_HEIGHT}%`, MAX_HEIGHT], []);
 
@@ -28,9 +34,7 @@ const HoldConfirmationModal = () => {
 
   useEffect(
     () =>
-      hold
-        ? bottomSheetRef.current?.present()
-        : bottomSheetRef.current?.close(),
+      hold ? bottomSheetRef.current?.expand() : bottomSheetRef.current?.close(),
     [hold]
   );
 
@@ -50,12 +54,13 @@ const HoldConfirmationModal = () => {
   const todayTixURL = process.env.TODAY_TIX_APP_URL;
 
   return (
-    <BottomSheetModal
+    <BottomSheet
       ref={bottomSheetRef}
       snapPoints={snapPoints}
       enableOverDrag={false}
       enablePanDownToClose={false}
       index={hold ? 1 : -1}
+      bottomInset={bottomInset}
       style={[styles.modalContainer, {borderColor: colors.primary}]}>
       {hold && (
         <BottomSheetView style={styles.contentContainer}>
@@ -97,10 +102,10 @@ const HoldConfirmationModal = () => {
           </Button>
         </BottomSheetView>
       )}
-    </BottomSheetModal>
+    </BottomSheet>
   );
 };
-export default HoldConfirmationModal;
+export default HoldConfirmationBottomSheet;
 
 const styles = StyleSheet.create({
   /* To work around a bug, the height on the button is set so the text doesn't get cutoff, see 

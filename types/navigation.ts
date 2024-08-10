@@ -1,21 +1,31 @@
 // This file was created following https://reactnavigation.org/docs/typescript/#specifying-default-types-for-usenavigation-link-ref-etc
+import {BottomTabScreenProps} from "@react-navigation/bottom-tabs";
 import type {StackScreenProps} from "@react-navigation/stack";
 
 import {TodayTixShow} from "./shows";
 import {TodayTixShowtime} from "./showtimes";
 
-type ShowAndShowtimes = {
-  show: TodayTixShow;
-  showtimes: TodayTixShowtime[];
+export type RushShowStackParamList = {
+  RushShowList: {rushShows: TodayTixShow[]};
+  ShowDetails: {show: TodayTixShow; showtimes: TodayTixShowtime[]};
+};
+
+export type LoggedInBottomTabParamList = {
+  RushShows: {rushShows: TodayTixShow[]};
+  Settings: undefined;
 };
 
 export type RootStackParamList = {
-  RushShowList: {
-    showsAndTimes: ShowAndShowtimes[];
-  };
-  ShowDetails: ShowAndShowtimes;
+  LoggedIn: undefined;
   EnterTokens: undefined;
 };
+
+export type RushShowsStackScreenProps<T extends keyof RushShowStackParamList> =
+  StackScreenProps<RushShowStackParamList, T>;
+
+export type LoggedInBottomTabScreenProps<
+  T extends keyof LoggedInBottomTabParamList
+> = BottomTabScreenProps<LoggedInBottomTabParamList, T>;
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;
@@ -23,5 +33,7 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> =
 declare global {
   namespace ReactNavigation {
     interface RootParamList extends RootStackParamList {}
+    interface LoggedInParamList extends LoggedInBottomTabParamList {}
+    interface RushShowsParamList extends RushShowStackParamList {}
   }
 }
