@@ -1,16 +1,21 @@
 import React from "react";
+import {StyleSheet, View} from "react-native";
+
+import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 
 import LoggedInBottomTabNavigator from "./LoggedInBottomTabNavigator";
 
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 import useGetShows from "../../hooks/todayTixHooks/useGetShows";
+import {HoldContextProvider} from "../../store/hold-context";
+import {SelectedShowtimeContextProvider} from "../../store/selected-showtime-context";
 import {TodayTixFieldset, TodayTixLocation} from "../../types/shows";
 
-/* This component is only used to lift the show state so that shows are not
-re-fetched when changing screens. If shows should be re-fetched, this component
-should be removed. */
 const LoggedInScreen = () => {
+  /* The show state is lifted to this component so that shows are not
+  re-fetched when changing screens. If shows should be re-fetched, move this state down
+  to the respective components that need it. */
   const {data: rushAndLotteryShows, isPending: isLoadingRushAndLotteryShows} =
     useGetShows({
       areAccessProgramsActive: true,
@@ -20,10 +25,22 @@ const LoggedInScreen = () => {
     });
 
   return isLoadingRushAndLotteryShows ? (
-    <LoadingSpinner />
+    <View style={styles.loadingSpinnerContainer}>
+      <LoadingSpinner size="large" />
+    </View>
   ) : (
-    <LoggedInBottomTabNavigator shows={rushAndLotteryShows ?? []} />
+    <SelectedShowtimeContextProvider>
+      <HoldContextProvider>
+        <BottomSheetModalProvider>
+          <LoggedInBottomTabNavigator shows={rushAndLotteryShows ?? []} />
+        </BottomSheetModalProvider>
+      </HoldContextProvider>
+    </SelectedShowtimeContextProvider>
   );
 };
 
 export default LoggedInScreen;
+
+const styles = StyleSheet.create({
+  loadingSpinnerContainer: {flex: 1, justifyContent: "center"}
+});
