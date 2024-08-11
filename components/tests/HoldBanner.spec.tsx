@@ -6,14 +6,14 @@ import {createStackNavigator} from "@react-navigation/stack";
 import nock from "nock";
 import {fireEvent, render, userEvent, waitFor} from "testing-library/extension";
 
-import ShowDetails from "../ShowDetails/ShowDetails";
-import HoldConfirmationModal from "../screens/HoldConfirmationModal";
-import RushShowList from "../screens/RushShowList";
+import ShowDetailsScreen from "../ShowDetails/ShowDetailsScreen";
+import HoldConfirmationBottomSheet from "../screens/HoldConfirmationBottomSheet";
+import RushShowListScreen from "../screens/RushShowListScreen";
 
 import HoldContext from "../../store/hold-context";
 import {hadestownLightThemeColors} from "../../themes";
 import {TodayTixHoldErrorCode, TodayTixHoldType} from "../../types/holds";
-import {RootStackParamList} from "../../types/navigation";
+import {RushShowStackParamList} from "../../types/navigation";
 import {TodayTixShow} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";
 
@@ -21,45 +21,46 @@ describe("Hold banner", () => {
   it("displays correctly on both rush show list and show details screens", async () => {
     // setup
     await AsyncStorage.setItem("customer-id", "customer-id");
+    const ticketAvailabilityTime = new Date(2021, 4, 23, 10).getTime() / 1000;
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
       .get("/customers/me/rushGrants")
-      .reply(200, {data: [{showId: 1, showName: "SIX the Musical"}]});
+      .reply(200, {data: [{showId: 1, showName: "SIX the Musical"}]})
+      .get("/shows/1/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 1,
+            localTime: "19:00",
+            rushTickets: {
+              minTickets: 1,
+              maxTickets: 2,
+              availableAfterEpoch: ticketAvailabilityTime
+            }
+          }
+        ]
+      });
 
-    const Stack = createStackNavigator<RootStackParamList>();
-    const ticketAvailabilityTime = new Date(2021, 4, 23, 10).getTime() / 1000;
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText, getByTestId} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="RushShowList"
-          component={RushShowList}
+          component={RushShowListScreen}
           initialParams={{
             /* The typecast is used because a TodayTixShow has many required fields,
             most of which are not necessary for the functionality of the component. */
-            showsAndTimes: [
+            rushShows: [
               {
-                show: {
-                  id: 1,
-                  displayName: "SIX the Musical",
-                  showId: 1
-                } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 1,
-                    localTime: "19:00",
-                    rushTickets: {
-                      minTickets: 1,
-                      maxTickets: 2,
-                      availableAfterEpoch: ticketAvailabilityTime
-                    }
-                  } as TodayTixShowtime
-                ]
-              }
+                id: 1,
+                displayName: "SIX the Musical",
+                showId: 1
+              } as TodayTixShow
             ]
           }}
         />
-        <Stack.Screen name="ShowDetails" component={ShowDetails} />
+        <Stack.Screen name="ShowDetails" component={ShowDetailsScreen} />
       </Stack.Navigator>
     );
 
@@ -86,14 +87,14 @@ describe("Hold banner", () => {
     // setup
     await AsyncStorage.setItem("customer-id", "customer-id");
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const ticketAvailabilityTime =
       new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000;
     const {getByText, getByLabelText} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="ShowDetails"
-          component={ShowDetails}
+          component={ShowDetailsScreen}
           initialParams={{
             show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
             showtimes: [
@@ -186,13 +187,13 @@ describe("Hold banner", () => {
         data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
       });
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText, getByTestId} = render(
       <>
         <Stack.Navigator>
           <Stack.Screen
             name="ShowDetails"
-            component={ShowDetails}
+            component={ShowDetailsScreen}
             initialParams={{
               show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
               showtimes: [
@@ -208,7 +209,7 @@ describe("Hold banner", () => {
             }}
           />
         </Stack.Navigator>
-        <HoldConfirmationModal />
+        <HoldConfirmationBottomSheet />
       </>
     );
 
@@ -245,7 +246,7 @@ describe("Hold banner", () => {
 
   it("does not retry hold if no customer id, show, or showtime are available", async () => {
     const scheduleHold = jest.fn();
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText} = render(
       /* There is no way to access the retry function without a customer id via user interaction, and hence
       a dummy context needs to be provided. */
@@ -260,7 +261,7 @@ describe("Hold banner", () => {
         <Stack.Navigator>
           <Stack.Screen
             name="ShowDetails"
-            component={ShowDetails}
+            component={ShowDetailsScreen}
             initialParams={{
               show: {} as TodayTixShow,
               showtimes: []

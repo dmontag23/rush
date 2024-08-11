@@ -63,7 +63,7 @@ const BottomTabBarWrapper = (
   props: BottomTabBarProps,
   handleLayout: (event: LayoutChangeEvent) => void
 ) => (
-  <View onLayout={handleLayout}>
+  <View onLayout={handleLayout} testID="bottomTabBarWrapper">
     <BottomTabBar {...props} />
   </View>
 );

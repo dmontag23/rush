@@ -11,12 +11,14 @@ describe("Rush shows", () => {
     await expect(element(by.text("Hamilton"))).not.toBeVisible();
     await expect(element(by.text("Guys & Dolls"))).toBeVisible();
     await expect(element(by.text("SIX the Musical"))).toBeVisible();
-    await expect(element(by.text("Tina"))).toBeVisible();
 
+    const penultimateShowName = element(by.text("Tina"));
     const finalShowName = element(by.text("Wicked"));
+    await expect(penultimateShowName).not.toBeVisible();
     await expect(finalShowName).not.toBeVisible();
 
     await element(by.id("rushShows")).scroll(400, "down");
+    await expect(penultimateShowName).toBeVisible();
     await expect(finalShowName).toBeVisible();
   });
 

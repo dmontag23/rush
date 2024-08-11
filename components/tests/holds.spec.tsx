@@ -13,14 +13,14 @@ import {
   waitFor
 } from "testing-library/extension";
 
-import ShowDetails from "../ShowDetails/ShowDetails";
-import HoldConfirmationModal from "../screens/HoldConfirmationModal";
-import RushShowList from "../screens/RushShowList";
+import ShowDetailsScreen from "../ShowDetails/ShowDetailsScreen";
+import HoldConfirmationBottomSheet from "../screens/HoldConfirmationBottomSheet";
+import RushShowListScreen from "../screens/RushShowListScreen";
 
 import {systemTime} from "../../tests/integration/setup";
 import {hadestownLightThemeColors} from "../../themes";
 import {TodayTixHoldErrorCode, TodayTixHoldType} from "../../types/holds";
-import {RootStackParamList} from "../../types/navigation";
+import {RushShowStackParamList} from "../../types/navigation";
 import {TodayTixShow} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";
 
@@ -50,13 +50,13 @@ describe("Holds", () => {
         ]
       });
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText} = render(
       <>
         <Stack.Navigator>
           <Stack.Screen
             name="ShowDetails"
-            component={ShowDetails}
+            component={ShowDetailsScreen}
             initialParams={{
               show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
               showtimes: [
@@ -69,7 +69,7 @@ describe("Holds", () => {
             }}
           />
         </Stack.Navigator>
-        <HoldConfirmationModal />
+        <HoldConfirmationBottomSheet />
       </>
     );
 
@@ -108,7 +108,7 @@ describe("Holds", () => {
         ]
       });
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const ticketAvailabilityTime =
       new Date(2021, 4, 23, 0, 0, 5).getTime() / 1000;
     const {getByText, queryByText, getByLabelText} = render(
@@ -116,7 +116,7 @@ describe("Holds", () => {
         <Stack.Navigator>
           <Stack.Screen
             name="ShowDetails"
-            component={ShowDetails}
+            component={ShowDetailsScreen}
             initialParams={{
               show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
               showtimes: [
@@ -133,7 +133,7 @@ describe("Holds", () => {
             }}
           />
         </Stack.Navigator>
-        <HoldConfirmationModal />
+        <HoldConfirmationBottomSheet />
       </>
     );
 
@@ -184,13 +184,13 @@ describe("Holds", () => {
         ]
       });
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText} = render(
       <>
         <Stack.Navigator>
           <Stack.Screen
             name="ShowDetails"
-            component={ShowDetails}
+            component={ShowDetailsScreen}
             initialParams={{
               show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
               showtimes: [
@@ -203,7 +203,7 @@ describe("Holds", () => {
             }}
           />
         </Stack.Navigator>
-        <HoldConfirmationModal />
+        <HoldConfirmationBottomSheet />
       </>
     );
 
@@ -270,13 +270,13 @@ describe("Holds", () => {
         data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
       });
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText} = render(
       <>
         <Stack.Navigator>
           <Stack.Screen
             name="ShowDetails"
-            component={ShowDetails}
+            component={ShowDetailsScreen}
             initialParams={{
               show: {id: 1, displayName: "Hamilton"} as TodayTixShow,
               showtimes: [
@@ -289,7 +289,7 @@ describe("Holds", () => {
             }}
           />
         </Stack.Navigator>
-        <HoldConfirmationModal />
+        <HoldConfirmationBottomSheet />
       </>
     );
 
@@ -308,6 +308,7 @@ describe("Holds", () => {
   it("cancels a hold for a show that is yet not open and gets tickets for a new show", async () => {
     // setup
     await AsyncStorage.setItem("customer-id", "customer-id");
+    const show1TicketAvailabilityDate = new Date(2021, 4, 23, 0, 1);
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
@@ -330,69 +331,67 @@ describe("Holds", () => {
       .get("/holds")
       .reply(200, {
         data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
+      })
+      .get("/shows/1/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 1,
+            localTime: "19:00",
+            rushTickets: {
+              minTickets: 1,
+              maxTickets: 2,
+              availableAfter: show1TicketAvailabilityDate.toISOString(),
+              availableAfterEpoch: show1TicketAvailabilityDate.getTime() / 1000,
+              availableUntil: show1TicketAvailabilityDate.toISOString()
+            }
+          }
+        ]
+      })
+      .get("/shows/2/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 2,
+            localTime: "19:30",
+            rushTickets: {
+              minTickets: 1,
+              maxTickets: 2,
+              availableAfter: systemTime.toISOString(),
+              availableAfterEpoch: systemTime.getTime() / 1000,
+              availableUntil: systemTime.toISOString()
+            }
+          }
+        ]
       });
 
-    const Stack = createStackNavigator<RootStackParamList>();
-    const show1TicketAvailabilityDate = new Date(2021, 4, 23, 0, 1);
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText} = render(
       <>
         <Stack.Navigator>
           <Stack.Screen
             name="RushShowList"
-            component={RushShowList}
+            component={RushShowListScreen}
             initialParams={{
-              showsAndTimes: [
+              rushShows: [
                 {
-                  show: {
-                    id: 1,
-                    displayName: "SIX the Musical",
-                    isRushActive: true,
-                    showId: 1
-                  } as TodayTixShow,
-                  showtimes: [
-                    {
-                      id: 1,
-                      localTime: "19:00",
-                      rushTickets: {
-                        minTickets: 1,
-                        maxTickets: 2,
-                        availableAfter:
-                          show1TicketAvailabilityDate.toISOString(),
-                        availableAfterEpoch:
-                          show1TicketAvailabilityDate.getTime() / 1000,
-                        availableUntil:
-                          show1TicketAvailabilityDate.toISOString()
-                      }
-                    } as TodayTixShowtime
-                  ]
-                },
+                  id: 1,
+                  displayName: "SIX the Musical",
+                  isRushActive: true,
+                  showId: 1
+                } as TodayTixShow,
                 {
-                  show: {
-                    id: 2,
-                    displayName: "Hamilton",
-                    isRushActive: true,
-                    showId: 2
-                  } as TodayTixShow,
-                  showtimes: [
-                    {
-                      id: 2,
-                      localTime: "19:30",
-                      rushTickets: {
-                        minTickets: 1,
-                        maxTickets: 2,
-                        availableAfter: systemTime.toISOString(),
-                        availableAfterEpoch: systemTime.getTime() / 1000,
-                        availableUntil: systemTime.toISOString()
-                      }
-                    } as TodayTixShowtime
-                  ]
-                }
+                  id: 2,
+                  displayName: "Hamilton",
+                  isRushActive: true,
+                  showId: 2
+                } as TodayTixShow
               ]
             }}
           />
-          <Stack.Screen name="ShowDetails" component={ShowDetails} />
+          <Stack.Screen name="ShowDetails" component={ShowDetailsScreen} />
         </Stack.Navigator>
-        <HoldConfirmationModal />
+        <HoldConfirmationBottomSheet />
       </>
     );
 
@@ -441,12 +440,12 @@ describe("Holds", () => {
           "Sorry, something went wrong. Please try signing in again and contact TodayTix Support if the issue persists."
       });
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText, queryByText} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="ShowDetails"
-          component={ShowDetails}
+          component={ShowDetailsScreen}
           initialParams={{
             show: {
               id: 1,
@@ -497,7 +496,7 @@ describe("Holds", () => {
           ]
         });
 
-      const {getByText} = render(<HoldConfirmationModal />);
+      const {getByText} = render(<HoldConfirmationBottomSheet />);
 
       await waitFor(
         () =>
@@ -535,7 +534,7 @@ describe("Holds", () => {
           ]
         });
 
-      const {getByText} = render(<HoldConfirmationModal />);
+      const {getByText} = render(<HoldConfirmationBottomSheet />);
 
       await waitFor(
         () =>
@@ -580,13 +579,13 @@ describe("Holds", () => {
         .get("/holds")
         .reply(200, {data: []});
 
-      const Stack = createStackNavigator<RootStackParamList>();
+      const Stack = createStackNavigator<RushShowStackParamList>();
       const {getByText, queryByText, getByLabelText} = render(
         <>
           <Stack.Navigator>
             <Stack.Screen
               name="ShowDetails"
-              component={ShowDetails}
+              component={ShowDetailsScreen}
               initialParams={{
                 show: {} as TodayTixShow,
                 showtimes: [
@@ -599,7 +598,7 @@ describe("Holds", () => {
               }}
             />
           </Stack.Navigator>
-          <HoldConfirmationModal />
+          <HoldConfirmationBottomSheet />
         </>
       );
 
@@ -632,30 +631,31 @@ describe("Holds", () => {
         data: [
           {numSeats: 2, showtime: {show: {displayName: "SIX the Musical"}}}
         ]
+      })
+      .get("/shows/1/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [{id: 1}]
       });
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText} = render(
       <>
         <Stack.Navigator>
           <Stack.Screen
             name="RushShowList"
-            component={RushShowList}
+            component={RushShowListScreen}
             initialParams={{
-              showsAndTimes: [
+              rushShows: [
                 {
-                  show: {
-                    id: 1,
-                    displayName: "SIX the Musical"
-                  } as TodayTixShow,
-                  showtimes: [{id: 1} as TodayTixShowtime]
-                }
+                  id: 1,
+                  displayName: "SIX the Musical"
+                } as TodayTixShow
               ]
             }}
           />
-          <Stack.Screen name="ShowDetails" component={ShowDetails} />
+          <Stack.Screen name="ShowDetails" component={ShowDetailsScreen} />
         </Stack.Navigator>
-        <HoldConfirmationModal />
+        <HoldConfirmationBottomSheet />
       </>
     );
 

@@ -12,14 +12,13 @@ import {
   waitFor
 } from "testing-library/extension";
 
-import RushShowList from "../RushShowList";
+import RushShowListScreen from "../RushShowListScreen";
 
-import ShowDetails from "../../ShowDetails/ShowDetails";
+import ShowDetailsScreen from "../../ShowDetails/ShowDetailsScreen";
 
 import {hadestownLightThemeColors} from "../../../themes";
-import {RootStackParamList} from "../../../types/navigation";
+import {RushShowStackParamList} from "../../../types/navigation";
 import {TodayTixShow} from "../../../types/shows";
-import {TodayTixShowtime} from "../../../types/showtimes";
 
 describe("Rush show list", () => {
   beforeEach(async () => {
@@ -42,99 +41,100 @@ describe("Rush show list", () => {
           {showId: 3, showName: "Hamilton"},
           {showId: 5, showName: "Come from Away"}
         ]
-      });
+      })
+      .get("/shows/1/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 1,
+            rushTickets: {
+              quantityAvailable: 4,
+              availableAfter: "2021-05-23T09:30:00.000",
+              availableUntil: "2021-05-23T15:30:00.000"
+            }
+          }
+        ]
+      })
+      .get("/shows/2/showtimes/with_rush_availability")
+      .reply(200, {data: []})
+      .get("/shows/3/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 3,
+            rushTickets: {
+              quantityAvailable: 3,
+              availableAfter: "2021-05-23T09:30:00.000",
+              availableUntil: "2021-05-23T15:30:00.000"
+            }
+          },
+          {
+            id: 4,
+            rushTickets: {
+              quantityAvailable: 2,
+              availableAfter: "2021-05-23T09:30:00.000",
+              availableUntil: "2021-05-23T15:30:00.000"
+            }
+          }
+        ]
+      })
+      .get("/shows/4/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 4,
+            rushTickets: {
+              quantityAvailable: 10,
+              availableAfter: "2021-05-23T09:30:00.000",
+              availableUntil: "2021-05-23T15:30:00.000"
+            }
+          }
+        ]
+      })
+      .get("/shows/5/showtimes/with_rush_availability")
+      .reply(200, {data: []});
 
     // render
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getAllByLabelText} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="RushShowList"
-          component={RushShowList}
+          component={RushShowListScreen}
           initialParams={{
             /* The typecast is used because a TodayTixShow has many required fields,
             most of which are not necessary for the functionality of the component. */
-            showsAndTimes: [
+            rushShows: [
               {
-                show: {
-                  id: 1,
-                  displayName: "SIX the Musical",
-                  isRushActive: true,
-                  showId: 1
-                } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 1,
-                    rushTickets: {
-                      quantityAvailable: 4,
-                      availableAfter: "2021-05-23T09:30:00.000",
-                      availableUntil: "2021-05-23T15:30:00.000"
-                    }
-                  } as TodayTixShowtime
-                ]
-              },
+                id: 1,
+                displayName: "SIX the Musical",
+                isRushActive: true,
+                showId: 1
+              } as TodayTixShow,
               {
-                show: {
-                  id: 2,
-                  displayName: "Unfortunate",
-                  isRushActive: true,
-                  showId: 2
-                } as TodayTixShow,
-                showtimes: []
-              },
+                id: 2,
+                displayName: "Unfortunate",
+                isRushActive: true,
+                showId: 2
+              } as TodayTixShow,
               {
-                show: {
-                  id: 3,
-                  displayName: "Hamilton",
-                  isRushActive: true,
-                  showId: 3
-                } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 3,
-                    rushTickets: {
-                      quantityAvailable: 3,
-                      availableAfter: "2021-05-23T09:30:00.000",
-                      availableUntil: "2021-05-23T15:30:00.000"
-                    }
-                  } as TodayTixShowtime,
-                  {
-                    id: 4,
-                    rushTickets: {
-                      quantityAvailable: 2,
-                      availableAfter: "2021-05-23T09:30:00.000",
-                      availableUntil: "2021-05-23T15:30:00.000"
-                    }
-                  } as TodayTixShowtime
-                ]
-              },
+                id: 3,
+                displayName: "Hamilton",
+                isRushActive: true,
+                showId: 3
+              } as TodayTixShow,
               {
-                show: {
-                  id: 4,
-                  displayName: "Hadestown",
-                  isRushActive: true,
-                  showId: 4
-                } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 4,
-                    rushTickets: {
-                      quantityAvailable: 10,
-                      availableAfter: "2021-05-23T09:30:00.000",
-                      availableUntil: "2021-05-23T15:30:00.000"
-                    }
-                  } as TodayTixShowtime
-                ]
-              },
+                id: 4,
+                displayName: "Hadestown",
+                isRushActive: true,
+                showId: 4
+              } as TodayTixShow,
               {
-                show: {
-                  id: 5,
-                  displayName: "Come from Away",
-                  isRushActive: true,
-                  showId: 5
-                } as TodayTixShow,
-                showtimes: []
-              }
+                id: 5,
+                displayName: "Come from Away",
+                isRushActive: true,
+                showId: 5
+              } as TodayTixShow
             ]
           }}
         />
@@ -161,41 +161,42 @@ describe("Rush show list", () => {
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
       .get("/customers/me/rushGrants")
-      .reply(200, {data: [{showId: 1, showName: "SIX the Musical"}]});
+      .reply(200, {data: [{showId: 1, showName: "SIX the Musical"}]})
+      .get("/shows/1/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 1,
+            rushTickets: {
+              quantityAvailable: 4,
+              availableAfter: "2021-05-23T11:00:00.000+01:00",
+              availableUntil: "2021-05-23T16:30:00.000+01:00"
+            }
+          }
+        ]
+      });
 
     // render
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByTestId, getByLabelText} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="RushShowList"
-          component={RushShowList}
+          component={RushShowListScreen}
           initialParams={{
             /* The typecast is used because a TodayTixShow has many required fields,
             most of which are not necessary for the functionality of the component. */
-            showsAndTimes: [
+            rushShows: [
               {
-                show: {
-                  id: 1,
-                  displayName: "SIX the Musical",
-                  isRushActive: true,
-                  showId: 1
-                } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 1,
-                    rushTickets: {
-                      quantityAvailable: 4,
-                      availableAfter: "2021-05-23T11:00:00.000+01:00",
-                      availableUntil: "2021-05-23T16:30:00.000+01:00"
-                    }
-                  } as TodayTixShowtime
-                ]
-              }
+                id: 1,
+                displayName: "SIX the Musical",
+                isRushActive: true,
+                showId: 1
+              } as TodayTixShow
             ]
           }}
         />
-        <Stack.Screen name="ShowDetails" component={ShowDetails} />
+        <Stack.Screen name="ShowDetails" component={ShowDetailsScreen} />
       </Stack.Navigator>
     );
 
@@ -229,68 +230,70 @@ describe("Rush show list", () => {
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
       .get("/customers/me/rushGrants")
-      .reply(200, {data: []});
+      .reply(200, {data: []})
+      .get("/shows/1/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 1,
+            localTime: "19:00",
+            rushTickets: {
+              minTickets: 1,
+              maxTickets: 2,
+              availableAfter: "2021-05-23T11:00:00.000+01:00",
+              availableAfterEpoch: 1621764000,
+              availableUntil: "2021-05-23T16:30:00.000+01:00"
+            }
+          }
+        ]
+      })
+      .get("/shows/2/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 2,
+            localTime: "14:00",
+            rushTickets: {
+              minTickets: 1,
+              maxTickets: 2,
+              availableAfter: "2021-05-23T11:00:00.000+01:00",
+              availableUntil: "2021-05-23T16:30:00.000+01:00"
+            }
+          }
+        ]
+      });
 
     // render
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="RushShowList"
-          component={RushShowList}
+          component={RushShowListScreen}
           initialParams={{
             /* The typecast is used because a TodayTixShow has many required fields,
             most of which are not necessary for the functionality of the component. */
-            showsAndTimes: [
+            rushShows: [
               {
-                show: {
-                  id: 1,
-                  displayName: "SIX the Musical",
-                  isRushActive: true
-                } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 1,
-                    localTime: "19:00",
-                    rushTickets: {
-                      minTickets: 1,
-                      maxTickets: 2,
-                      availableAfter: "2021-05-23T11:00:00.000+01:00",
-                      availableAfterEpoch: 1621764000,
-                      availableUntil: "2021-05-23T16:30:00.000+01:00"
-                    }
-                  } as TodayTixShowtime
-                ]
-              },
+                id: 1,
+                displayName: "SIX the Musical",
+                isRushActive: true
+              } as TodayTixShow,
               {
-                show: {
-                  id: 2,
-                  displayName: "Hamilton",
-                  isRushActive: true,
-                  images: {
-                    productMedia: {
-                      appHeroImage: {file: {url: "test-url-for-show-card"}},
-                      headerImage: {file: {url: "test-url-for-header-photo"}}
-                    }
+                id: 2,
+                displayName: "Hamilton",
+                isRushActive: true,
+                images: {
+                  productMedia: {
+                    appHeroImage: {file: {url: "test-url-for-show-card"}},
+                    headerImage: {file: {url: "test-url-for-header-photo"}}
                   }
-                } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 2,
-                    localTime: "14:00",
-                    rushTickets: {
-                      minTickets: 1,
-                      maxTickets: 2,
-                      availableAfter: "2021-05-23T11:00:00.000+01:00",
-                      availableUntil: "2021-05-23T16:30:00.000+01:00"
-                    }
-                  } as TodayTixShowtime
-                ]
-              }
+                }
+              } as TodayTixShow
             ]
           }}
         />
-        <Stack.Screen name="ShowDetails" component={ShowDetails} />
+        <Stack.Screen name="ShowDetails" component={ShowDetailsScreen} />
       </Stack.Navigator>
     );
 
@@ -362,23 +365,20 @@ describe("Rush show list", () => {
       .delay(5000)
       .reply(200, {data: []});
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByTestId} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="RushShowList"
-          component={RushShowList}
+          component={RushShowListScreen}
           initialParams={{
-            showsAndTimes: [
+            rushShows: [
               {
-                show: {
-                  id: 1,
-                  displayName: "SIX the Musical",
-                  isRushActive: true,
-                  showId: 1
-                } as TodayTixShow,
-                showtimes: []
-              }
+                id: 1,
+                displayName: "SIX the Musical",
+                isRushActive: true,
+                showId: 1
+              } as TodayTixShow
             ]
           }}
         />
@@ -403,52 +403,54 @@ describe("Rush show list", () => {
         title: "Error",
         message:
           "Sorry, something went wrong. Please try signing in again and contact TodayTix Support if the issue persists."
+      })
+      .get("/shows/1/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 1,
+            rushTickets: {
+              quantityAvailable: 6,
+              availableAfter: "2021-05-23T11:00:00.000+01:00",
+              availableUntil: "2021-05-23T16:30:00.000+01:00"
+            }
+          }
+        ]
+      })
+      .get("/shows/2/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 2,
+            rushTickets: {
+              quantityAvailable: 10,
+              availableAfter: "2021-05-23T11:00:00.000+01:00",
+              availableUntil: "2021-05-23T16:30:00.000+01:00"
+            }
+          }
+        ]
       });
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getAllByLabelText, getByLabelText} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="RushShowList"
-          component={RushShowList}
+          component={RushShowListScreen}
           initialParams={{
-            showsAndTimes: [
+            rushShows: [
               {
-                show: {
-                  id: 1,
-                  displayName: "SIX the Musical",
-                  isRushActive: true,
-                  showId: 1
-                } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 1,
-                    rushTickets: {
-                      quantityAvailable: 6,
-                      availableAfter: "2021-05-23T11:00:00.000+01:00",
-                      availableUntil: "2021-05-23T16:30:00.000+01:00"
-                    }
-                  } as TodayTixShowtime
-                ]
-              },
+                id: 1,
+                displayName: "SIX the Musical",
+                isRushActive: true,
+                showId: 1
+              } as TodayTixShow,
               {
-                show: {
-                  id: 2,
-                  displayName: "Hamilton",
-                  isRushActive: true,
-                  showId: 2
-                } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 2,
-                    rushTickets: {
-                      quantityAvailable: 10,
-                      availableAfter: "2021-05-23T11:00:00.000+01:00",
-                      availableUntil: "2021-05-23T16:30:00.000+01:00"
-                    }
-                  } as TodayTixShowtime
-                ]
-              }
+                id: 2,
+                displayName: "Hamilton",
+                isRushActive: true,
+                showId: 2
+              } as TodayTixShow
             ]
           }}
         />
@@ -492,34 +494,35 @@ describe("Rush show list", () => {
       .get("/customers/me/rushGrants")
       .reply(200, {
         data: [{showId: 1, showName: "SIX the Musical"}]
+      })
+      .get("/shows/1/showtimes/with_rush_availability")
+      .reply(200, {
+        data: [
+          {
+            id: 1,
+            rushTickets: {
+              quantityAvailable: 6,
+              availableAfter: "2021-05-23T11:00:00.000+01:00",
+              availableUntil: "2021-05-23T16:30:00.000+01:00"
+            }
+          }
+        ]
       });
 
-    const Stack = createStackNavigator<RootStackParamList>();
+    const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText, queryByLabelText} = render(
       <Stack.Navigator>
         <Stack.Screen
           name="RushShowList"
-          component={RushShowList}
+          component={RushShowListScreen}
           initialParams={{
-            showsAndTimes: [
+            rushShows: [
               {
-                show: {
-                  id: 1,
-                  displayName: "SIX the Musical",
-                  isRushActive: true,
-                  showId: 1
-                } as TodayTixShow,
-                showtimes: [
-                  {
-                    id: 1,
-                    rushTickets: {
-                      quantityAvailable: 6,
-                      availableAfter: "2021-05-23T11:00:00.000+01:00",
-                      availableUntil: "2021-05-23T16:30:00.000+01:00"
-                    }
-                  } as TodayTixShowtime
-                ]
-              }
+                id: 1,
+                displayName: "SIX the Musical",
+                isRushActive: true,
+                showId: 1
+              } as TodayTixShow
             ]
           }}
         />
