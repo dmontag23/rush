@@ -3657,14 +3657,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.7.3":
-  version: 1.7.3
-  resolution: "axios@npm:1.7.3"
+"axios@npm:^1.7.4":
+  version: 1.7.4
+  resolution: "axios@npm:1.7.4"
   dependencies:
     follow-redirects: ^1.15.6
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
-  checksum: bc304d6da974922342aed7c33155934354429cdc7e1ba9d399ab9ff3ac76103f3697eeedf042a634d43cdae682182bcffd942291db42d2be45b750597cdd5eef
+  checksum: 0c17039a9acfe6a566fca8431ba5c1b455c83d30ea6157fec68a6722878fcd30f3bd32d172f6bee0c51fe75ca98e6414ddcd968a87b5606b573731629440bfaf
   languageName: node
   linkType: hard
 
@@ -4699,9 +4699,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"detox@npm:^20.25.2":
-  version: 20.25.2
-  resolution: "detox@npm:20.25.2"
+"detox@npm:^20.25.4":
+  version: 20.25.4
+  resolution: "detox@npm:20.25.4"
   dependencies:
     ajv: ^8.6.3
     bunyan: ^1.8.12
@@ -4745,7 +4745,7 @@ __metadata:
       optional: true
   bin:
     detox: local-cli/cli.js
-  checksum: 5a8bab2d0ccdf8fb2b5d11ea9b0294886fa24089b368cd9b81acea76239d2a7b584dd07732ff87242cf83c9ce6d4729a8255b260a97db05078d5cbfad3a3d657
+  checksum: d1a0937008d71e36ff87dabb8e9352432f26da7e59a11947ed0fd4e5f6de863b03b2fc62ca3a7044945ca0dd0bd7407caa0ab8de44d9bf0ab4f3e00d56949751
   languageName: node
   linkType: hard
 
@@ -9653,9 +9653,9 @@ __metadata:
     "@types/react": ^18.2.6
     "@types/react-native-vector-icons": ^6.4.18
     "@types/react-test-renderer": ^18.0.0
-    axios: ^1.7.3
+    axios: ^1.7.4
     babel-jest: ^29.6.3
-    detox: ^20.25.2
+    detox: ^20.25.4
     eslint: ^8.19.0
     eslint-config-prettier: ^9.1.0
     eslint-plugin-prettier: ^5.2.1
