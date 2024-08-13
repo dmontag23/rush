@@ -29,32 +29,29 @@ const BottomTabBar = ({
   <BottomNavigation.Bar
     navigationState={state}
     safeAreaInsets={insets}
-    onTabPress={({route, preventDefault}) => {
-      const event = navigation.emit({
+    onTabPress={({route}) => {
+      navigation.emit({
         type: "tabPress",
         target: route.key,
         canPreventDefault: true
       });
 
-      event.defaultPrevented
-        ? preventDefault()
-        : navigation.dispatch({
-            ...CommonActions.navigate(route.name, route.params),
-            target: state.key
-          });
+      navigation.dispatch({
+        ...CommonActions.navigate(route.name, route.params),
+        target: state.key
+      });
     }}
     renderIcon={({route, focused, color}) => {
       const {options} = descriptors[route.key];
-      if (options.tabBarIcon)
-        return options.tabBarIcon({focused, color, size: 24});
+      return options.tabBarIcon?.({focused, color, size: 24});
     }}
     getLabelText={({route}) => {
       const {options} = descriptors[route.key];
-      const tabBarLabel =
-        typeof options.tabBarLabel === "string"
-          ? options.tabBarLabel
-          : undefined;
-      return tabBarLabel ?? options.title ?? route.name;
+      /* Technically the tabBarLabel can also be a function that returns a react element, but because
+      we have control over what gets passed into the tabBarLabel option in the tabs below, we can always
+      ensure a string is passed in. The typecast is a tradeoff - we can either typecast, or not have full
+      test coverage. Typecasting leads to the more elegant solution. */
+      return options.tabBarLabel as string;
     }}
   />
 );
@@ -72,7 +69,7 @@ const CreateTabBarIcon =
   (name: (typeof Icon)["name"]): BottomTabNavigationOptions["tabBarIcon"] =>
   ({color, size}) => <Icon name={name} size={size} color={color} />;
 
-const SettingsRoute = () => <Text>Settings</Text>;
+const SettingsRoute = () => <Text>All Settings</Text>;
 
 type LoggedInBottomTabNavigatorProps = {
   shows: TodayTixShow[];
