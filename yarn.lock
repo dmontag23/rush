@@ -2836,9 +2836,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-native@npm:^12.5.3":
-  version: 12.5.3
-  resolution: "@testing-library/react-native@npm:12.5.3"
+"@testing-library/react-native@npm:^12.6.0":
+  version: 12.6.0
+  resolution: "@testing-library/react-native@npm:12.6.0"
   dependencies:
     jest-matcher-utils: ^29.7.0
     pretty-format: ^29.7.0
@@ -2851,7 +2851,7 @@ __metadata:
   peerDependenciesMeta:
     jest:
       optional: true
-  checksum: d1467bf479a620efa50738946faeaa0dca6fed42b6d6cab36aaae5ebe3b5276b0dcbfba81a78e64479f7495e579151a3ec3066727cfb65bfbbc091a284b26f6f
+  checksum: ccd1fd5c5080b50a10d147697066035e4caad11520f89b8e04cf9e4e9251b9a12ab0e729e7363c18c3484da75d7eb27adf2dcae97e64ed6f61b2dd7b81b22330
   languageName: node
   linkType: hard
 
@@ -4671,9 +4671,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"detox@npm:^20.25.4":
-  version: 20.25.4
-  resolution: "detox@npm:20.25.4"
+"detox@npm:^20.25.5":
+  version: 20.25.5
+  resolution: "detox@npm:20.25.5"
   dependencies:
     ajv: ^8.6.3
     bunyan: ^1.8.12
@@ -4717,7 +4717,7 @@ __metadata:
       optional: true
   bin:
     detox: local-cli/cli.js
-  checksum: d1a0937008d71e36ff87dabb8e9352432f26da7e59a11947ed0fd4e5f6de863b03b2fc62ca3a7044945ca0dd0bd7407caa0ab8de44d9bf0ab4f3e00d56949751
+  checksum: 03322935859ad4725830fc724927ed6ac53a87b14f280b957af97bda8aa2aa4358b284c71332712222c50de475145b29242df2b5433aec12e8c4361b70f685dc
   languageName: node
   linkType: hard
 
@@ -9109,13 +9109,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:^4.10.8":
-  version: 4.10.8
-  resolution: "react-native-safe-area-context@npm:4.10.8"
+"react-native-safe-area-context@npm:^4.10.9":
+  version: 4.10.9
+  resolution: "react-native-safe-area-context@npm:4.10.9"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: eced388ae7cc712f75e43cba302b612c8fecceb8ec8b39cff21b6bc29debe2fdc24423f67609af244d919c3ed871dd1d36c6adc97a8960a938984d333490e653
+  checksum: 150bf4fa7607e8de565cce0c45d321048a3c982f4c82cc2a49eb342def968559f538d4554c30c20fa8b2e6dc716c24846745b129dc25396e083d98c2a29962a2
   languageName: node
   linkType: hard
 
@@ -9597,14 +9597,14 @@ __metadata:
     "@react-navigation/native": ^6.1.18
     "@react-navigation/stack": ^6.4.1
     "@tanstack/react-query": ^5.51.23
-    "@testing-library/react-native": ^12.5.3
+    "@testing-library/react-native": ^12.6.0
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
     "@types/react": ^18.2.6
     "@types/react-native-vector-icons": ^6.4.18
     "@types/react-test-renderer": ^18.0.0
     axios: ^1.7.4
     babel-jest: ^29.6.3
-    detox: ^20.25.4
+    detox: ^20.25.5
     eslint: ^8.19.0
     eslint-config-prettier: ^9.1.0
     eslint-plugin-prettier: ^5.2.1
@@ -9618,7 +9618,7 @@ __metadata:
     react-native-gesture-handler: ^2.18.1
     react-native-paper: ^5.12.5
     react-native-reanimated: ^3.15.0
-    react-native-safe-area-context: ^4.10.8
+    react-native-safe-area-context: ^4.10.9
     react-native-screens: ^3.34.0
     react-native-svg: ^15.5.0
     react-native-vector-icons: ^10.0.3
