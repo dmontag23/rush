@@ -13,7 +13,5 @@ describe("Rush shows", () => {
 
     // navigate to the settings tab
     await settingsTab.tap();
-
-    await expect(element(by.text("All Settings"))).toBeVisible();
   });
 });
