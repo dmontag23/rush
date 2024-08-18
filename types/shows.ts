@@ -3,9 +3,18 @@ export enum TodayTixFieldset {
 }
 
 export enum TodayTixLocation {
-  NewYork = 1,
+  Adelaide = 95,
+  Brisbane = 19,
+  Chicago = 3,
   London = 2,
-  Sydney = 17
+  LosAngelesAndOrangeCounty = 5,
+  Melbourne = 18,
+  NewYork = 1,
+  Perth = 93,
+  SanFrancisco = 4,
+  Sydney = 17,
+  WashingtonDC = 6,
+  OtherCities = 98
 }
 
 export enum AnchorPosition {

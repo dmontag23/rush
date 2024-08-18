@@ -6,12 +6,12 @@ import {TodayTixShow} from "./shows";
 import {TodayTixShowtime} from "./showtimes";
 
 export type RushShowStackParamList = {
-  RushShowList: {rushShows: TodayTixShow[]};
+  RushShowList: undefined;
   ShowDetails: {show: TodayTixShow; showtimes: TodayTixShowtime[]};
 };
 
 export type LoggedInBottomTabParamList = {
-  RushShows: {rushShows: TodayTixShow[]};
+  RushShows: undefined;
   Settings: undefined;
 };
 

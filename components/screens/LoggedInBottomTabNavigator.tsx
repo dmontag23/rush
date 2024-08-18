@@ -7,14 +7,14 @@ import {
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
 import {CommonActions} from "@react-navigation/native";
-import {BottomNavigation, Text} from "react-native-paper";
+import {BottomNavigation} from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import HoldConfirmationBottomSheet from "./HoldConfirmationBottomSheet";
 import RushShowNavigator from "./RushShowNavigator";
+import SettingsScreen from "./SettingsScreen";
 
 import {LoggedInBottomTabParamList} from "../../types/navigation";
-import {TodayTixShow} from "../../types/shows";
 
 const BottomTab = createBottomTabNavigator<LoggedInBottomTabParamList>();
 
@@ -69,18 +69,8 @@ const CreateTabBarIcon =
   (name: (typeof Icon)["name"]): BottomTabNavigationOptions["tabBarIcon"] =>
   ({color, size}) => <Icon name={name} size={size} color={color} />;
 
-const SettingsRoute = () => <Text>All Settings</Text>;
-
-type LoggedInBottomTabNavigatorProps = {
-  shows: TodayTixShow[];
-};
-
-const LoggedInBottomTabNavigator = ({
-  shows
-}: LoggedInBottomTabNavigatorProps) => {
+const LoggedInBottomTabNavigator = () => {
   const [bottomNavBarHeight, setBottomNavBarHeight] = useState<number>();
-
-  const rushShows = shows.filter(show => show.isRushActive);
 
   const handleLayout = (event: LayoutChangeEvent) => {
     const {height} = event.nativeEvent.layout;
@@ -100,7 +90,6 @@ const LoggedInBottomTabNavigator = ({
         <BottomTab.Screen
           name="RushShows"
           component={RushShowNavigator}
-          initialParams={{rushShows}}
           options={{
             tabBarLabel: "Rush Shows",
             tabBarIcon: CreateTabBarIcon("drama-masks")
@@ -108,7 +97,7 @@ const LoggedInBottomTabNavigator = ({
         />
         <BottomTab.Screen
           name="Settings"
-          component={SettingsRoute}
+          component={SettingsScreen}
           options={{
             tabBarLabel: "Settings",
             tabBarIcon: CreateTabBarIcon("cog")

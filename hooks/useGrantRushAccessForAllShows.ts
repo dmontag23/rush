@@ -66,7 +66,7 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
       /* The condition below ensures that isGrantingAccess is still true between the
       time the current rush grants are received and the post request(s) needed to unlock
       the remaining shows */
-      (showIdsToGrantRushAccessTo.length &&
+      (Boolean(showIdsToGrantRushAccessTo.length) &&
         !(isPostRushGrantsSuccess || isPostRushGrantsError)),
     rushGrants
   };

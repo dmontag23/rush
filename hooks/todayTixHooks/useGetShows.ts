@@ -30,14 +30,19 @@ const getShows = (
   );
 };
 
+type UseGetShowsProps = {
+  requestParams?: TodayTixShowsReqQueryParams;
+  enabled?: boolean;
+};
+
 const useGetShows = ({
-  areAccessProgramsActive,
-  fieldset,
-  limit,
-  location,
-  offset
-}: TodayTixShowsReqQueryParams = {}) =>
-  useQuery<TodayTixShow[], TodayTixAPIError>({
+  requestParams = {},
+  enabled = true
+}: UseGetShowsProps = {}) => {
+  const {areAccessProgramsActive, fieldset, limit, location, offset} =
+    requestParams;
+
+  return useQuery<TodayTixShow[], TodayTixAPIError>({
     queryKey: [
       "shows",
       areAccessProgramsActive,
@@ -47,7 +52,9 @@ const useGetShows = ({
       offset
     ],
     queryFn: () =>
-      getShows(areAccessProgramsActive, fieldset, limit, location, offset)
+      getShows(areAccessProgramsActive, fieldset, limit, location, offset),
+    enabled
   });
+};
 
 export default useGetShows;

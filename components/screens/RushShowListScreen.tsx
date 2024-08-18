@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {ScrollView, StyleSheet, View} from "react-native";
 
 import {useSafeAreaInsets} from "react-native-safe-area-context";
@@ -7,10 +7,12 @@ import HoldBanner from "../HoldBanner";
 import ShowCard, {isShowActive} from "../ShowCard";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
+import useGetLocation from "../../hooks/asyncStorageHooks/useGetLocation";
+import useGetShows from "../../hooks/todayTixHooks/useGetShows";
 import useGetShowtimesWithRushAvailability from "../../hooks/todayTixHooks/useGetShowtimesWithRushAvailability";
 import useGrantRushAccessForAllShows from "../../hooks/useGrantRushAccessForAllShows";
 import {RushShowsStackScreenProps} from "../../types/navigation";
-import {TodayTixShow} from "../../types/shows";
+import {TodayTixFieldset, TodayTixShow} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";
 
 const isRushUnlocked = (show: TodayTixShow, allUnlockedRushShowIds: number[]) =>
@@ -24,12 +26,26 @@ const addTickets = (showtimes: TodayTixShowtime[]) =>
   );
 
 const RushShowListScreen = ({
-  route,
   navigation
 }: RushShowsStackScreenProps<"RushShowList">) => {
   const {top, bottom} = useSafeAreaInsets();
 
-  const {rushShows} = route.params;
+  const {data: location, isPending: isLoadingLocation} = useGetLocation();
+  const {data: rushAndLotteryShows, isPending: isLoadingRushAndLotteryShows} =
+    useGetShows({
+      requestParams: {
+        areAccessProgramsActive: true,
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location
+      },
+      enabled: Boolean(location)
+    });
+
+  const rushShows = useMemo(
+    () => rushAndLotteryShows?.filter(show => show.isRushActive) ?? [],
+    [rushAndLotteryShows]
+  );
 
   const {isGrantingAccess, rushGrants} =
     useGrantRushAccessForAllShows(rushShows);
@@ -39,7 +55,12 @@ const RushShowListScreen = ({
       showIds: rushShows.map(show => show.id)
     });
 
-  if (isGrantingAccess || isLoadingRushShowtimes)
+  if (
+    isLoadingLocation ||
+    isLoadingRushAndLotteryShows ||
+    isGrantingAccess ||
+    isLoadingRushShowtimes
+  )
     return (
       <View style={styles.loadingSpinnerContainer}>
         <LoadingSpinner size="large" />

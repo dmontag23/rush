@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useMemo, useRef} from "react";
 import {Linking, StyleSheet, View} from "react-native";
 
-import BottomSheet, {BottomSheetView} from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 import {Button, Card, Text, useTheme} from "react-native-paper";
 
 import {pluralize} from "../utils";
@@ -63,7 +63,7 @@ const HoldConfirmationBottomSheet = ({
       bottomInset={bottomInset}
       style={[styles.modalContainer, {borderColor: colors.primary}]}>
       {hold && (
-        <BottomSheetView style={styles.contentContainer}>
+        <View style={styles.contentContainer}>
           <Text
             variant="titleMedium"
             style={
@@ -100,7 +100,7 @@ const HoldConfirmationBottomSheet = ({
             style={styles.button}>
             Release tickets
           </Button>
-        </BottomSheetView>
+        </View>
       )}
     </BottomSheet>
   );
