@@ -14,7 +14,11 @@ import HoldContext from "../../store/hold-context";
 import {hadestownLightThemeColors} from "../../themes";
 import {TodayTixHoldErrorCode, TodayTixHoldType} from "../../types/holds";
 import {RushShowStackParamList} from "../../types/navigation";
-import {TodayTixShow} from "../../types/shows";
+import {
+  TodayTixFieldset,
+  TodayTixLocation,
+  TodayTixShow
+} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";
 
 describe("Hold banner", () => {
@@ -27,6 +31,16 @@ describe("Hold banner", () => {
     )
       .get("/customers/me/rushGrants")
       .reply(200, {data: [{showId: 1, showName: "SIX the Musical"}]})
+      .get("/shows")
+      .query({
+        areAccessProgramsActive: 1,
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location: TodayTixLocation.London
+      })
+      .reply(200, {
+        data: [{id: 1, displayName: "SIX the Musical", isRushActive: true}]
+      })
       .get("/shows/1/showtimes/with_rush_availability")
       .reply(200, {
         data: [
@@ -45,21 +59,7 @@ describe("Hold banner", () => {
     const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText, getByTestId} = render(
       <Stack.Navigator>
-        <Stack.Screen
-          name="RushShowList"
-          component={RushShowListScreen}
-          initialParams={{
-            /* The typecast is used because a TodayTixShow has many required fields,
-            most of which are not necessary for the functionality of the component. */
-            rushShows: [
-              {
-                id: 1,
-                displayName: "SIX the Musical",
-                showId: 1
-              } as TodayTixShow
-            ]
-          }}
-        />
+        <Stack.Screen name="RushShowList" component={RushShowListScreen} />
         <Stack.Screen name="ShowDetails" component={ShowDetailsScreen} />
       </Stack.Navigator>
     );

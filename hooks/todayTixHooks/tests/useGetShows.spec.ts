@@ -31,8 +31,12 @@ describe("useGetShows hook", () => {
         data: [{id: "Test show"}]
       });
 
-    const {result} = renderHook(() => useGetShows({offset: 10}));
+    const {result} = renderHook(() =>
+      useGetShows({requestParams: {offset: 10}})
+    );
 
-    await waitFor(() => expect(result.current.data?.[0].id).toBe("Test show"));
+    await waitFor(() => expect(result.current.data?.[0].id).toBe("Test show"), {
+      timeout: 2000
+    });
   });
 });

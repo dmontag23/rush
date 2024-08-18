@@ -21,7 +21,11 @@ import {systemTime} from "../../tests/integration/setup";
 import {hadestownLightThemeColors} from "../../themes";
 import {TodayTixHoldErrorCode, TodayTixHoldType} from "../../types/holds";
 import {RushShowStackParamList} from "../../types/navigation";
-import {TodayTixShow} from "../../types/shows";
+import {
+  TodayTixFieldset,
+  TodayTixLocation,
+  TodayTixShow
+} from "../../types/shows";
 import {TodayTixShowtime} from "../../types/showtimes";
 
 describe("Holds", () => {
@@ -332,6 +336,24 @@ describe("Holds", () => {
       .reply(200, {
         data: [{numSeats: 2, showtime: {show: {displayName: "Hamilton"}}}]
       })
+      .get("/shows")
+      .query({
+        areAccessProgramsActive: 1,
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location: TodayTixLocation.London
+      })
+      .reply(200, {
+        data: [
+          {
+            id: 1,
+            displayName: "SIX the Musical",
+            isRushActive: true,
+            showId: 1
+          },
+          {id: 2, displayName: "Hamilton", isRushActive: true, showId: 2}
+        ]
+      })
       .get("/shows/1/showtimes/with_rush_availability")
       .reply(200, {
         data: [
@@ -369,26 +391,7 @@ describe("Holds", () => {
     const {getByText, getByLabelText} = render(
       <>
         <Stack.Navigator>
-          <Stack.Screen
-            name="RushShowList"
-            component={RushShowListScreen}
-            initialParams={{
-              rushShows: [
-                {
-                  id: 1,
-                  displayName: "SIX the Musical",
-                  isRushActive: true,
-                  showId: 1
-                } as TodayTixShow,
-                {
-                  id: 2,
-                  displayName: "Hamilton",
-                  isRushActive: true,
-                  showId: 2
-                } as TodayTixShow
-              ]
-            }}
-          />
+          <Stack.Screen name="RushShowList" component={RushShowListScreen} />
           <Stack.Screen name="ShowDetails" component={ShowDetailsScreen} />
         </Stack.Navigator>
         <HoldConfirmationBottomSheet />
@@ -632,27 +635,24 @@ describe("Holds", () => {
           {numSeats: 2, showtime: {show: {displayName: "SIX the Musical"}}}
         ]
       })
-      .get("/shows/1/showtimes/with_rush_availability")
+      .get("/shows")
+      .query({
+        areAccessProgramsActive: 1,
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location: TodayTixLocation.London
+      })
       .reply(200, {
-        data: [{id: 1}]
-      });
+        data: [{id: 1, displayName: "SIX the Musical", isRushActive: true}]
+      })
+      .get("/shows/1/showtimes/with_rush_availability")
+      .reply(200, {data: [{id: 1}]});
 
     const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText} = render(
       <>
         <Stack.Navigator>
-          <Stack.Screen
-            name="RushShowList"
-            component={RushShowListScreen}
-            initialParams={{
-              rushShows: [
-                {
-                  id: 1,
-                  displayName: "SIX the Musical"
-                } as TodayTixShow
-              ]
-            }}
-          />
+          <Stack.Screen name="RushShowList" component={RushShowListScreen} />
           <Stack.Screen name="ShowDetails" component={ShowDetailsScreen} />
         </Stack.Navigator>
         <HoldConfirmationBottomSheet />
@@ -661,11 +661,11 @@ describe("Holds", () => {
 
     const headerText = "You've won 2 tickets to SIX the Musical 🎉";
     await waitFor(() => expect(getByText(headerText)).toBeVisible());
-    const showCard = getByText("SIX the Musical");
-    expect(showCard).toBeVisible();
+    const showCardText = "SIX the Musical";
+    await waitFor(() => expect(getByText(showCardText)).toBeVisible());
 
     // navigate between screens
-    await userEvent.press(showCard);
+    await userEvent.press(getByText(showCardText));
     fireEvent(getByLabelText("Header image"), "onLoadEnd");
     expect(getByText(headerText)).toBeVisible();
     await waitFor(() => expect(getByText("Select a Time")).toBeVisible());

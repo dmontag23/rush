@@ -18,7 +18,7 @@ import ShowDetailsScreen from "../../ShowDetails/ShowDetailsScreen";
 
 import {hadestownLightThemeColors} from "../../../themes";
 import {RushShowStackParamList} from "../../../types/navigation";
-import {TodayTixShow} from "../../../types/shows";
+import {TodayTixFieldset, TodayTixLocation} from "../../../types/shows";
 
 describe("Rush show list", () => {
   beforeEach(async () => {
@@ -40,6 +40,27 @@ describe("Rush show list", () => {
           {showId: 1, showName: "SIX the Musical"},
           {showId: 3, showName: "Hamilton"},
           {showId: 5, showName: "Come from Away"}
+        ]
+      })
+      .get("/shows")
+      .query({
+        areAccessProgramsActive: 1,
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location: TodayTixLocation.London
+      })
+      .reply(200, {
+        data: [
+          {
+            id: 1,
+            displayName: "SIX the Musical",
+            isRushActive: true,
+            showId: 1
+          },
+          {id: 2, displayName: "Unfortunate", isRushActive: true, showId: 2},
+          {id: 3, displayName: "Hamilton", isRushActive: true, showId: 3},
+          {id: 4, displayName: "Hadestown", isRushActive: true, showId: 4},
+          {id: 5, displayName: "Come from Away", isRushActive: true, showId: 5}
         ]
       })
       .get("/shows/1/showtimes/with_rush_availability")
@@ -98,46 +119,7 @@ describe("Rush show list", () => {
     const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getAllByLabelText} = render(
       <Stack.Navigator>
-        <Stack.Screen
-          name="RushShowList"
-          component={RushShowListScreen}
-          initialParams={{
-            /* The typecast is used because a TodayTixShow has many required fields,
-            most of which are not necessary for the functionality of the component. */
-            rushShows: [
-              {
-                id: 1,
-                displayName: "SIX the Musical",
-                isRushActive: true,
-                showId: 1
-              } as TodayTixShow,
-              {
-                id: 2,
-                displayName: "Unfortunate",
-                isRushActive: true,
-                showId: 2
-              } as TodayTixShow,
-              {
-                id: 3,
-                displayName: "Hamilton",
-                isRushActive: true,
-                showId: 3
-              } as TodayTixShow,
-              {
-                id: 4,
-                displayName: "Hadestown",
-                isRushActive: true,
-                showId: 4
-              } as TodayTixShow,
-              {
-                id: 5,
-                displayName: "Come from Away",
-                isRushActive: true,
-                showId: 5
-              } as TodayTixShow
-            ]
-          }}
-        />
+        <Stack.Screen name="RushShowList" component={RushShowListScreen} />
       </Stack.Navigator>
     );
 
@@ -162,6 +144,18 @@ describe("Rush show list", () => {
     )
       .get("/customers/me/rushGrants")
       .reply(200, {data: [{showId: 1, showName: "SIX the Musical"}]})
+      .get("/shows")
+      .query({
+        areAccessProgramsActive: 1,
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location: TodayTixLocation.London
+      })
+      .reply(200, {
+        data: [
+          {id: 1, displayName: "SIX the Musical", isRushActive: true, showId: 1}
+        ]
+      })
       .get("/shows/1/showtimes/with_rush_availability")
       .reply(200, {
         data: [
@@ -180,22 +174,7 @@ describe("Rush show list", () => {
     const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByTestId, getByLabelText} = render(
       <Stack.Navigator>
-        <Stack.Screen
-          name="RushShowList"
-          component={RushShowListScreen}
-          initialParams={{
-            /* The typecast is used because a TodayTixShow has many required fields,
-            most of which are not necessary for the functionality of the component. */
-            rushShows: [
-              {
-                id: 1,
-                displayName: "SIX the Musical",
-                isRushActive: true,
-                showId: 1
-              } as TodayTixShow
-            ]
-          }}
-        />
+        <Stack.Screen name="RushShowList" component={RushShowListScreen} />
         <Stack.Screen name="ShowDetails" component={ShowDetailsScreen} />
       </Stack.Navigator>
     );
@@ -231,6 +210,29 @@ describe("Rush show list", () => {
     )
       .get("/customers/me/rushGrants")
       .reply(200, {data: []})
+      .get("/shows")
+      .query({
+        areAccessProgramsActive: 1,
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location: TodayTixLocation.London
+      })
+      .reply(200, {
+        data: [
+          {id: 1, displayName: "SIX the Musical", isRushActive: true},
+          {
+            id: 2,
+            displayName: "Hamilton",
+            isRushActive: true,
+            images: {
+              productMedia: {
+                appHeroImage: {file: {url: "test-url-for-show-card"}},
+                headerImage: {file: {url: "test-url-for-header-photo"}}
+              }
+            }
+          }
+        ]
+      })
       .get("/shows/1/showtimes/with_rush_availability")
       .reply(200, {
         data: [
@@ -267,32 +269,7 @@ describe("Rush show list", () => {
     const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText} = render(
       <Stack.Navigator>
-        <Stack.Screen
-          name="RushShowList"
-          component={RushShowListScreen}
-          initialParams={{
-            /* The typecast is used because a TodayTixShow has many required fields,
-            most of which are not necessary for the functionality of the component. */
-            rushShows: [
-              {
-                id: 1,
-                displayName: "SIX the Musical",
-                isRushActive: true
-              } as TodayTixShow,
-              {
-                id: 2,
-                displayName: "Hamilton",
-                isRushActive: true,
-                images: {
-                  productMedia: {
-                    appHeroImage: {file: {url: "test-url-for-show-card"}},
-                    headerImage: {file: {url: "test-url-for-header-photo"}}
-                  }
-                }
-              } as TodayTixShow
-            ]
-          }}
-        />
+        <Stack.Screen name="RushShowList" component={RushShowListScreen} />
         <Stack.Screen name="ShowDetails" component={ShowDetailsScreen} />
       </Stack.Navigator>
     );
@@ -363,25 +340,24 @@ describe("Rush show list", () => {
     )
       .get("/customers/me/rushGrants")
       .delay(5000)
-      .reply(200, {data: []});
+      .reply(200, {data: []})
+      .get("/shows")
+      .query({
+        areAccessProgramsActive: 1,
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location: TodayTixLocation.London
+      })
+      .reply(200, {
+        data: [
+          {id: 1, displayName: "SIX the Musical", isRushActive: true, showId: 1}
+        ]
+      });
 
     const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByTestId} = render(
       <Stack.Navigator>
-        <Stack.Screen
-          name="RushShowList"
-          component={RushShowListScreen}
-          initialParams={{
-            rushShows: [
-              {
-                id: 1,
-                displayName: "SIX the Musical",
-                isRushActive: true,
-                showId: 1
-              } as TodayTixShow
-            ]
-          }}
-        />
+        <Stack.Screen name="RushShowList" component={RushShowListScreen} />
       </Stack.Navigator>
     );
 
@@ -403,6 +379,24 @@ describe("Rush show list", () => {
         title: "Error",
         message:
           "Sorry, something went wrong. Please try signing in again and contact TodayTix Support if the issue persists."
+      })
+      .get("/shows")
+      .query({
+        areAccessProgramsActive: 1,
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location: TodayTixLocation.London
+      })
+      .reply(200, {
+        data: [
+          {
+            id: 1,
+            displayName: "SIX the Musical",
+            isRushActive: true,
+            showId: 1
+          },
+          {id: 2, displayName: "Hamilton", isRushActive: true, showId: 2}
+        ]
       })
       .get("/shows/1/showtimes/with_rush_availability")
       .reply(200, {
@@ -434,26 +428,7 @@ describe("Rush show list", () => {
     const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getAllByLabelText, getByLabelText} = render(
       <Stack.Navigator>
-        <Stack.Screen
-          name="RushShowList"
-          component={RushShowListScreen}
-          initialParams={{
-            rushShows: [
-              {
-                id: 1,
-                displayName: "SIX the Musical",
-                isRushActive: true,
-                showId: 1
-              } as TodayTixShow,
-              {
-                id: 2,
-                displayName: "Hamilton",
-                isRushActive: true,
-                showId: 2
-              } as TodayTixShow
-            ]
-          }}
-        />
+        <Stack.Screen name="RushShowList" component={RushShowListScreen} />
       </Stack.Navigator>
     );
 
@@ -473,9 +448,7 @@ describe("Rush show list", () => {
     expect(secondShow).toHaveTextContent("Tickets: 10", {exact: false});
     expect(secondShow).toHaveTextContent(
       "Rush is not unlocked for this show.",
-      {
-        exact: false
-      }
+      {exact: false}
     );
     expect(getByLabelText("Inactive card")).toBeVisible();
   });
@@ -495,6 +468,18 @@ describe("Rush show list", () => {
       .reply(200, {
         data: [{showId: 1, showName: "SIX the Musical"}]
       })
+      .get("/shows")
+      .query({
+        areAccessProgramsActive: 1,
+        fieldset: TodayTixFieldset.Summary,
+        limit: 10000,
+        location: TodayTixLocation.London
+      })
+      .reply(200, {
+        data: [
+          {id: 1, displayName: "SIX the Musical", isRushActive: true, showId: 1}
+        ]
+      })
       .get("/shows/1/showtimes/with_rush_availability")
       .reply(200, {
         data: [
@@ -512,20 +497,7 @@ describe("Rush show list", () => {
     const Stack = createStackNavigator<RushShowStackParamList>();
     const {getByText, getByLabelText, queryByLabelText} = render(
       <Stack.Navigator>
-        <Stack.Screen
-          name="RushShowList"
-          component={RushShowListScreen}
-          initialParams={{
-            rushShows: [
-              {
-                id: 1,
-                displayName: "SIX the Musical",
-                isRushActive: true,
-                showId: 1
-              } as TodayTixShow
-            ]
-          }}
-        />
+        <Stack.Screen name="RushShowList" component={RushShowListScreen} />
       </Stack.Navigator>
     );
 
