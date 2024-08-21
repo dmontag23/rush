@@ -1,3 +1,3 @@
-# Test
+# SABS
 
-A personal toy app to learn React Native
+My boyfriend made me name this app after him. I'm not even kidding.
