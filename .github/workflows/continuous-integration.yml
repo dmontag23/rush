@@ -80,4 +80,4 @@ jobs:
         env:
           NETLIFY_API_KEY: ${{ secrets.NETLIFY_API_KEY }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        run: yarn test:e2e ios.sim.release --cleanup
+        run: yarn test:e2e ios.sim.release --headless
