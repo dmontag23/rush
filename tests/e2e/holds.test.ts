@@ -11,8 +11,9 @@ describe("Holds", () => {
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     const showtime = element(by.text("19:30"));
-    const ticketNumber = element(by.text("1"));
     await showtime.tap();
+    const ticketNumber = element(by.text("1"));
+    await expect(ticketNumber).toBeVisible();
     await ticketNumber.tap();
     const holdConfirmationText = element(
       by.text("You've won 1 ticket to Guys & Dolls 🎉")
@@ -72,7 +73,9 @@ describe("Holds", () => {
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("19:30")).tap();
-    await element(by.text("1")).tap();
+    const numberOfTicketsElement = element(by.text("1"));
+    await expect(numberOfTicketsElement).toBeVisible();
+    await numberOfTicketsElement.tap();
     await expect(
       element(by.text("You've won 1 ticket to Guys & Dolls 🎉"))
     ).toBeVisible();
@@ -86,7 +89,9 @@ describe("Holds", () => {
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("19:30")).tap();
-    await element(by.text("1")).tap();
+    const numberOfTicketsElement = element(by.text("1"));
+    await expect(numberOfTicketsElement).toBeVisible();
+    await numberOfTicketsElement.tap();
     const headerText = element(
       by.text("You've won 1 ticket to Guys & Dolls 🎉")
     );
@@ -100,7 +105,9 @@ describe("Holds", () => {
 
     // re-reserve the tickets
     await element(by.text("19:30")).tap();
-    await element(by.text("1")).tap();
+    const newNumberOfTicketsElement = element(by.text("1"));
+    await expect(newNumberOfTicketsElement).toBeVisible();
+    await newNumberOfTicketsElement.tap();
     await expect(headerText).toBeVisible();
   });
 
@@ -109,7 +116,9 @@ describe("Holds", () => {
     await element(by.text("SIX the Musical")).tap();
     const showtime = element(by.text("19:00"));
     await showtime.tap();
-    await element(by.text("2")).tap();
+    const numberOfTicketsElement = element(by.text("2"));
+    await expect(numberOfTicketsElement).toBeVisible();
+    await numberOfTicketsElement.tap();
 
     // retry the request for tickets
     const errorMessage = element(
@@ -130,7 +139,9 @@ describe("Holds", () => {
     // select a showtime that is not open
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("23:59")).tap();
-    await element(by.text("1")).tap();
+    const numberOfTicketsElement = element(by.text("1"));
+    await expect(numberOfTicketsElement).toBeVisible();
+    await numberOfTicketsElement.tap();
     // TODO: Somehow fix the time for the e2e tests to test the countdown timer?
     const guysAndDolls1Ticket = element(
       by.text(/Attempting to get 1 ticket for Guys & Dolls in (.*)/)
@@ -145,7 +156,9 @@ describe("Holds", () => {
 
     // cancel by selecting a new showtime
     await element(by.text("23:59")).tap();
-    await element(by.text("2")).tap();
+    const newNumberOfTicketsElement = element(by.text("2"));
+    await expect(newNumberOfTicketsElement).toBeVisible();
+    await newNumberOfTicketsElement.tap();
     const guysAndDolls2Tickets = element(
       by.text(/Attempting to get 2 tickets for Guys & Dolls in (.*)/)
     );
@@ -158,7 +171,9 @@ describe("Holds", () => {
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("19:30")).tap();
-    await element(by.text("1")).tap();
+    const numberOfTicketsElement = element(by.text("1"));
+    await expect(numberOfTicketsElement).toBeVisible();
+    await numberOfTicketsElement.tap();
     const headerText = element(
       by.text("You've won 1 ticket to Guys & Dolls 🎉")
     );
