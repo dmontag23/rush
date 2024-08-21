@@ -4,6 +4,9 @@ module.exports = {
     args: {
       $0: "jest",
       config: "tests/e2e/utils/jest.config.js"
+    },
+    jest: {
+      setupTimeout: 120000
     }
   },
   apps: {
@@ -43,7 +46,8 @@ module.exports = {
     iphone15: {
       type: "ios.simulator",
       device: {
-        type: "iPhone 15"
+        type: "iPhone 15",
+        os: "17.4"
       }
     },
     attached: {
