@@ -2825,14 +2825,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.52.0":
-  version: 5.52.0
-  resolution: "@tanstack/react-query@npm:5.52.0"
+"@tanstack/react-query@npm:^5.52.1":
+  version: 5.52.1
+  resolution: "@tanstack/react-query@npm:5.52.1"
   dependencies:
     "@tanstack/query-core": 5.52.0
   peerDependencies:
-    react: ^18.0.0
-  checksum: 1e0fc3e57ad0ffc97e9f314c128510251e2402ad41093475e91ff0c0504effb7e3a39bd9d30215bfd72f06e96c5954d444871c401a0881c37f913b5481f6c0ef
+    react: ^18 || ^19
+  checksum: f46bf1f85cc03b8329aee5d8a5a96b4e30dc88aff04d5256ebd0efefe1f507720b42a4be4a9bee340d3ade6cf0ae7b59187de90d87ea973c0f67e3764f76260c
   languageName: node
   linkType: hard
 
@@ -9132,9 +9132,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-svg@npm:^15.5.0":
-  version: 15.5.0
-  resolution: "react-native-svg@npm:15.5.0"
+"react-native-svg@npm:^15.6.0":
+  version: 15.6.0
+  resolution: "react-native-svg@npm:15.6.0"
   dependencies:
     css-select: ^5.1.0
     css-tree: ^1.1.3
@@ -9142,7 +9142,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 597c126a0d6feebf0aa0f4d1a03b835d7b2fd9908ddd02f4935a5f824232e61a0ef96c269220639f31b7a64a1cb33dd9343932d3bf379dc75161cba4f6f78349
+  checksum: 31c70317b7ca4c74d2b1db28af7ae127920c004c606ed4bd37f1e191a9433f6ce9929eabd105ed8768a1327ad26675ef0eaa06a97ca736ced8bfc6410b0d7480
   languageName: node
   linkType: hard
 
@@ -9596,7 +9596,7 @@ __metadata:
     "@react-navigation/elements": ^1.3.31
     "@react-navigation/native": ^6.1.18
     "@react-navigation/stack": ^6.4.1
-    "@tanstack/react-query": ^5.52.0
+    "@tanstack/react-query": ^5.52.1
     "@testing-library/react-native": ^12.6.0
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
     "@types/react": ^18.2.6
@@ -9620,7 +9620,7 @@ __metadata:
     react-native-reanimated: ^3.15.0
     react-native-safe-area-context: ^4.10.9
     react-native-screens: ^3.34.0
-    react-native-svg: ^15.5.0
+    react-native-svg: ^15.6.0
     react-native-vector-icons: ^10.0.3
     react-test-renderer: 18.3.1
     typescript: 5.0.4
