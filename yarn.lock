@@ -2818,21 +2818,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.52.0":
-  version: 5.52.0
-  resolution: "@tanstack/query-core@npm:5.52.0"
-  checksum: 1e142995fa9b0eec88009dd1083cd226eaec9125dc668b6485699639f45edb1386e4acd634e0eddc33d3a29e0c9636302824c42ac8c4106935d776fdc41d2638
+"@tanstack/query-core@npm:5.52.2":
+  version: 5.52.2
+  resolution: "@tanstack/query-core@npm:5.52.2"
+  checksum: 8750cb3aa88044c2ea6c15c0a6ab53f355fa60ec568bcd76bdcb873c982c7ddd85e454075b2cba72320ac7bd4648fad9b4af80beaacd2f223ed75213c3a14ef1
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.52.1":
-  version: 5.52.1
-  resolution: "@tanstack/react-query@npm:5.52.1"
+"@tanstack/react-query@npm:^5.52.2":
+  version: 5.52.2
+  resolution: "@tanstack/react-query@npm:5.52.2"
   dependencies:
-    "@tanstack/query-core": 5.52.0
+    "@tanstack/query-core": 5.52.2
   peerDependencies:
     react: ^18 || ^19
-  checksum: f46bf1f85cc03b8329aee5d8a5a96b4e30dc88aff04d5256ebd0efefe1f507720b42a4be4a9bee340d3ade6cf0ae7b59187de90d87ea973c0f67e3764f76260c
+  checksum: decaed468b1884859db949bcc67c129648f9212bcd688a9683e8bc9ab8b325263c2c31c30bbf8faa61d7e3ed951dce4828db7fb74533a707d872994be2244514
   languageName: node
   linkType: hard
 
@@ -4671,9 +4671,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"detox@npm:^20.25.5":
-  version: 20.25.5
-  resolution: "detox@npm:20.25.5"
+"detox@npm:^20.25.6":
+  version: 20.25.6
+  resolution: "detox@npm:20.25.6"
   dependencies:
     ajv: ^8.6.3
     bunyan: ^1.8.12
@@ -4717,7 +4717,7 @@ __metadata:
       optional: true
   bin:
     detox: local-cli/cli.js
-  checksum: 03322935859ad4725830fc724927ed6ac53a87b14f280b957af97bda8aa2aa4358b284c71332712222c50de475145b29242df2b5433aec12e8c4361b70f685dc
+  checksum: 8ed6ee124cc86e7c16684eb8172f7cf3b3e440c8a292a758fd93d08e2b75887b5b7dbf5281d4c7e63672c690826883be362161632e00f70f4d20d5c63398b0af
   languageName: node
   linkType: hard
 
@@ -9014,12 +9014,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.52.2":
-  version: 7.52.2
-  resolution: "react-hook-form@npm:7.52.2"
+"react-hook-form@npm:^7.53.0":
+  version: 7.53.0
+  resolution: "react-hook-form@npm:7.53.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 8621a21cf674f46507776741b2507d5357564af62bfc9dae8d1d7fb9076538352a48f16485885d3379d685d2d50537b28285322ad5a8c33d0ea5ddff21080543
+  checksum: 84d67fb79bad03d0aa809b5e411d97fb081fc13cd2b6d063a988f81f6fbef8545463e05360afa9d8d58fff19f08fa919930dcdc98a9e68bf74048c9f63e10ad5
   languageName: node
   linkType: hard
 
@@ -9596,7 +9596,7 @@ __metadata:
     "@react-navigation/elements": ^1.3.31
     "@react-navigation/native": ^6.1.18
     "@react-navigation/stack": ^6.4.1
-    "@tanstack/react-query": ^5.52.1
+    "@tanstack/react-query": ^5.52.2
     "@testing-library/react-native": ^12.6.0
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
     "@types/react": ^18.2.6
@@ -9604,7 +9604,7 @@ __metadata:
     "@types/react-test-renderer": ^18.0.0
     axios: ^1.7.5
     babel-jest: ^29.6.3
-    detox: ^20.25.5
+    detox: ^20.25.6
     eslint: ^8.19.0
     eslint-config-prettier: ^9.1.0
     eslint-plugin-prettier: ^5.2.1
@@ -9612,7 +9612,7 @@ __metadata:
     nock: ^13.5.5
     prettier: 3.2.5
     react: 18.3.1
-    react-hook-form: ^7.52.2
+    react-hook-form: ^7.53.0
     react-native: 0.75.1
     react-native-dotenv: ^3.4.10
     react-native-gesture-handler: ^2.18.1
