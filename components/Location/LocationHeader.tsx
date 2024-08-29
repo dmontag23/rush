@@ -6,10 +6,10 @@ import {Button, Text} from "react-native-paper";
 const CLOSE_BUTTON_PADDING = 6;
 
 type LocationHeaderProps = {
-  onCloseButtonPress?: () => void;
+  onCloseButtonPress: () => void;
 };
 
-const LocationHeader = ({onCloseButtonPress}: LocationHeaderProps = {}) => (
+const LocationHeader = ({onCloseButtonPress}: LocationHeaderProps) => (
   <View style={styles.header}>
     <View style={[styles.headerItem, {paddingLeft: CLOSE_BUTTON_PADDING}]}>
       <Button onPress={onCloseButtonPress} style={styles.button}>

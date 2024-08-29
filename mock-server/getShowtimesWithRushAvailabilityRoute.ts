@@ -212,19 +212,20 @@ const getShowtimesWithRushAvailabilityRoute = (router: Router) =>
     {showId: string},
     TodayTixAPIRes<TodayTixShowtime[]> | TodayTixAPIError
   >("/shows/:showId/showtimes/with_rush_availability", (req, res) => {
-    if (req.params.showId === "1")
-      return res.status(200).json(getShowtimesWithRushSix200Response);
-
-    if (req.params.showId === "2")
-      return res.status(200).json(getShowtimesWithRushWicked200Response);
-
-    if (req.params.showId === "3")
-      return res.status(200).json(getShowtimesWithRushGuysNDolls200Response);
-
-    if (req.params.showId === "4")
-      return res.status(200).json(getShowtimesWithRushTina200Response);
-
-    return res.status(400).json(getShowtimesWithRush400Response);
+    switch (req.params.showId) {
+      case "1":
+        return res.status(200).json(getShowtimesWithRushSix200Response);
+      case "2":
+        return res.status(200).json(getShowtimesWithRushWicked200Response);
+      case "3":
+        return res.status(200).json(getShowtimesWithRushGuysNDolls200Response);
+      case "4":
+        return res.status(200).json(getShowtimesWithRushTina200Response);
+      case "24608":
+        return res.status(200).json({code: 200, data: []});
+      default:
+        return res.status(400).json(getShowtimesWithRush400Response);
+    }
   });
 
 export default getShowtimesWithRushAvailabilityRoute;

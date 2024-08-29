@@ -1,4 +1,4 @@
-import {useEffect, useMemo} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 import useGetRushGrants from "./todayTixHooks/useGetRushGrants";
 import usePostRushGrants from "./todayTixHooks/usePostRushGrants";
@@ -7,11 +7,19 @@ import useGetCustomerId from "./useGetCustomerId";
 import {TodayTixShow} from "../types/shows";
 
 const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
-  const {customerId, isPending: isGetCustomerIdPending} = useGetCustomerId();
+  /* This piece of state ensures that isGrantingAccess is still true between the
+  network requests needed to unlock the rush grants, if any. */
+  const [areMoreGrantsToFetch, setAreMoreGrantsToFetch] = useState(true);
+
+  const {
+    customerId,
+    isPending: isGetCustomerIdPending,
+    isSuccess: isGetCustomerIdSuccess
+  } = useGetCustomerId();
 
   const {
     data: rushGrants,
-    isPending: isGetRushGrantsPending,
+    isFetching: isGetRushGrantsPending,
     isSuccess: isGetRushGrantsSuccess,
     refetch: refetchRushGrants
   } = useGetRushGrants();
@@ -43,13 +51,18 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
   );
 
   useEffect(() => {
-    // grant access to all remaining shows
+    if (
+      (isGetRushGrantsSuccess && !showIdsToGrantRushAccessTo.length) ||
+      (isGetCustomerIdSuccess && !customerId)
+    )
+      setAreMoreGrantsToFetch(false);
     showIdsToGrantRushAccessTo.forEach(showId => {
       if (customerId) grantAccessToShow({customerId, showId});
     });
   }, [
     customerId,
     grantAccessToShow,
+    isGetCustomerIdSuccess,
     isGetRushGrantsSuccess,
     showIdsToGrantRushAccessTo
   ]);
@@ -63,11 +76,7 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
       isGetCustomerIdPending ||
       isGetRushGrantsPending ||
       isPostRushGrantsPending ||
-      /* The condition below ensures that isGrantingAccess is still true between the
-      time the current rush grants are received and the post request(s) needed to unlock
-      the remaining shows */
-      (Boolean(showIdsToGrantRushAccessTo.length) &&
-        !(isPostRushGrantsSuccess || isPostRushGrantsError)),
+      areMoreGrantsToFetch,
     rushGrants
   };
 };

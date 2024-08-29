@@ -23,6 +23,11 @@ jest.mock("react-native-reanimated", () => {
   return Reanimated;
 });
 
+jest.mock("@gorhom/bottom-sheet", () => ({
+  ...require("@gorhom/bottom-sheet/mock"),
+  __esModule: true
+}));
+
 export const systemTime = new Date(2021, 4, 23);
 
 beforeEach(() => {

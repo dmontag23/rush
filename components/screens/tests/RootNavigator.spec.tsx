@@ -170,6 +170,8 @@ describe("The root navigator", () => {
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
+      .get("/customers/me/rushGrants")
+      .reply(200, {data: [{showId: 1, showName: "SIX the Musical"}]})
       .get("/shows")
       .query({
         areAccessProgramsActive: 1,

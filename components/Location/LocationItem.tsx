@@ -11,15 +11,11 @@ import {TodayTixLocation} from "../../types/shows";
 
 type LocationItemProps = {
   location: keyof typeof TodayTixLocation;
-  isChecked?: boolean;
+  isChecked: boolean;
   onPress?: () => void;
 };
 
-const LocationItem = ({
-  location,
-  isChecked = false,
-  onPress
-}: LocationItemProps) => {
+const LocationItem = ({location, isChecked, onPress}: LocationItemProps) => {
   const {mutate: storeLocation} = useStoreLocation();
 
   return (

@@ -53,7 +53,10 @@ const useGetCustomerId = () => {
       isGetCustomerIdFromAsyncStoragePending ||
       (shouldFetchCustomerFromTodayTixAPI &&
         isGetCustomerFromTodayTixPending) ||
-      isStoreCustomerIdInAsyncStoragePending
+      isStoreCustomerIdInAsyncStoragePending,
+    isSuccess: shouldFetchCustomerFromTodayTixAPI
+      ? isGetCustomerFromTodayTixSuccess
+      : isGetCustomerIdFromAsyncStorageSuccess
   };
 };
 
