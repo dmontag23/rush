@@ -11,11 +11,7 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
   network requests needed to unlock the rush grants, if any. */
   const [areMoreGrantsToFetch, setAreMoreGrantsToFetch] = useState(true);
 
-  const {
-    customerId,
-    isPending: isGetCustomerIdPending,
-    isSuccess: isGetCustomerIdSuccess
-  } = useGetCustomerId();
+  const {customerId, isPending: isGetCustomerIdPending} = useGetCustomerId();
 
   const {
     data: rushGrants,
@@ -51,24 +47,19 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
   );
 
   useEffect(() => {
-    if (
-      (isGetRushGrantsSuccess && !showIdsToGrantRushAccessTo.length) ||
-      (isGetCustomerIdSuccess && !customerId)
-    )
-      setAreMoreGrantsToFetch(false);
+    setAreMoreGrantsToFetch(
+      Boolean(customerId && showIdsToGrantRushAccessTo.length)
+    );
     showIdsToGrantRushAccessTo.forEach(showId => {
       if (customerId) grantAccessToShow({customerId, showId});
     });
-  }, [
-    customerId,
-    grantAccessToShow,
-    isGetCustomerIdSuccess,
-    isGetRushGrantsSuccess,
-    showIdsToGrantRushAccessTo
-  ]);
+  }, [customerId, grantAccessToShow, showIdsToGrantRushAccessTo]);
 
   useEffect(() => {
-    if (isPostRushGrantsSuccess || isPostRushGrantsError) refetchRushGrants();
+    if (isPostRushGrantsSuccess || isPostRushGrantsError) {
+      refetchRushGrants();
+      setAreMoreGrantsToFetch(false);
+    }
   }, [isPostRushGrantsError, isPostRushGrantsSuccess, refetchRushGrants]);
 
   return {
