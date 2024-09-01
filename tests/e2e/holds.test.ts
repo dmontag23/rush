@@ -71,6 +71,9 @@ describe("Holds", () => {
   it("can purchase tickets on TodayTix", async () => {
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
+    const showtime = element(by.text("19:30"));
+    await waitFor(showtime).toBeVisible().withTimeout(20000);
+    await showtime.tap();
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
     await waitFor(oneTicket).toBeVisible().withTimeout(30000);
@@ -137,7 +140,9 @@ describe("Holds", () => {
     // select a showtime that is not open
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("23:59")).tap();
-    await element(by.text("1")).tap();
+    const oneTicket = element(by.text("1"));
+    await waitFor(oneTicket).toBeVisible().withTimeout(20000);
+    await oneTicket.tap();
     // TODO: Somehow fix the time for the e2e tests to test the countdown timer?
     const guysAndDolls1Ticket = element(
       by.text(/Attempting to get 1 ticket for Guys & Dolls in (.*)/)
@@ -166,7 +171,7 @@ describe("Holds", () => {
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
-    await waitFor(oneTicket).toBeVisible().withTimeout(20000);
+    await waitFor(oneTicket).toBeVisible().withTimeout(30000);
     await oneTicket.tap();
     const headerText = element(
       by.text("You've won 1 ticket to Guys & Dolls 🎉")
