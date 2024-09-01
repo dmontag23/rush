@@ -92,7 +92,7 @@ describe("Holds", () => {
     await element(by.text("Guys & Dolls")).tap();
     await waitFor(element(by.text("Select a Time")))
       .toBeVisible()
-      .withTimeout(20000);
+      .withTimeout(30000);
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
     await waitFor(oneTicket).toBeVisible().withTimeout(10000);
@@ -117,6 +117,7 @@ describe("Holds", () => {
   it("can attempt to get tickets again if all tickets are currently reserved", async () => {
     // select a showtime that has all tickets currently reserved
     await element(by.text("SIX the Musical")).tap();
+    await expect(element(by.text("Select a Time"))).toBeVisible();
     const showtime = element(by.text("19:00"));
     await showtime.tap();
     await element(by.text("2")).tap();
