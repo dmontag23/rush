@@ -85,6 +85,7 @@ describe("Holds", () => {
   it("can release tickets", async () => {
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
+    await expect(element(by.text("Select a Time"))).toBeVisible();
     await element(by.text("19:30")).tap();
     await element(by.text("1")).tap();
     const headerText = element(
