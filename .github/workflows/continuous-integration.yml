@@ -74,6 +74,8 @@ jobs:
         run: cd ./mock-server && yarn && cd ..
       - name: Start mock server
         run: cd ./mock-server && nohup yarn start &
+      - name: Try to access mock server
+        run: curl http://localhost:3000 -I
       - name: Install Detox dependencies
         run: |
           brew tap wix/brew
