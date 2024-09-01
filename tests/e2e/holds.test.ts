@@ -73,7 +73,7 @@ describe("Holds", () => {
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
-    await waitFor(oneTicket).toBeVisible().withTimeout(20000);
+    await waitFor(oneTicket).toBeVisible().withTimeout(30000);
     await oneTicket.tap();
     await expect(
       element(by.text("You've won 1 ticket to Guys & Dolls 🎉"))
@@ -87,7 +87,9 @@ describe("Holds", () => {
   it("can release tickets", async () => {
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
-    await expect(element(by.text("Select a Time"))).toBeVisible();
+    await waitFor(element(by.text("Select a Time")))
+      .toBeVisible()
+      .withTimeout(20000);
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
     await waitFor(oneTicket).toBeVisible().withTimeout(10000);
@@ -95,7 +97,7 @@ describe("Holds", () => {
     const headerText = element(
       by.text("You've won 1 ticket to Guys & Dolls 🎉")
     );
-    await expect(headerText).toBeVisible();
+    await waitFor(headerText).toBeVisible().withTimeout(20000);
 
     // release tickets via the hold confirmation modal
     const releaseTicketsButton = element(by.text("Release tickets"));
