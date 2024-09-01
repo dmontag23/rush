@@ -87,7 +87,9 @@ describe("Holds", () => {
   it("can release tickets", async () => {
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
-    await expect(element(by.text("Select a Time"))).toBeVisible();
+    await waitFor(element(by.text("Select a Time")))
+      .toBeVisible()
+      .withTimeout(20000);
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
     await waitFor(oneTicket).toBeVisible().withTimeout(10000);
