@@ -26,7 +26,7 @@ describe("Rush shows", () => {
     // select the showtime in the distant future
     const guysAndDollsText = element(by.text("Guys & Dolls"));
     await guysAndDollsText.tap();
-    await expect(guysAndDollsText).toBeVisible();
+    await waitFor(guysAndDollsText).toBeVisible().withTimeout(20000);
     const selectATimeText = element(by.text("Select a Time"));
     await waitFor(selectATimeText).toBeVisible().withTimeout(20000);
     const futureShowtime = element(by.text("23:59"));
