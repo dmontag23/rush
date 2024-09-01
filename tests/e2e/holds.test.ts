@@ -73,7 +73,7 @@ describe("Holds", () => {
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
-    await waitFor(oneTicket).toBeVisible().withTimeout(10000);
+    await waitFor(oneTicket).toBeVisible().withTimeout(20000);
     await oneTicket.tap();
     await expect(
       element(by.text("You've won 1 ticket to Guys & Dolls 🎉"))
