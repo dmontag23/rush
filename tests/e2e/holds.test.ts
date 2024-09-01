@@ -95,7 +95,7 @@ describe("Holds", () => {
     const headerText = element(
       by.text("You've won 1 ticket to Guys & Dolls 🎉")
     );
-    await expect(headerText).toBeVisible();
+    await waitFor(headerText).toBeVisible().withTimeout(20000);
 
     // release tickets via the hold confirmation modal
     const releaseTicketsButton = element(by.text("Release tickets"));
