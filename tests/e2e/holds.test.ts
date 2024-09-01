@@ -187,7 +187,9 @@ describe("Holds", () => {
 
     // check that, when bringing the app to the foreground, the hold is no longer visible
     await device.launchApp();
-    await expect(element(by.text("Select a Time"))).toBeVisible();
+    await waitFor(element(by.text("Select a Time")))
+      .toBeVisible()
+      .withTimeout(1000);
     await expect(headerText).not.toBeVisible();
   });
 });

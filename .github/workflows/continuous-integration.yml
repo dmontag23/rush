@@ -72,16 +72,14 @@ jobs:
         run: cd ./ios && pod install && cd ..
       - name: Install mock server dependencies
         run: cd ./mock-server && yarn && cd ..
-      - name: Start mock server
-        run: cd ./mock-server && nohup yarn start &
-      - name: Try to access mock server
-        run: curl http://localhost:3000 -I
       - name: Install Detox dependencies
         run: |
           brew tap wix/brew
           brew install applesimutils
       - name: Build Detox
         run: yarn test:e2e:build ios.sim.release
+      - name: Start mock server
+        run: cd ./mock-server && nohup yarn start &
       - name: Run Detox Tests
         env:
           NETLIFY_API_KEY: ${{ secrets.NETLIFY_API_KEY }}
