@@ -28,5 +28,7 @@ updates:
   # Disable any ruby updates as these are done manually as a part of a react native upgrade
   - package-ecosystem: bundler
     directory: "/"
+    schedule:
+      interval: "daily"
     ignore:
       - dependency-name: "*"
