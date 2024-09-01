@@ -48,6 +48,8 @@ jobs:
           cache: yarn
       - name: Create the env file
         run: echo "${{ vars.ENV }}" > .env
+      - name: Create the env file in mock server too
+        run: echo "${{ vars.ENV }}" > ./mock-server/.env
       - name: Install dependencies
         run: yarn
       - name: Run integration tests
