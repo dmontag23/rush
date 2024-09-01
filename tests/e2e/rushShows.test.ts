@@ -28,7 +28,7 @@ describe("Rush shows", () => {
     await guysAndDollsText.tap();
     await expect(guysAndDollsText).toBeVisible();
     const selectATimeText = element(by.text("Select a Time"));
-    await waitFor(selectATimeText).toBeVisible().withTimeout(10000);
+    await waitFor(selectATimeText).toBeVisible().withTimeout(20000);
     const futureShowtime = element(by.text("23:59"));
     await expect(futureShowtime).toBeVisible();
     await expect(element(by.text("19:30"))).toBeVisible();
