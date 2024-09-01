@@ -25,3 +25,8 @@ updates:
       - dependency-name: "prettier"
       - dependency-name: "react-test-renderer"
       - dependency-name: "typescript"
+  # Disable any ruby updates as these are done manually as a part of a react native upgrade
+  - package-ecosystem: bundler
+    directory: "/"
+    ignore:
+      - dependency-name: "*"
