@@ -70,6 +70,10 @@ jobs:
         run: yarn
       - name: Install pod dependencies
         run: cd ./ios && pod install && cd ..
+      - name: Install mock server dependencies
+        run: cd ./mock-server && yarn && cd ..
+      - name: Start mock server
+        run: cd ./mock-server && nohup yarn start && cd ..
       - name: Install Detox dependencies
         run: |
           brew tap wix/brew
