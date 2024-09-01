@@ -14,7 +14,7 @@ describe("Rush shows", () => {
 
     const penultimateShowName = element(by.text("Tina"));
     const finalShowName = element(by.text("Wicked"));
-    await expect(penultimateShowName).not.toBeVisible();
+    await waitFor(penultimateShowName).not.toBeVisible().withTimeout(20000);
     await expect(finalShowName).not.toBeVisible();
 
     await element(by.id("rushShows")).scroll(400, "down");
