@@ -1,6 +1,6 @@
 import {beforeEach, describe, it} from "@jest/globals";
 import axios from "axios";
-import {expect} from "detox";
+import {expect, waitFor} from "detox";
 
 import {login} from "./utils/utils";
 
@@ -158,7 +158,9 @@ describe("Holds", () => {
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     await element(by.text("19:30")).tap();
-    await element(by.text("1")).tap();
+    const oneTicket = element(by.text("1"));
+    await waitFor(oneTicket).toBeVisible().withTimeout(5000);
+    await oneTicket.tap();
     const headerText = element(
       by.text("You've won 1 ticket to Guys & Dolls 🎉")
     );
