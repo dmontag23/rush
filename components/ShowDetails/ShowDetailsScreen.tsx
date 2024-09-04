@@ -9,6 +9,7 @@ import RushShowTicketSelection from "./RushShowTicketSelection";
 import HoldBanner from "../HoldBanner";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
+import TodayTixBanner from "../../assets/TodayTixBanner.jpg";
 import {RushShowsStackScreenProps} from "../../types/navigation";
 
 const ShowDetailsScreen = ({
@@ -26,9 +27,9 @@ const ShowDetailsScreen = ({
       <Image
         accessibilityLabel="Header image"
         source={{
-          // TODO: Add a fallback image here
           uri: `https:${headerImage?.file.url ?? show.images?.productMedia.appHeroImage.file.url}`
         }}
+        defaultSource={TodayTixBanner}
         resizeMode={headerImage ? "cover" : "stretch"}
         onLoadEnd={() => setIsImageLoading(false)}
         style={styles.image}

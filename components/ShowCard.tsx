@@ -3,6 +3,7 @@ import {StyleSheet, View} from "react-native";
 
 import {Card, Chip, Text, TouchableRipple, useTheme} from "react-native-paper";
 
+import TodayTixBanner from "../assets/TodayTixBanner.jpg";
 import {TodayTixShow} from "../types/shows";
 import {TodayTixShowtime} from "../types/showtimes";
 
@@ -116,9 +117,9 @@ const ShowCard = ({
           <Card.Cover
             resizeMode="stretch"
             source={{
-              // TODO: Add a fallback image here
               uri: `https:${show.images?.productMedia.appHeroImage.file.url}`
             }}
+            defaultSource={TodayTixBanner}
             theme={{roundness: 0}}
             style={[
               styles.image,
