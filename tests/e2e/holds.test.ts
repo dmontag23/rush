@@ -9,7 +9,12 @@ describe("Holds", () => {
 
   it("can place a hold for a show where tickets are already open", async () => {
     // select a showtime that is already open
+    await expect(
+      element(by.text("Rush is not unlocked for this show"))
+    ).not.toBeVisible();
     await element(by.text("Guys & Dolls")).tap();
+    const selectATimeText = element(by.text("Select a Time"));
+    await expect(selectATimeText).toBeVisible();
     const showtime = element(by.text("19:30"));
     const ticketNumber = element(by.text("1"));
     await showtime.tap();
@@ -50,11 +55,14 @@ describe("Holds", () => {
 
     // ensure the modal stays minimized when navigating between screens
     await element(by.label("Back button")).atIndex(1).tap();
+    const sixShow = element(by.label("SIX the Musical"));
+    await expect(sixShow).toBeVisible();
     await expect(holdConfirmationText).toBeVisible();
     await expect(detailsText).not.toBeVisible();
 
     // navigate to a new show and check the modal is still minimized and buttons disabled
-    await element(by.label("SIX the Musical")).tap();
+    await sixShow.tap();
+    await expect(selectATimeText).toBeVisible();
     await expect(holdConfirmationText).toBeVisible();
     await expect(detailsText).not.toBeVisible();
     await expect(
@@ -69,12 +77,15 @@ describe("Holds", () => {
   });
 
   it("can purchase tickets on TodayTix", async () => {
+    await expect(
+      element(by.text("Rush is not unlocked for this show"))
+    ).not.toBeVisible();
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
+    await expect(element(by.text("Select a Time"))).toBeVisible();
     const showtime = element(by.text("19:30"));
     await waitFor(showtime).toBeVisible().withTimeout(20000);
     await showtime.tap();
-    await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
     await waitFor(oneTicket).toBeVisible().withTimeout(30000);
     await oneTicket.tap();
@@ -88,6 +99,9 @@ describe("Holds", () => {
   });
 
   it("can release tickets", async () => {
+    await expect(
+      element(by.text("Rush is not unlocked for this show"))
+    ).not.toBeVisible();
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     await waitFor(element(by.text("Select a Time")))
@@ -115,6 +129,9 @@ describe("Holds", () => {
   });
 
   it("can attempt to get tickets again if all tickets are currently reserved", async () => {
+    await expect(
+      element(by.text("Rush is not unlocked for this show"))
+    ).not.toBeVisible();
     // select a showtime that has all tickets currently reserved
     await element(by.text("SIX the Musical")).tap();
     await expect(element(by.text("Select a Time"))).toBeVisible();
@@ -138,8 +155,12 @@ describe("Holds", () => {
   });
 
   it("can cancel hold", async () => {
+    await expect(
+      element(by.text("Rush is not unlocked for this show"))
+    ).not.toBeVisible();
     // select a showtime that is not open
     await element(by.text("Guys & Dolls")).tap();
+    await expect(element(by.text("Select a Time"))).toBeVisible();
     await element(by.text("23:59")).tap();
     const oneTicket = element(by.text("1"));
     await waitFor(oneTicket).toBeVisible().withTimeout(20000);
@@ -168,8 +189,13 @@ describe("Holds", () => {
   });
 
   it("re-fetches holds when the app is brought into the foreground", async () => {
+    await expect(
+      element(by.text("Rush is not unlocked for this show"))
+    ).not.toBeVisible();
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
+    const selectATimeText = element(by.text("Select a Time"));
+    await expect(selectATimeText).toBeVisible();
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
     await waitFor(oneTicket).toBeVisible().withTimeout(30000);
@@ -187,9 +213,7 @@ describe("Holds", () => {
 
     // check that, when bringing the app to the foreground, the hold is no longer visible
     await device.launchApp();
-    await waitFor(element(by.text("Select a Time")))
-      .toBeVisible()
-      .withTimeout(1000);
+    await waitFor(selectATimeText).toBeVisible().withTimeout(1000);
     await expect(headerText).not.toBeVisible();
   });
 });
