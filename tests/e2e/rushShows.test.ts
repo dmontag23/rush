@@ -23,9 +23,7 @@ describe("Rush shows", () => {
   });
 
   it("can select a show and number of tickets", async () => {
-    await expect(
-      element(by.text("Rush is not unlocked for this show"))
-    ).not.toBeVisible();
+    await expect(element(by.text("Tickets: 10"))).toBeVisible();
     // select the showtime in the distant future
     const guysAndDollsText = element(by.text("Guys & Dolls"));
     await guysAndDollsText.tap();
