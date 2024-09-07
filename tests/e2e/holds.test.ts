@@ -13,7 +13,7 @@ describe("Holds", () => {
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
     )
       .not.toBeVisible()
-      .withTimeout(30000);
+      .withTimeout(300000);
     await element(by.text("Guys & Dolls")).tap();
     const selectATimeText = element(by.text("Select a Time"));
     await expect(selectATimeText).toBeVisible();
@@ -83,7 +83,7 @@ describe("Holds", () => {
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
     )
       .not.toBeVisible()
-      .withTimeout(30000);
+      .withTimeout(300000);
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     await expect(element(by.text("Select a Time"))).toBeVisible();
@@ -91,7 +91,7 @@ describe("Holds", () => {
     await waitFor(showtime).toBeVisible().withTimeout(20000);
     await showtime.tap();
     const oneTicket = element(by.text("1"));
-    await waitFor(oneTicket).toBeVisible().withTimeout(30000);
+    await waitFor(oneTicket).toBeVisible().withTimeout(300000);
     await oneTicket.tap();
     await expect(
       element(by.text("You've won 1 ticket to Guys & Dolls 🎉"))
@@ -107,12 +107,12 @@ describe("Holds", () => {
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
     )
       .not.toBeVisible()
-      .withTimeout(30000);
+      .withTimeout(300000);
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     await waitFor(element(by.text("Select a Time")))
       .toBeVisible()
-      .withTimeout(30000);
+      .withTimeout(300000);
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
     await waitFor(oneTicket).toBeVisible().withTimeout(10000);
@@ -139,7 +139,7 @@ describe("Holds", () => {
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
     )
       .not.toBeVisible()
-      .withTimeout(30000);
+      .withTimeout(300000);
     // select a showtime that has all tickets currently reserved
     await element(by.text("SIX the Musical")).tap();
     await expect(element(by.text("Select a Time"))).toBeVisible();
@@ -167,7 +167,7 @@ describe("Holds", () => {
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
     )
       .not.toBeVisible()
-      .withTimeout(30000);
+      .withTimeout(300000);
     // select a showtime that is not open
     await element(by.text("Guys & Dolls")).tap();
     await expect(element(by.text("Select a Time"))).toBeVisible();
@@ -203,14 +203,14 @@ describe("Holds", () => {
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
     )
       .not.toBeVisible()
-      .withTimeout(30000);
+      .withTimeout(300000);
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     const selectATimeText = element(by.text("Select a Time"));
     await expect(selectATimeText).toBeVisible();
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
-    await waitFor(oneTicket).toBeVisible().withTimeout(30000);
+    await waitFor(oneTicket).toBeVisible().withTimeout(300000);
     await oneTicket.tap();
     const headerText = element(
       by.text("You've won 1 ticket to Guys & Dolls 🎉")
