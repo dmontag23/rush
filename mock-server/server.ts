@@ -23,7 +23,6 @@ export const startMockServer = async () =>
       (server = app.listen(port, () => {
         const serverAddress = server.address() as AddressInfo;
         console.log(`Running mock server on port '${serverAddress.port}'...`);
-        server.timeout = 5000;
         resolve();
       }))
   );
