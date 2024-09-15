@@ -102,3 +102,4 @@ jobs:
         with:
           name: E2E test artifacts
           path: ./tests/e2e/.artifacts
+          include-hidden-files: true
