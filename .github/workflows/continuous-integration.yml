@@ -90,12 +90,6 @@ jobs:
           NETLIFY_API_KEY: ${{ secrets.NETLIFY_API_KEY }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: yarn test:e2e ios.sim.release --headless
-      - name: Print working directory
-        if: failure()
-        run: pwd
-      - name: List files in artifacts directory
-        if: failure()
-        run: ls -R ./tests/e2e/.artifacts
       - name: Upload E2E test artifacts
         if: failure()
         uses: actions/upload-artifact@v4
