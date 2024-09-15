@@ -90,6 +90,8 @@ jobs:
           NETLIFY_API_KEY: ${{ secrets.NETLIFY_API_KEY }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: yarn test:e2e ios.sim.release --headless
+      - name: DEBUG SEE WHAT IS IN DATA
+        run: ls -R ./mock-server/data
       - name: Upload E2E test artifacts
         if: failure()
         uses: actions/upload-artifact@v4
