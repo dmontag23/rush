@@ -20,10 +20,7 @@ export const todayTixAPIv2 = axios.create({
 todayTixAPIv2.interceptors.request.use(handleTodayTixApiRequest);
 
 todayTixAPIv2.interceptors.response.use(
-  response => {
-    console.log("RESPONSE: ", response);
-    return response.data.data;
-  },
+  response => response.data.data,
   errorResponse =>
     Promise.reject(errorResponse.response?.data ?? errorResponse.response)
 );
