@@ -16,6 +16,5 @@ export const login = async () => {
   await element(by.text("Login")).tap();
 };
 
-export const clearAllMockServerData = async () => {
+export const clearAllMockServerData = async () =>
   await axios.delete(`${process.env.TODAY_TIX_API_BASE_URL}/clearAllData`);
-};

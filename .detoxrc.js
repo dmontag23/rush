@@ -36,6 +36,13 @@ module.exports = {
         "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release"
     }
   },
+  artifacts: {
+    rootDir: "tests/e2e/.artifacts/",
+    plugins: {
+      screenshot: "failing",
+      video: "failing"
+    }
+  },
   devices: {
     iphone12: {
       type: "ios.simulator",

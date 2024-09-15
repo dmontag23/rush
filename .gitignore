@@ -88,3 +88,6 @@ mock-server/data
 
 # Local Netlify folder
 .netlify
+
+# E2E test artifacts
+tests/e2e/.artifacts
