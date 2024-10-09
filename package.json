@@ -8,8 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "yarn typecheck && yarn lint && yarn test:integration && yarn test:e2e:local",
-    "test:e2e": "detox test -c",
-    "test:e2e:build": "detox build -c",
+    "test:e2e": "npx detox test -c",
+    "test:e2e:build": "npx detox build -c",
     "test:e2e:local": "NODE_ENV=development yarn test:e2e ios.sim.debug",
     "test:integration": "jest",
     "typecheck": "npx tsc"

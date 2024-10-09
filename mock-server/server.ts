@@ -5,8 +5,7 @@ import {AddressInfo} from "net";
 import clearAllDataRoute from "./clearAllDataRoute";
 import {oauthRouter, v2Router} from "./routers";
 
-// app needs to be exported for Netlify
-export const app = express();
+const app = express();
 let server: Server;
 
 app.use(express.json());

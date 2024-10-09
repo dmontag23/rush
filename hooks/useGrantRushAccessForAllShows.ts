@@ -18,7 +18,7 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
     isFetching: isGetRushGrantsPending,
     isSuccess: isGetRushGrantsSuccess,
     refetch: refetchRushGrants
-  } = useGetRushGrants();
+  } = useGetRushGrants({enabled: Boolean(customerId)});
 
   const {
     mutate: grantAccessToShow,
@@ -50,9 +50,10 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
     setAreMoreGrantsToFetch(
       Boolean(customerId && showIdsToGrantRushAccessTo.length)
     );
-    showIdsToGrantRushAccessTo.forEach(showId => {
-      if (customerId) grantAccessToShow({customerId, showId});
-    });
+    if (customerId)
+      showIdsToGrantRushAccessTo.forEach(showId =>
+        grantAccessToShow({customerId, showId})
+      );
   }, [customerId, grantAccessToShow, showIdsToGrantRushAccessTo]);
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const useGrantRushAccessForAllShows = (shows: TodayTixShow[]) => {
       isGetRushGrantsPending ||
       isPostRushGrantsPending ||
       areMoreGrantsToFetch,
-    rushGrants
+    rushGrants: rushGrants ?? []
   };
 };
 

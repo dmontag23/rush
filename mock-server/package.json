@@ -5,21 +5,15 @@
   "scripts": {
     "build": "yarn clean-mock-server && yarn mock-server-ts-compile",
     "clean-mock-server": "rm -rf dist",
-    "delete-blob": "npx netlify blobs:delete",
     "mock-server-ts-compile": "npx tsc",
     "start": "yarn build && node dist/mock-server/runMockServer.js"
   },
   "dependencies": {
-    "@netlify/blobs": "^7.3.0",
-    "@netlify/functions": "^2.6.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "serverless-http": "^3.2.0"
+    "express": "^4.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
     "@types/express": "^4.17.21",
-    "netlify-cli": "^17.19.4",
     "typescript": "^5.3.3"
   },
   "engines": {

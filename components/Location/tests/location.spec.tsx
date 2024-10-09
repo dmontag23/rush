@@ -1,6 +1,7 @@
 import React from "react";
 
 import {describe, expect, it} from "@jest/globals";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import nock from "nock";
 import {fireEvent, render, userEvent, waitFor} from "testing-library/extension";
 
@@ -10,6 +11,7 @@ import {TodayTixFieldset, TodayTixLocation} from "../../../types/shows";
 
 describe("Locations", () => {
   it("can change the location and see the updated shows", async () => {
+    await AsyncStorage.setItem("customer-id", "customer-id");
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )

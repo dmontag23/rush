@@ -1,6 +1,6 @@
 import {beforeEach, describe, it} from "@jest/globals";
 import axios from "axios";
-import {expect, waitFor} from "detox";
+import {expect} from "detox";
 
 import {login} from "./utils/utils";
 
@@ -9,11 +9,10 @@ describe("Holds", () => {
 
   it("can place a hold for a show where tickets are already open", async () => {
     // select a showtime that is already open
-    await waitFor(
+    await expect(
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
-    )
-      .not.toBeVisible()
-      .withTimeout(300000);
+    ).not.toBeVisible();
+
     await element(by.text("Guys & Dolls")).tap();
     const selectATimeText = element(by.text("Select a Time"));
     await expect(selectATimeText).toBeVisible();
@@ -79,19 +78,17 @@ describe("Holds", () => {
   });
 
   it("can purchase tickets on TodayTix", async () => {
-    await waitFor(
+    await expect(
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
-    )
-      .not.toBeVisible()
-      .withTimeout(300000);
+    ).not.toBeVisible();
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     await expect(element(by.text("Select a Time"))).toBeVisible();
     const showtime = element(by.text("19:30"));
-    await waitFor(showtime).toBeVisible().withTimeout(20000);
+    await expect(showtime).toBeVisible();
     await showtime.tap();
     const oneTicket = element(by.text("1"));
-    await waitFor(oneTicket).toBeVisible().withTimeout(300000);
+    await expect(oneTicket).toBeVisible();
     await oneTicket.tap();
     await expect(
       element(by.text("You've won 1 ticket to Guys & Dolls 🎉"))
@@ -103,24 +100,20 @@ describe("Holds", () => {
   });
 
   it("can release tickets", async () => {
-    await waitFor(
+    await expect(
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
-    )
-      .not.toBeVisible()
-      .withTimeout(300000);
+    ).not.toBeVisible();
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
-    await waitFor(element(by.text("Select a Time")))
-      .toBeVisible()
-      .withTimeout(300000);
+    await expect(element(by.text("Select a Time"))).toBeVisible();
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
-    await waitFor(oneTicket).toBeVisible().withTimeout(10000);
+    await expect(oneTicket).toBeVisible();
     await oneTicket.tap();
     const headerText = element(
       by.text("You've won 1 ticket to Guys & Dolls 🎉")
     );
-    await waitFor(headerText).toBeVisible().withTimeout(20000);
+    await expect(headerText).toBeVisible();
 
     // release tickets via the hold confirmation modal
     const releaseTicketsButton = element(by.text("Release tickets"));
@@ -135,11 +128,9 @@ describe("Holds", () => {
   });
 
   it("can attempt to get tickets again if all tickets are currently reserved", async () => {
-    await waitFor(
+    await expect(
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
-    )
-      .not.toBeVisible()
-      .withTimeout(300000);
+    ).not.toBeVisible();
     // select a showtime that has all tickets currently reserved
     await element(by.text("SIX the Musical")).tap();
     await expect(element(by.text("Select a Time"))).toBeVisible();
@@ -163,17 +154,15 @@ describe("Holds", () => {
   });
 
   it("can cancel hold", async () => {
-    await waitFor(
+    await expect(
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
-    )
-      .not.toBeVisible()
-      .withTimeout(300000);
+    ).not.toBeVisible();
     // select a showtime that is not open
     await element(by.text("Guys & Dolls")).tap();
     await expect(element(by.text("Select a Time"))).toBeVisible();
     await element(by.text("23:59")).tap();
     const oneTicket = element(by.text("1"));
-    await waitFor(oneTicket).toBeVisible().withTimeout(20000);
+    await expect(oneTicket).toBeVisible();
     await oneTicket.tap();
     // TODO: Somehow fix the time for the e2e tests to test the countdown timer?
     const guysAndDolls1Ticket = element(
@@ -199,18 +188,16 @@ describe("Holds", () => {
   });
 
   it("re-fetches holds when the app is brought into the foreground", async () => {
-    await waitFor(
+    await expect(
       element(by.text("Rush is not unlocked for this show.")).atIndex(0)
-    )
-      .not.toBeVisible()
-      .withTimeout(300000);
+    ).not.toBeVisible();
     // select a showtime that is already open
     await element(by.text("Guys & Dolls")).tap();
     const selectATimeText = element(by.text("Select a Time"));
     await expect(selectATimeText).toBeVisible();
     await element(by.text("19:30")).tap();
     const oneTicket = element(by.text("1"));
-    await waitFor(oneTicket).toBeVisible().withTimeout(300000);
+    await expect(oneTicket).toBeVisible();
     await oneTicket.tap();
     const headerText = element(
       by.text("You've won 1 ticket to Guys & Dolls 🎉")
@@ -225,7 +212,7 @@ describe("Holds", () => {
 
     // check that, when bringing the app to the foreground, the hold is no longer visible
     await device.launchApp();
-    await waitFor(selectATimeText).toBeVisible().withTimeout(1000);
+    await expect(selectATimeText).toBeVisible();
     await expect(headerText).not.toBeVisible();
   });
 });

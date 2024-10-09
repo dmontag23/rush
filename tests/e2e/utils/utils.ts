@@ -8,7 +8,7 @@ export const login = async () => {
   const accessTokenFormInput = element(by.label("Access token input")).atIndex(
     1
   );
-  await waitFor(accessTokenFormInput).toBeVisible().withTimeout(10000);
+  await expect(accessTokenFormInput).toBeVisible();
   await accessTokenFormInput.typeText("access-token");
   await element(by.label("Refresh token input"))
     .atIndex(1)

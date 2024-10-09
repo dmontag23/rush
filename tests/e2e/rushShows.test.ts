@@ -1,5 +1,5 @@
 import {beforeEach, describe, it} from "@jest/globals";
-import {expect, waitFor} from "detox";
+import {expect} from "detox";
 
 import {login} from "./utils/utils";
 
@@ -14,7 +14,7 @@ describe("Rush shows", () => {
 
     const penultimateShowName = element(by.text("Tina"));
     const finalShowName = element(by.text("Wicked"));
-    await waitFor(penultimateShowName).not.toBeVisible().withTimeout(20000);
+    await expect(penultimateShowName).not.toBeVisible();
     await expect(finalShowName).not.toBeVisible();
 
     await element(by.id("rushShows")).scroll(400, "down");
@@ -29,9 +29,9 @@ describe("Rush shows", () => {
     // select the showtime in the distant future
     const guysAndDollsText = element(by.text("Guys & Dolls"));
     await guysAndDollsText.tap();
-    await waitFor(guysAndDollsText).toBeVisible().withTimeout(20000);
+    await expect(guysAndDollsText).toBeVisible();
     const selectATimeText = element(by.text("Select a Time"));
-    await waitFor(selectATimeText).toBeVisible().withTimeout(20000);
+    await expect(selectATimeText).toBeVisible();
     const futureShowtime = element(by.text("23:59"));
     await expect(futureShowtime).toBeVisible();
     await expect(element(by.text("19:30"))).toBeVisible();

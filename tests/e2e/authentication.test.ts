@@ -4,9 +4,7 @@ import {expect} from "detox";
 describe("Authentication flow", () => {
   it("should be able to log in", async () => {
     // check the initial state of the login screen
-    await waitFor(element(by.text("Sign into TodayTix")))
-      .toBeVisible()
-      .withTimeout(10000);
+    await expect(element(by.text("Sign into TodayTix"))).toBeVisible();
     await expect(
       element(
         by.text("Enter the access tokens from the current TodayTix session.")

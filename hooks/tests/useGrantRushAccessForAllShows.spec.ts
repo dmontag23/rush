@@ -38,17 +38,16 @@ describe("useGrantRushAccessForAllShows hook", () => {
   });
 
   it("does not grant rush access to shows if no customer id exists", async () => {
+    await AsyncStorage.multiSet([
+      ["access-token", "access-token"],
+      ["refresh-token", "refresh-token"],
+      ["token-ttl", "token-ttl"]
+    ]);
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
-      .get("/customers/me/rushGrants")
-      .reply(200, {data: []})
-      .post("/customers/customer-id/rushGrants", {showId: 1})
-      .reply(201, {data: [{showId: 1, showName: "SIX the Musical"}]})
-      .get("/customers/me/rushGrants")
-      .reply(200, {
-        data: [{showId: 1, showName: "SIX the Musical"}]
-      });
+      .get("/customers/me")
+      .reply(200, {data: {}});
 
     const testShows = [
       {id: 1, showId: 1, showName: "SIX the Musical"} as TodayTixShow

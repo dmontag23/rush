@@ -3,7 +3,7 @@ module.exports = {
   preset: "react-native",
   rootDir: "../../..",
   testMatch: ["<rootDir>/tests/e2e/**/*.test.ts"],
-  testTimeout: 300000,
+  testTimeout: 120000,
   maxWorkers: 1,
   globalSetup: "detox/runners/jest/globalSetup",
   globalTeardown: "detox/runners/jest/globalTeardown",

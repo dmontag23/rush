@@ -66,32 +66,26 @@ jobs:
           cache: yarn
       - name: Create the env file
         run: echo "${{ vars.ENV }}" > .env
-      - name: Create the env file in mock server too
-        run: echo "${{ vars.ENV }}" > ./mock-server/.env
       - name: Install dependencies
         run: yarn
       - name: Install pod dependencies
         run: cd ./ios && pod install && cd ..
       - name: Install mock server dependencies
         run: cd ./mock-server && yarn && cd ..
+      - name: Start mock server
+        run: cd ./mock-server && nohup yarn start &
       - name: Install Detox dependencies
         run: |
           brew tap wix/brew
           brew install applesimutils
       - name: Build Detox
         run: yarn test:e2e:build ios.sim.release
-      - name: Start mock server
-        env:
-          NETLIFY_API_KEY: ${{ secrets.NETLIFY_API_KEY }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        run: cd ./mock-server && nohup yarn start &
       - name: Run Detox Tests
-        env:
-          NETLIFY_API_KEY: ${{ secrets.NETLIFY_API_KEY }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        run: yarn test:e2e ios.sim.release --headless
-      - name: Upload E2E test artifacts
+        run: yarn test:e2e ios.sim.release
+      - name: Upload failed E2E test artifacts
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: E2E test artifacts
-          path: tests/e2e/.artifacts
+          name: 'E2E test artifacts for commit "${{ github.event.head_commit.message }}"'
+          path: ./tests/e2e/.artifacts
+          include-hidden-files: true

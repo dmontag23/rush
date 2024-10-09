@@ -1,9 +1,9 @@
 import {Request, Response} from "express";
 
-import {clearAllData} from "./netlifyUtils";
+import {clearAllData} from "./utils";
 
-const clearAllDataRoute = async (req: Request, res: Response) => {
-  await clearAllData();
+const clearAllDataRoute = (req: Request, res: Response) => {
+  clearAllData();
   return res.sendStatus(200);
 };
 
