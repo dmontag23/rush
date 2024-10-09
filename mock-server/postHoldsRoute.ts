@@ -1,6 +1,6 @@
 import {Router} from "express";
 
-import {getItemFromStore, writeItemToStore} from "./netlifyUtils";
+import {getItemFromStore, writeItemToStore} from "./utils";
 
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
 import {
@@ -383,13 +383,13 @@ const postHoldsRoute = (router: Router) =>
     null,
     TodayTixAPIRes<TodayTixHold> | TodayTixAPIError,
     TodayTixHoldsReq
-  >("/holds", async (req, res) => {
+  >("/holds", (req, res) => {
     if (req.body.showtime === 1 && req.body.numTickets === 2)
       return res.status(409).json(postHolds409SeatsTakenResponse);
 
-    // see if Guys & Dolls has been unlocked via Netlify blobs
+    // see if Guys & Dolls has been unlocked
     const isGuysAndDollsUnlocked = Boolean(
-      await getItemFromStore<TodayTixRushGrant>("rush-grants", "3")
+      getItemFromStore<TodayTixRushGrant>("rush-grants", "3")
     );
 
     if (!isGuysAndDollsUnlocked)
@@ -397,11 +397,17 @@ const postHoldsRoute = (router: Router) =>
 
     // Otherwise store the hold for Guys & Dolls
     if (req.body.showtime === 3) {
-      const holdToReturn = await writeItemToStore(
+      const holdToReturn = writeItemToStore(
         "holds",
         guysAndDollsHold.id.toString(),
         guysAndDollsHold
       );
+
+      if (!holdToReturn)
+        return res.status(500).json({
+          code: 500,
+          error: `Internal server error trying to write hold with id ${guysAndDollsHold.id} to the file system.`
+        });
 
       return res.status(201).json({
         code: 201,

@@ -1,6 +1,6 @@
 import {Router} from "express";
 
-import {getItemsFromStore} from "./netlifyUtils";
+import {getItemsFromStore} from "./utils";
 
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
 import {TodayTixRushGrant} from "../types/rushGrants";
@@ -19,16 +19,15 @@ const getRushGrantsRoute = (router: Router) =>
     "/customers/me/rushGrants",
     null,
     TodayTixAPIRes<TodayTixRushGrant[]> | TodayTixAPIError
-  >("/customers/me/rushGrants", async (req, res) => {
+  >("/customers/me/rushGrants", (req, res) => {
     if (req.headers["return-status"] === "401")
       return res.status(401).json(getRushGrants401Response);
 
-    const rushGrants =
-      await getItemsFromStore<TodayTixRushGrant>("rush-grants");
+    const rushGrants = getItemsFromStore<TodayTixRushGrant>("rush-grants");
 
     return res
       .status(200)
-      .json({code: 200, data: rushGrants, pagination: null});
+      .json({code: 200, data: rushGrants ?? [], pagination: null});
   });
 
 export default getRushGrantsRoute;

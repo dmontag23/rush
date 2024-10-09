@@ -86,8 +86,5 @@ mock-server/data
 .env.production
 .env.test
 
-# Local Netlify folder
-.netlify
-
 # E2E test artifacts
 tests/e2e/.artifacts

@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 import useGetAuthTokens from "./asyncStorageHooks/useGetAuthTokens";
 import useGetCustomerIdFromAsyncStorage from "./asyncStorageHooks/useGetCustomerIdFromAsyncStorage";
@@ -6,6 +6,12 @@ import useStoreCustomerId from "./asyncStorageHooks/useStoreCustomerId";
 import useGetCustomersMe from "./todayTixHooks/useGetCustomersMe";
 
 const useGetCustomerId = () => {
+  /* This piece of state ensures that isPending is still true between the time the customer
+  is retrieved from TodayTix and the mutation that needs to be fired in order to save
+  that customer in AsyncStorage. */
+  const [hasCalledStoreCustomerMutation, setHasCalledStoreCustomerMutation] =
+    useState(false);
+
   const {data: authTokens, isPending: isGetAuthTokensPending} =
     useGetAuthTokens();
 
@@ -16,30 +22,28 @@ const useGetCustomerId = () => {
   } = useGetCustomerIdFromAsyncStorage();
 
   const shouldFetchCustomerFromTodayTixAPI =
-    Boolean(authTokens?.accessToken && authTokens.refreshToken) &&
-    isGetCustomerIdFromAsyncStorageSuccess &&
-    !customerIdFromAsyncStorage;
+    isGetCustomerIdFromAsyncStorageSuccess && !customerIdFromAsyncStorage;
 
   const {
     data: customerFromTodayTix,
-    isPending: isGetCustomerFromTodayTixPending,
     isSuccess: isGetCustomerFromTodayTixSuccess
   } = useGetCustomersMe({
-    enabled: shouldFetchCustomerFromTodayTixAPI
+    enabled:
+      shouldFetchCustomerFromTodayTixAPI &&
+      Boolean(authTokens?.accessToken && authTokens.refreshToken)
   });
 
   const {
     mutate: storeCustomerIdInAsyncStorage,
-    isPending: isStoreCustomerIdInAsyncStoragePending
+    isPending: isStoreCustomerIdInAsyncStoragePending,
+    isSuccess: isStoreCustomerIdInAsyncStorageSuccess
   } = useStoreCustomerId();
 
-  /* TODO: Note that there is a brief period where isPending for the whole hook will be false but the whole
-  hook is technically still loading because it needs to store the customer ID from the TodayTix Customer API endpoint, 
-  but the mutation function in this useEffect call hasn't been triggered yet. Come back to handle this in a clever
-  way so the hook always returns the right pending state */
   useEffect(() => {
-    if (isGetCustomerFromTodayTixSuccess)
+    if (isGetCustomerFromTodayTixSuccess) {
       storeCustomerIdInAsyncStorage(customerFromTodayTix.id);
+      setHasCalledStoreCustomerMutation(true);
+    }
   }, [
     customerFromTodayTix,
     isGetCustomerFromTodayTixSuccess,
@@ -51,11 +55,11 @@ const useGetCustomerId = () => {
     isPending:
       isGetAuthTokensPending ||
       isGetCustomerIdFromAsyncStoragePending ||
-      (shouldFetchCustomerFromTodayTixAPI &&
-        isGetCustomerFromTodayTixPending) ||
+      (shouldFetchCustomerFromTodayTixAPI && !hasCalledStoreCustomerMutation) ||
       isStoreCustomerIdInAsyncStoragePending,
     isSuccess: shouldFetchCustomerFromTodayTixAPI
-      ? isGetCustomerFromTodayTixSuccess
+      ? isGetCustomerFromTodayTixSuccess &&
+        isStoreCustomerIdInAsyncStorageSuccess
       : isGetCustomerIdFromAsyncStorageSuccess
   };
 };

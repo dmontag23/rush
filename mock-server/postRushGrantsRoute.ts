@@ -1,6 +1,6 @@
 import {Router} from "express";
 
-import {writeItemToStore} from "./netlifyUtils";
+import {writeItemToStore} from "./utils";
 
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
 import {TodayTixRushGrant, TodayTixRushGrantsReq} from "../types/rushGrants";
@@ -24,7 +24,7 @@ const postRushGrantsRoute = (router: Router) =>
     RouteParams,
     TodayTixAPIRes<TodayTixRushGrant> | TodayTixAPIError,
     TodayTixRushGrantsReq
-  >("/customers/:customerId/rushGrants", async (req, res) => {
+  >("/customers/:customerId/rushGrants", (req, res) => {
     if (req.body.showId === 4)
       return res.status(401).json(postRushGrants401Response);
 
@@ -35,11 +35,17 @@ const postRushGrantsRoute = (router: Router) =>
       showName: `Show for ${req.params.customerId}`
     };
 
-    const rushGrantToReturn = await writeItemToStore(
+    const rushGrantToReturn = writeItemToStore(
       "rush-grants",
       req.body.showId.toString(),
       newRushGrant
     );
+
+    if (!rushGrantToReturn)
+      return res.status(500).json({
+        code: 500,
+        error: `Internal server error trying to write rush grant for show id ${newRushGrant.showId} to the file system.`
+      });
 
     return res.status(201).json({
       code: 201,

@@ -626,6 +626,8 @@ describe("Holds", () => {
   });
 
   it("persists modal across screens", async () => {
+    await AsyncStorage.setItem("customer-id", "customer-id");
+
     nock(
       `${process.env.TODAY_TIX_API_BASE_URL}${process.env.TODAY_TIX_API_V2_ENDPOINT}`
     )
