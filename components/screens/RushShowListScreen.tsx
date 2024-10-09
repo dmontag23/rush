@@ -67,7 +67,7 @@ const RushShowListScreen = ({
       </View>
     );
 
-  const allUnlockedRushShowIds = rushGrants?.map(({showId}) => showId) ?? [];
+  const allUnlockedRushShowIds = rushGrants.map(({showId}) => showId);
   const showsAndTimes = rushShows.map((show, i) => ({
     show,
     showtimes: rushShowtimes[i] ?? []
