@@ -1,6 +1,6 @@
 import {Router} from "express";
 
-import {removeItemFromStore} from "./netlifyUtils";
+import {removeItemFromStore} from "./utils";
 
 import {TodayTixAPIError, TodayTixAPIRes} from "../types/base";
 
@@ -13,8 +13,8 @@ const deleteHoldsRoute = (router: Router) =>
     "/holds/:holdId",
     DeleteHoldsRouteParams,
     TodayTixAPIRes<{}> | TodayTixAPIError
-  >("/holds/:holdId", async (req, res) => {
-    await removeItemFromStore("holds", req.params.holdId);
+  >("/holds/:holdId", (req, res) => {
+    removeItemFromStore("holds", req.params.holdId);
 
     return res.status(200).json({code: 200, data: {}});
   });
