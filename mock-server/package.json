@@ -9,7 +9,7 @@
     "start": "yarn build && node dist/mock-server/runMockServer.js"
   },
   "dependencies": {
-    "express": "^4.20.0"
+    "express": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.7",

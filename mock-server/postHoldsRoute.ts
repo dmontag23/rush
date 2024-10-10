@@ -384,16 +384,20 @@ const postHoldsRoute = (router: Router) =>
     TodayTixAPIRes<TodayTixHold> | TodayTixAPIError,
     TodayTixHoldsReq
   >("/holds", (req, res) => {
-    if (req.body.showtime === 1 && req.body.numTickets === 2)
-      return res.status(409).json(postHolds409SeatsTakenResponse);
+    if (req.body.showtime === 1 && req.body.numTickets === 2) {
+      res.status(409).json(postHolds409SeatsTakenResponse);
+      return;
+    }
 
     // see if Guys & Dolls has been unlocked
     const isGuysAndDollsUnlocked = Boolean(
       getItemFromStore<TodayTixRushGrant>("rush-grants", "3")
     );
 
-    if (!isGuysAndDollsUnlocked)
-      return res.status(409).json(postHolds409Response);
+    if (!isGuysAndDollsUnlocked) {
+      res.status(409).json(postHolds409Response);
+      return;
+    }
 
     // Otherwise store the hold for Guys & Dolls
     if (req.body.showtime === 3) {
@@ -403,19 +407,22 @@ const postHoldsRoute = (router: Router) =>
         guysAndDollsHold
       );
 
-      if (!holdToReturn)
-        return res.status(500).json({
+      if (!holdToReturn) {
+        res.status(500).json({
           code: 500,
           error: `Internal server error trying to write hold with id ${guysAndDollsHold.id} to the file system.`
         });
+        return;
+      }
 
-      return res.status(201).json({
+      res.status(201).json({
         code: 201,
         data: holdToReturn
       });
+      return;
     }
 
-    return res.status(401).json(postHolds401Response);
+    res.status(401).json(postHolds401Response);
   });
 
 export default postHoldsRoute;

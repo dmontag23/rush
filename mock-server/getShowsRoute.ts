@@ -1174,16 +1174,16 @@ const getShowsRoute = (router: Router) =>
     null,
     TodayTixShowsReqQueryParams
   >("/shows", (req, res) => {
-    if (req.query.areAccessProgramsActive)
-      return res
-        .status(200)
-        .json(
-          Number(req.query.location) === TodayTixLocation.NewYork
-            ? getRushAndLotteryShowsNewYork200Response
-            : getRushAndLotteryShowsLondon200Response
-        );
+    if (req.query.areAccessProgramsActive) {
+      res.json(
+        Number(req.query.location) === TodayTixLocation.NewYork
+          ? getRushAndLotteryShowsNewYork200Response
+          : getRushAndLotteryShowsLondon200Response
+      );
+      return;
+    }
 
-    return res.status(400).json(getShows400Response);
+    res.status(400).json(getShows400Response);
   });
 
 export default getShowsRoute;

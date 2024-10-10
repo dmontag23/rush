@@ -15,8 +15,7 @@ const deleteHoldsRoute = (router: Router) =>
     TodayTixAPIRes<{}> | TodayTixAPIError
   >("/holds/:holdId", (req, res) => {
     removeItemFromStore("holds", req.params.holdId);
-
-    return res.status(200).json({code: 200, data: {}});
+    res.json({code: 200, data: {}});
   });
 
 export default deleteHoldsRoute;
