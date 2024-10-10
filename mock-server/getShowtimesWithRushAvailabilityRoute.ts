@@ -214,17 +214,22 @@ const getShowtimesWithRushAvailabilityRoute = (router: Router) =>
   >("/shows/:showId/showtimes/with_rush_availability", (req, res) => {
     switch (req.params.showId) {
       case "1":
-        return res.status(200).json(getShowtimesWithRushSix200Response);
+        res.json(getShowtimesWithRushSix200Response);
+        break;
       case "2":
-        return res.status(200).json(getShowtimesWithRushWicked200Response);
+        res.json(getShowtimesWithRushWicked200Response);
+        break;
       case "3":
-        return res.status(200).json(getShowtimesWithRushGuysNDolls200Response);
+        res.json(getShowtimesWithRushGuysNDolls200Response);
+        break;
       case "4":
-        return res.status(200).json(getShowtimesWithRushTina200Response);
+        res.json(getShowtimesWithRushTina200Response);
+        break;
       case "24608":
-        return res.status(200).json({code: 200, data: []});
+        res.json({code: 200, data: []});
+        break;
       default:
-        return res.status(400).json(getShowtimesWithRush400Response);
+        res.status(400).json(getShowtimesWithRush400Response);
     }
   });
 

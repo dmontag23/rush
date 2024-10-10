@@ -25,8 +25,10 @@ const postRushGrantsRoute = (router: Router) =>
     TodayTixAPIRes<TodayTixRushGrant> | TodayTixAPIError,
     TodayTixRushGrantsReq
   >("/customers/:customerId/rushGrants", (req, res) => {
-    if (req.body.showId === 4)
-      return res.status(401).json(postRushGrants401Response);
+    if (req.body.showId === 4) {
+      res.status(401).json(postRushGrants401Response);
+      return;
+    }
 
     const newRushGrant: TodayTixRushGrant = {
       _type: "RushGrant",
@@ -41,13 +43,15 @@ const postRushGrantsRoute = (router: Router) =>
       newRushGrant
     );
 
-    if (!rushGrantToReturn)
-      return res.status(500).json({
+    if (!rushGrantToReturn) {
+      res.status(500).json({
         code: 500,
         error: `Internal server error trying to write rush grant for show id ${newRushGrant.showId} to the file system.`
       });
+      return;
+    }
 
-    return res.status(201).json({
+    res.status(201).json({
       code: 201,
       data: rushGrantToReturn
     });

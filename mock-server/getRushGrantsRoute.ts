@@ -20,14 +20,14 @@ const getRushGrantsRoute = (router: Router) =>
     null,
     TodayTixAPIRes<TodayTixRushGrant[]> | TodayTixAPIError
   >("/customers/me/rushGrants", (req, res) => {
-    if (req.headers["return-status"] === "401")
-      return res.status(401).json(getRushGrants401Response);
+    if (req.headers["return-status"] === "401") {
+      res.status(401).json(getRushGrants401Response);
+      return;
+    }
 
     const rushGrants = getItemsFromStore<TodayTixRushGrant>("rush-grants");
 
-    return res
-      .status(200)
-      .json({code: 200, data: rushGrants ?? [], pagination: null});
+    res.json({code: 200, data: rushGrants ?? [], pagination: null});
   });
 
 export default getRushGrantsRoute;

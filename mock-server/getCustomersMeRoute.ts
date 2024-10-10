@@ -68,10 +68,12 @@ const getCustomersMeRoute = (router: Router) =>
     null,
     TodayTixAPIRes<TodayTixCustomer> | TodayTixAPIError
   >("/customers/me", (req, res) => {
-    if (req.headers["return-status"] === "401")
-      return res.status(401).json(getCustomersMe401Response);
+    if (req.headers["return-status"] === "401") {
+      res.status(401).json(getCustomersMe401Response);
+      return;
+    }
 
-    return res.status(200).json(getCustomersMe200Response);
+    res.json(getCustomersMe200Response);
   });
 
 export default getCustomersMeRoute;

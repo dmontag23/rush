@@ -27,10 +27,11 @@ const postTokenRoute = (router: Router) =>
     TodayTixRefreshTokenReq
   >("/token", (req, res) => {
     if (req.body.refresh_token === "refresh-token") {
-      return res.status(200).json(postToken200Response);
+      res.json(postToken200Response);
+      return;
     }
 
-    return res.status(400).json(postToken400Response);
+    res.status(400).json(postToken400Response);
   });
 
 export default postTokenRoute;

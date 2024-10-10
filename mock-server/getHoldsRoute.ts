@@ -10,9 +10,7 @@ const getHoldsRoute = (router: Router) =>
     "/holds",
     (req, res) => {
       const holds = getItemsFromStore<TodayTixHold>("holds");
-      return res
-        .status(200)
-        .json({code: 200, data: holds ?? [], pagination: null});
+      res.json({code: 200, data: holds ?? [], pagination: null});
     }
   );
 
